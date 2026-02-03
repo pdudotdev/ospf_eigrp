@@ -1,4 +1,4 @@
-! Startup-config last modified at Tue Feb  3 11:01:39 2026 by root
+! Startup-config last modified at Tue Feb  3 19:10:45 2026 by root
 ! device: R6A (cEOSLab, EOS-4.35.0F-44178984.4350F (engineering build))
 !
 no aaa root
@@ -43,9 +43,9 @@ interface Loopback1
 !
 interface Management0
    ip address 172.20.20.206/24
-   ipv6 address 3fff:172:20:20::2/64
+   ipv6 address 3fff:172:20:20::3/64
 !
-no ip routing
+ip routing
 !
 ip route 0.0.0.0/0 172.20.20.1
 !
@@ -57,5 +57,12 @@ router multicast
    !
    ipv6
       software-forwarding kernel
+!
+router ospf 1
+   router-id 6.6.6.6
+   network 6.6.6.6/32 area 0.0.0.1
+   network 10.1.1.0/30 area 0.0.0.1
+   network 10.1.1.12/30 area 0.0.0.1
+   max-lsa 12000
 !
 end
