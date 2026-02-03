@@ -1,0 +1,23 @@
+name: mcp-lab
+
+topology:
+  defaults:
+    env:
+      CLAB_MGMT_PASSTHROUGH: "true"
+  nodes:
+    r1:
+      kind: cisco_iol
+      image: vrnetlab/cisco_iol:17.16.01a
+      mgmt-ipv4: 172.20.20.11
+    r2:
+      kind: arista_ceos
+      image: ceos:4.35.0F
+      mgmt-ipv4: 172.20.20.22
+    r3:
+      kind: arista_ceos
+      image: ceos:4.35.0F
+      mgmt-ipv4: 172.20.20.33
+  links:
+    - endpoints: ["r1:Ethernet0/1", "r2:eth1"]
+    - endpoints: ["r2:eth2", "r3:eth1"]
+    - endpoints: ["r1:Ethernet0/2", "r3:eth2"]

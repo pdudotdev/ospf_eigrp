@@ -1,0 +1,8 @@
+mcp/
+.env
+__pycache__/
+*.pyc
+*.log
+.claude/
+.MCPServer.py.swp
+snapshots/

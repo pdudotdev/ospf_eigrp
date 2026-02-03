@@ -1,0 +1,164 @@
+{
+  "name": "mcp-lab",
+  "type": "clab",
+  "clab": {
+    "config": {
+      "prefix": "clab",
+      "mgmt": {
+        "network": "clab",
+        "bridge": "br-7543dab85857",
+        "ipv4-subnet": "172.20.20.0/24",
+        "ipv4-gw": "172.20.20.1",
+        "ipv6-subnet": "3fff:172:20:20::/64",
+        "ipv6-gw": "3fff:172:20:20::1",
+        "external-access": true
+      }
+    }
+  },
+  "ssh-pub-keys": [],
+  "nodes": {
+    "r1": {
+      "index": "0",
+      "shortname": "r1",
+      "longname": "clab-mcp-lab-r1",
+      "fqdn": "r1.mcp-lab.io",
+      "group": "",
+      "labdir": "/home/mcp/mcp-project/clab-mcp-lab/r1",
+      "kind": "cisco_iol",
+      "image": "vrnetlab/cisco_iol:17.16.01a",
+      "mgmt-net": "",
+      "mgmt-intf": "",
+      "mgmt-ipv4-address": "172.20.20.11",
+      "mgmt-ipv4-prefix-length": 24,
+      "mgmt-ipv6-address": "3fff:172:20:20::4",
+      "mgmt-ipv6-prefix-length": 64,
+      "mac-address": "",
+      "labels": {
+        "clab-mgmt-net-bridge": "br-7543dab85857",
+        "clab-node-group": "",
+        "clab-node-kind": "cisco_iol",
+        "clab-node-lab-dir": "/home/mcp/mcp-project/clab-mcp-lab/r1",
+        "clab-node-longname": "clab-mcp-lab-r1",
+        "clab-node-name": "r1",
+        "clab-node-type": "",
+        "clab-owner": "mcp",
+        "clab-topo-file": "/home/mcp/mcp-project/lab.yml",
+        "containerlab": "mcp-lab"
+      },
+      "port-bindings": [
+      ]
+    },
+    "r2": {
+      "index": "1",
+      "shortname": "r2",
+      "longname": "clab-mcp-lab-r2",
+      "fqdn": "r2.mcp-lab.io",
+      "group": "",
+      "labdir": "/home/mcp/mcp-project/clab-mcp-lab/r2",
+      "kind": "arista_ceos",
+      "image": "ceos:4.35.0F",
+      "mgmt-net": "",
+      "mgmt-intf": "Management0",
+      "mgmt-ipv4-address": "172.20.20.22",
+      "mgmt-ipv4-prefix-length": 24,
+      "mgmt-ipv6-address": "3fff:172:20:20::3",
+      "mgmt-ipv6-prefix-length": 64,
+      "mac-address": "00:1c:73:3e:29:40",
+      "labels": {
+        "clab-mgmt-net-bridge": "br-7543dab85857",
+        "clab-node-group": "",
+        "clab-node-kind": "arista_ceos",
+        "clab-node-lab-dir": "/home/mcp/mcp-project/clab-mcp-lab/r2",
+        "clab-node-longname": "clab-mcp-lab-r2",
+        "clab-node-name": "r2",
+        "clab-node-type": "",
+        "clab-owner": "mcp",
+        "clab-topo-file": "/home/mcp/mcp-project/lab.yml",
+        "containerlab": "mcp-lab"
+      },
+      "port-bindings": [
+      ]
+    },
+    "r3": {
+      "index": "2",
+      "shortname": "r3",
+      "longname": "clab-mcp-lab-r3",
+      "fqdn": "r3.mcp-lab.io",
+      "group": "",
+      "labdir": "/home/mcp/mcp-project/clab-mcp-lab/r3",
+      "kind": "arista_ceos",
+      "image": "ceos:4.35.0F",
+      "mgmt-net": "",
+      "mgmt-intf": "Management0",
+      "mgmt-ipv4-address": "172.20.20.33",
+      "mgmt-ipv4-prefix-length": 24,
+      "mgmt-ipv6-address": "3fff:172:20:20::2",
+      "mgmt-ipv6-prefix-length": 64,
+      "mac-address": "00:1c:73:5e:b7:55",
+      "labels": {
+        "clab-mgmt-net-bridge": "br-7543dab85857",
+        "clab-node-group": "",
+        "clab-node-kind": "arista_ceos",
+        "clab-node-lab-dir": "/home/mcp/mcp-project/clab-mcp-lab/r3",
+        "clab-node-longname": "clab-mcp-lab-r3",
+        "clab-node-name": "r3",
+        "clab-node-type": "",
+        "clab-owner": "mcp",
+        "clab-topo-file": "/home/mcp/mcp-project/lab.yml",
+        "containerlab": "mcp-lab"
+      },
+      "port-bindings": [
+      ]
+    }
+  },
+  "links": [
+    {
+      "endpoints": {
+        "a": {
+          "node": "r1",
+          "interface": "eth1",
+          "mac": "aa:c1:ab:37:f6:7e",
+          "peer": "z"
+        },
+        "z": {
+          "node": "r2",
+          "interface": "eth1",
+          "mac": "aa:c1:ab:c1:34:68",
+          "peer": "a"
+        }
+      }
+    },
+    {
+      "endpoints": {
+        "a": {
+          "node": "r2",
+          "interface": "eth2",
+          "mac": "aa:c1:ab:7b:9d:3f",
+          "peer": "z"
+        },
+        "z": {
+          "node": "r3",
+          "interface": "eth1",
+          "mac": "aa:c1:ab:6a:19:2c",
+          "peer": "a"
+        }
+      }
+    },
+    {
+      "endpoints": {
+        "a": {
+          "node": "r1",
+          "interface": "eth2",
+          "mac": "aa:c1:ab:3e:51:e8",
+          "peer": "z"
+        },
+        "z": {
+          "node": "r3",
+          "interface": "eth2",
+          "mac": "aa:c1:ab:a2:6c:f3",
+          "peer": "a"
+        }
+      }
+    }
+  ]
+}
