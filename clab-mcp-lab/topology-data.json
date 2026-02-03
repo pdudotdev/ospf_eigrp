@@ -1,0 +1,588 @@
+{
+  "name": "mcp-lab",
+  "type": "clab",
+  "clab": {
+    "config": {
+      "prefix": "clab",
+      "mgmt": {
+        "network": "clab",
+        "bridge": "br-14ce07ae9c2d",
+        "ipv4-subnet": "172.20.20.0/24",
+        "ipv4-gw": "172.20.20.1",
+        "ipv6-subnet": "3fff:172:20:20::/64",
+        "ipv6-gw": "3fff:172:20:20::1",
+        "external-access": true
+      }
+    }
+  },
+  "ssh-pub-keys": [],
+  "nodes": {
+    "R10C": {
+      "index": "0",
+      "shortname": "R10C",
+      "longname": "clab-mcp-lab-R10C",
+      "fqdn": "R10C.mcp-lab.io",
+      "group": "",
+      "labdir": "/home/mcp/mcp-project/clab-mcp-lab/R10C",
+      "kind": "cisco_iol",
+      "image": "vrnetlab/cisco_iol:17.16.01a",
+      "mgmt-net": "",
+      "mgmt-intf": "",
+      "mgmt-ipv4-address": "172.20.20.210",
+      "mgmt-ipv4-prefix-length": 24,
+      "mgmt-ipv6-address": "3fff:172:20:20::c",
+      "mgmt-ipv6-prefix-length": 64,
+      "mac-address": "",
+      "labels": {
+        "clab-mgmt-net-bridge": "br-14ce07ae9c2d",
+        "clab-node-group": "",
+        "clab-node-kind": "cisco_iol",
+        "clab-node-lab-dir": "/home/mcp/mcp-project/clab-mcp-lab/R10C",
+        "clab-node-longname": "clab-mcp-lab-R10C",
+        "clab-node-name": "R10C",
+        "clab-node-type": "",
+        "clab-owner": "mcp",
+        "clab-topo-file": "/home/mcp/mcp-project/lab.yml",
+        "containerlab": "mcp-lab"
+      },
+      "port-bindings": [
+      ]
+    },
+    "R11C": {
+      "index": "1",
+      "shortname": "R11C",
+      "longname": "clab-mcp-lab-R11C",
+      "fqdn": "R11C.mcp-lab.io",
+      "group": "",
+      "labdir": "/home/mcp/mcp-project/clab-mcp-lab/R11C",
+      "kind": "cisco_iol",
+      "image": "vrnetlab/cisco_iol:17.16.01a",
+      "mgmt-net": "",
+      "mgmt-intf": "",
+      "mgmt-ipv4-address": "172.20.20.211",
+      "mgmt-ipv4-prefix-length": 24,
+      "mgmt-ipv6-address": "3fff:172:20:20::a",
+      "mgmt-ipv6-prefix-length": 64,
+      "mac-address": "",
+      "labels": {
+        "clab-mgmt-net-bridge": "br-14ce07ae9c2d",
+        "clab-node-group": "",
+        "clab-node-kind": "cisco_iol",
+        "clab-node-lab-dir": "/home/mcp/mcp-project/clab-mcp-lab/R11C",
+        "clab-node-longname": "clab-mcp-lab-R11C",
+        "clab-node-name": "R11C",
+        "clab-node-type": "",
+        "clab-owner": "mcp",
+        "clab-topo-file": "/home/mcp/mcp-project/lab.yml",
+        "containerlab": "mcp-lab"
+      },
+      "port-bindings": [
+      ]
+    },
+    "R1A": {
+      "index": "2",
+      "shortname": "R1A",
+      "longname": "clab-mcp-lab-R1A",
+      "fqdn": "R1A.mcp-lab.io",
+      "group": "",
+      "labdir": "/home/mcp/mcp-project/clab-mcp-lab/R1A",
+      "kind": "arista_ceos",
+      "image": "ceos:4.35.0F",
+      "mgmt-net": "",
+      "mgmt-intf": "Management0",
+      "mgmt-ipv4-address": "172.20.20.201",
+      "mgmt-ipv4-prefix-length": 24,
+      "mgmt-ipv6-address": "3fff:172:20:20::3",
+      "mgmt-ipv6-prefix-length": 64,
+      "mac-address": "00:1c:73:3d:e4:27",
+      "labels": {
+        "clab-mgmt-net-bridge": "br-14ce07ae9c2d",
+        "clab-node-group": "",
+        "clab-node-kind": "arista_ceos",
+        "clab-node-lab-dir": "/home/mcp/mcp-project/clab-mcp-lab/R1A",
+        "clab-node-longname": "clab-mcp-lab-R1A",
+        "clab-node-name": "R1A",
+        "clab-node-type": "",
+        "clab-owner": "mcp",
+        "clab-topo-file": "/home/mcp/mcp-project/lab.yml",
+        "containerlab": "mcp-lab"
+      },
+      "port-bindings": [
+      ]
+    },
+    "R2A": {
+      "index": "3",
+      "shortname": "R2A",
+      "longname": "clab-mcp-lab-R2A",
+      "fqdn": "R2A.mcp-lab.io",
+      "group": "",
+      "labdir": "/home/mcp/mcp-project/clab-mcp-lab/R2A",
+      "kind": "arista_ceos",
+      "image": "ceos:4.35.0F",
+      "mgmt-net": "",
+      "mgmt-intf": "Management0",
+      "mgmt-ipv4-address": "172.20.20.202",
+      "mgmt-ipv4-prefix-length": 24,
+      "mgmt-ipv6-address": "3fff:172:20:20::6",
+      "mgmt-ipv6-prefix-length": 64,
+      "mac-address": "00:1c:73:fb:21:6b",
+      "labels": {
+        "clab-mgmt-net-bridge": "br-14ce07ae9c2d",
+        "clab-node-group": "",
+        "clab-node-kind": "arista_ceos",
+        "clab-node-lab-dir": "/home/mcp/mcp-project/clab-mcp-lab/R2A",
+        "clab-node-longname": "clab-mcp-lab-R2A",
+        "clab-node-name": "R2A",
+        "clab-node-type": "",
+        "clab-owner": "mcp",
+        "clab-topo-file": "/home/mcp/mcp-project/lab.yml",
+        "containerlab": "mcp-lab"
+      },
+      "port-bindings": [
+      ]
+    },
+    "R3C": {
+      "index": "4",
+      "shortname": "R3C",
+      "longname": "clab-mcp-lab-R3C",
+      "fqdn": "R3C.mcp-lab.io",
+      "group": "",
+      "labdir": "/home/mcp/mcp-project/clab-mcp-lab/R3C",
+      "kind": "cisco_iol",
+      "image": "vrnetlab/cisco_iol:17.16.01a",
+      "mgmt-net": "",
+      "mgmt-intf": "",
+      "mgmt-ipv4-address": "172.20.20.203",
+      "mgmt-ipv4-prefix-length": 24,
+      "mgmt-ipv6-address": "3fff:172:20:20::8",
+      "mgmt-ipv6-prefix-length": 64,
+      "mac-address": "",
+      "labels": {
+        "clab-mgmt-net-bridge": "br-14ce07ae9c2d",
+        "clab-node-group": "",
+        "clab-node-kind": "cisco_iol",
+        "clab-node-lab-dir": "/home/mcp/mcp-project/clab-mcp-lab/R3C",
+        "clab-node-longname": "clab-mcp-lab-R3C",
+        "clab-node-name": "R3C",
+        "clab-node-type": "",
+        "clab-owner": "mcp",
+        "clab-topo-file": "/home/mcp/mcp-project/lab.yml",
+        "containerlab": "mcp-lab"
+      },
+      "port-bindings": [
+      ]
+    },
+    "R4C": {
+      "index": "5",
+      "shortname": "R4C",
+      "longname": "clab-mcp-lab-R4C",
+      "fqdn": "R4C.mcp-lab.io",
+      "group": "",
+      "labdir": "/home/mcp/mcp-project/clab-mcp-lab/R4C",
+      "kind": "cisco_iol",
+      "image": "vrnetlab/cisco_iol:17.16.01a",
+      "mgmt-net": "",
+      "mgmt-intf": "",
+      "mgmt-ipv4-address": "172.20.20.204",
+      "mgmt-ipv4-prefix-length": 24,
+      "mgmt-ipv6-address": "3fff:172:20:20::7",
+      "mgmt-ipv6-prefix-length": 64,
+      "mac-address": "",
+      "labels": {
+        "clab-mgmt-net-bridge": "br-14ce07ae9c2d",
+        "clab-node-group": "",
+        "clab-node-kind": "cisco_iol",
+        "clab-node-lab-dir": "/home/mcp/mcp-project/clab-mcp-lab/R4C",
+        "clab-node-longname": "clab-mcp-lab-R4C",
+        "clab-node-name": "R4C",
+        "clab-node-type": "",
+        "clab-owner": "mcp",
+        "clab-topo-file": "/home/mcp/mcp-project/lab.yml",
+        "containerlab": "mcp-lab"
+      },
+      "port-bindings": [
+      ]
+    },
+    "R5C": {
+      "index": "6",
+      "shortname": "R5C",
+      "longname": "clab-mcp-lab-R5C",
+      "fqdn": "R5C.mcp-lab.io",
+      "group": "",
+      "labdir": "/home/mcp/mcp-project/clab-mcp-lab/R5C",
+      "kind": "cisco_iol",
+      "image": "vrnetlab/cisco_iol:17.16.01a",
+      "mgmt-net": "",
+      "mgmt-intf": "",
+      "mgmt-ipv4-address": "172.20.20.205",
+      "mgmt-ipv4-prefix-length": 24,
+      "mgmt-ipv6-address": "3fff:172:20:20::b",
+      "mgmt-ipv6-prefix-length": 64,
+      "mac-address": "",
+      "labels": {
+        "clab-mgmt-net-bridge": "br-14ce07ae9c2d",
+        "clab-node-group": "",
+        "clab-node-kind": "cisco_iol",
+        "clab-node-lab-dir": "/home/mcp/mcp-project/clab-mcp-lab/R5C",
+        "clab-node-longname": "clab-mcp-lab-R5C",
+        "clab-node-name": "R5C",
+        "clab-node-type": "",
+        "clab-owner": "mcp",
+        "clab-topo-file": "/home/mcp/mcp-project/lab.yml",
+        "containerlab": "mcp-lab"
+      },
+      "port-bindings": [
+      ]
+    },
+    "R6A": {
+      "index": "7",
+      "shortname": "R6A",
+      "longname": "clab-mcp-lab-R6A",
+      "fqdn": "R6A.mcp-lab.io",
+      "group": "",
+      "labdir": "/home/mcp/mcp-project/clab-mcp-lab/R6A",
+      "kind": "arista_ceos",
+      "image": "ceos:4.35.0F",
+      "mgmt-net": "",
+      "mgmt-intf": "Management0",
+      "mgmt-ipv4-address": "172.20.20.206",
+      "mgmt-ipv4-prefix-length": 24,
+      "mgmt-ipv6-address": "3fff:172:20:20::2",
+      "mgmt-ipv6-prefix-length": 64,
+      "mac-address": "00:1c:73:99:19:86",
+      "labels": {
+        "clab-mgmt-net-bridge": "br-14ce07ae9c2d",
+        "clab-node-group": "",
+        "clab-node-kind": "arista_ceos",
+        "clab-node-lab-dir": "/home/mcp/mcp-project/clab-mcp-lab/R6A",
+        "clab-node-longname": "clab-mcp-lab-R6A",
+        "clab-node-name": "R6A",
+        "clab-node-type": "",
+        "clab-owner": "mcp",
+        "clab-topo-file": "/home/mcp/mcp-project/lab.yml",
+        "containerlab": "mcp-lab"
+      },
+      "port-bindings": [
+      ]
+    },
+    "R7A": {
+      "index": "8",
+      "shortname": "R7A",
+      "longname": "clab-mcp-lab-R7A",
+      "fqdn": "R7A.mcp-lab.io",
+      "group": "",
+      "labdir": "/home/mcp/mcp-project/clab-mcp-lab/R7A",
+      "kind": "arista_ceos",
+      "image": "ceos:4.35.0F",
+      "mgmt-net": "",
+      "mgmt-intf": "Management0",
+      "mgmt-ipv4-address": "172.20.20.207",
+      "mgmt-ipv4-prefix-length": 24,
+      "mgmt-ipv6-address": "3fff:172:20:20::4",
+      "mgmt-ipv6-prefix-length": 64,
+      "mac-address": "00:1c:73:89:64:3f",
+      "labels": {
+        "clab-mgmt-net-bridge": "br-14ce07ae9c2d",
+        "clab-node-group": "",
+        "clab-node-kind": "arista_ceos",
+        "clab-node-lab-dir": "/home/mcp/mcp-project/clab-mcp-lab/R7A",
+        "clab-node-longname": "clab-mcp-lab-R7A",
+        "clab-node-name": "R7A",
+        "clab-node-type": "",
+        "clab-owner": "mcp",
+        "clab-topo-file": "/home/mcp/mcp-project/lab.yml",
+        "containerlab": "mcp-lab"
+      },
+      "port-bindings": [
+      ]
+    },
+    "R8C": {
+      "index": "9",
+      "shortname": "R8C",
+      "longname": "clab-mcp-lab-R8C",
+      "fqdn": "R8C.mcp-lab.io",
+      "group": "",
+      "labdir": "/home/mcp/mcp-project/clab-mcp-lab/R8C",
+      "kind": "cisco_iol",
+      "image": "vrnetlab/cisco_iol:17.16.01a",
+      "mgmt-net": "",
+      "mgmt-intf": "",
+      "mgmt-ipv4-address": "172.20.20.208",
+      "mgmt-ipv4-prefix-length": 24,
+      "mgmt-ipv6-address": "3fff:172:20:20::5",
+      "mgmt-ipv6-prefix-length": 64,
+      "mac-address": "",
+      "labels": {
+        "clab-mgmt-net-bridge": "br-14ce07ae9c2d",
+        "clab-node-group": "",
+        "clab-node-kind": "cisco_iol",
+        "clab-node-lab-dir": "/home/mcp/mcp-project/clab-mcp-lab/R8C",
+        "clab-node-longname": "clab-mcp-lab-R8C",
+        "clab-node-name": "R8C",
+        "clab-node-type": "",
+        "clab-owner": "mcp",
+        "clab-topo-file": "/home/mcp/mcp-project/lab.yml",
+        "containerlab": "mcp-lab"
+      },
+      "port-bindings": [
+      ]
+    },
+    "R9C": {
+      "index": "10",
+      "shortname": "R9C",
+      "longname": "clab-mcp-lab-R9C",
+      "fqdn": "R9C.mcp-lab.io",
+      "group": "",
+      "labdir": "/home/mcp/mcp-project/clab-mcp-lab/R9C",
+      "kind": "cisco_iol",
+      "image": "vrnetlab/cisco_iol:17.16.01a",
+      "mgmt-net": "",
+      "mgmt-intf": "",
+      "mgmt-ipv4-address": "172.20.20.209",
+      "mgmt-ipv4-prefix-length": 24,
+      "mgmt-ipv6-address": "3fff:172:20:20::9",
+      "mgmt-ipv6-prefix-length": 64,
+      "mac-address": "",
+      "labels": {
+        "clab-mgmt-net-bridge": "br-14ce07ae9c2d",
+        "clab-node-group": "",
+        "clab-node-kind": "cisco_iol",
+        "clab-node-lab-dir": "/home/mcp/mcp-project/clab-mcp-lab/R9C",
+        "clab-node-longname": "clab-mcp-lab-R9C",
+        "clab-node-name": "R9C",
+        "clab-node-type": "",
+        "clab-owner": "mcp",
+        "clab-topo-file": "/home/mcp/mcp-project/lab.yml",
+        "containerlab": "mcp-lab"
+      },
+      "port-bindings": [
+      ]
+    }
+  },
+  "links": [
+    {
+      "endpoints": {
+        "a": {
+          "node": "R1A",
+          "interface": "eth1",
+          "mac": "aa:c1:ab:71:a7:f5",
+          "peer": "z"
+        },
+        "z": {
+          "node": "R10C",
+          "interface": "eth1",
+          "mac": "aa:c1:ab:2c:b2:6a",
+          "peer": "a"
+        }
+      }
+    },
+    {
+      "endpoints": {
+        "a": {
+          "node": "R1A",
+          "interface": "eth2",
+          "mac": "aa:c1:ab:05:61:88",
+          "peer": "z"
+        },
+        "z": {
+          "node": "R11C",
+          "interface": "eth1",
+          "mac": "aa:c1:ab:29:88:1a",
+          "peer": "a"
+        }
+      }
+    },
+    {
+      "endpoints": {
+        "a": {
+          "node": "R10C",
+          "interface": "eth2",
+          "mac": "aa:c1:ab:ae:42:a7",
+          "peer": "z"
+        },
+        "z": {
+          "node": "R11C",
+          "interface": "eth2",
+          "mac": "aa:c1:ab:61:c5:85",
+          "peer": "a"
+        }
+      }
+    },
+    {
+      "endpoints": {
+        "a": {
+          "node": "R1A",
+          "interface": "eth3",
+          "mac": "aa:c1:ab:5b:a6:1a",
+          "peer": "z"
+        },
+        "z": {
+          "node": "R3C",
+          "interface": "eth3",
+          "mac": "aa:c1:ab:89:81:04",
+          "peer": "a"
+        }
+      }
+    },
+    {
+      "endpoints": {
+        "a": {
+          "node": "R1A",
+          "interface": "eth4",
+          "mac": "aa:c1:ab:1d:ca:4b",
+          "peer": "z"
+        },
+        "z": {
+          "node": "R2A",
+          "interface": "eth3",
+          "mac": "aa:c1:ab:70:14:b2",
+          "peer": "a"
+        }
+      }
+    },
+    {
+      "endpoints": {
+        "a": {
+          "node": "R3C",
+          "interface": "eth2",
+          "mac": "aa:c1:ab:50:65:8f",
+          "peer": "z"
+        },
+        "z": {
+          "node": "R4C",
+          "interface": "eth1",
+          "mac": "aa:c1:ab:8f:bd:27",
+          "peer": "a"
+        }
+      }
+    },
+    {
+      "endpoints": {
+        "a": {
+          "node": "R3C",
+          "interface": "eth1",
+          "mac": "aa:c1:ab:9c:49:6d",
+          "peer": "z"
+        },
+        "z": {
+          "node": "R5C",
+          "interface": "eth1",
+          "mac": "aa:c1:ab:58:81:49",
+          "peer": "a"
+        }
+      }
+    },
+    {
+      "endpoints": {
+        "a": {
+          "node": "R4C",
+          "interface": "eth2",
+          "mac": "aa:c1:ab:0f:ac:b2",
+          "peer": "z"
+        },
+        "z": {
+          "node": "R5C",
+          "interface": "eth2",
+          "mac": "aa:c1:ab:71:fc:37",
+          "peer": "a"
+        }
+      }
+    },
+    {
+      "endpoints": {
+        "a": {
+          "node": "R2A",
+          "interface": "eth4",
+          "mac": "aa:c1:ab:94:fa:2c",
+          "peer": "z"
+        },
+        "z": {
+          "node": "R3C",
+          "interface": "eth4",
+          "mac": "aa:c1:ab:86:ba:6b",
+          "peer": "a"
+        }
+      }
+    },
+    {
+      "endpoints": {
+        "a": {
+          "node": "R2A",
+          "interface": "eth2",
+          "mac": "aa:c1:ab:cf:b7:83",
+          "peer": "z"
+        },
+        "z": {
+          "node": "R7A",
+          "interface": "eth1",
+          "mac": "aa:c1:ab:ad:03:84",
+          "peer": "a"
+        }
+      }
+    },
+    {
+      "endpoints": {
+        "a": {
+          "node": "R2A",
+          "interface": "eth1",
+          "mac": "aa:c1:ab:88:50:e0",
+          "peer": "z"
+        },
+        "z": {
+          "node": "R6A",
+          "interface": "eth1",
+          "mac": "aa:c1:ab:b7:5c:17",
+          "peer": "a"
+        }
+      }
+    },
+    {
+      "endpoints": {
+        "a": {
+          "node": "R7A",
+          "interface": "eth2",
+          "mac": "aa:c1:ab:29:14:f0",
+          "peer": "z"
+        },
+        "z": {
+          "node": "R8C",
+          "interface": "eth2",
+          "mac": "aa:c1:ab:20:f1:c2",
+          "peer": "a"
+        }
+      }
+    },
+    {
+      "endpoints": {
+        "a": {
+          "node": "R6A",
+          "interface": "eth2",
+          "mac": "aa:c1:ab:16:c8:68",
+          "peer": "z"
+        },
+        "z": {
+          "node": "R8C",
+          "interface": "eth1",
+          "mac": "aa:c1:ab:e4:74:f8",
+          "peer": "a"
+        }
+      }
+    },
+    {
+      "endpoints": {
+        "a": {
+          "node": "R8C",
+          "interface": "eth3",
+          "mac": "aa:c1:ab:4e:ab:93",
+          "peer": "z"
+        },
+        "z": {
+          "node": "R9C",
+          "interface": "eth1",
+          "mac": "aa:c1:ab:3e:b3:bf",
+          "peer": "a"
+        }
+      }
+    }
+  ]
+}

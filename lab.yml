@@ -5,19 +5,62 @@ topology:
     env:
       CLAB_MGMT_PASSTHROUGH: "true"
   nodes:
-    r1:
+    R1A:
       kind: arista_ceos
       image: ceos:4.35.0F
       mgmt-ipv4: 172.20.20.201
-    r2:
-      kind: cisco_iol
-      image: vrnetlab/cisco_iol:17.16.01a
+    R2A:
+      kind: arista_ceos
+      image: ceos:4.35.0F
       mgmt-ipv4: 172.20.20.202
-    r3:
+    R3C:
       kind: cisco_iol
       image: vrnetlab/cisco_iol:17.16.01a
       mgmt-ipv4: 172.20.20.203
+    R4C:
+      kind: cisco_iol
+      image: vrnetlab/cisco_iol:17.16.01a
+      mgmt-ipv4: 172.20.20.204
+    R5C:
+      kind: cisco_iol
+      image: vrnetlab/cisco_iol:17.16.01a
+      mgmt-ipv4: 172.20.20.205
+    R6A:
+      kind: arista_ceos
+      image: ceos:4.35.0F
+      mgmt-ipv4: 172.20.20.206
+    R7A:
+      kind: arista_ceos
+      image: ceos:4.35.0F
+      mgmt-ipv4: 172.20.20.207
+    R8C:
+      kind: cisco_iol
+      image: vrnetlab/cisco_iol:17.16.01a
+      mgmt-ipv4: 172.20.20.208
+    R9C:
+      kind: cisco_iol
+      image: vrnetlab/cisco_iol:17.16.01a
+      mgmt-ipv4: 172.20.20.209
+    R10C:
+      kind: cisco_iol
+      image: vrnetlab/cisco_iol:17.16.01a
+      mgmt-ipv4: 172.20.20.210
+    R11C:
+      kind: cisco_iol
+      image: vrnetlab/cisco_iol:17.16.01a
+      mgmt-ipv4: 172.20.20.211
   links:
-    - endpoints: ["r1:Ethernet0/1", "r2:eth1"]
-    - endpoints: ["r2:eth2", "r3:eth1"]
-    - endpoints: ["r1:Ethernet0/2", "r3:eth2"]
+    - endpoints: ["R1A:eth1", "R10C:Ethernet0/1"]
+    - endpoints: ["R1A:eth2", "R11C:Ethernet0/1"]
+    - endpoints: ["R10C:Ethernet0/2", "R11C:Ethernet0/2"]
+    - endpoints: ["R1A:eth3", "R3C:Ethernet0/3"]
+    - endpoints: ["R1A:eth4", "R2A:eth3"]
+    - endpoints: ["R3C:Ethernet0/2", "R4C:Ethernet0/1"]
+    - endpoints: ["R3C:Ethernet0/1", "R5C:Ethernet0/1"]
+    - endpoints: ["R4C:Ethernet0/2", "R5C:Ethernet0/2"]
+    - endpoints: ["R2A:eth4", "R3C:Ethernet1/0"]
+    - endpoints: ["R2A:eth2", "R7A:eth1"]
+    - endpoints: ["R2A:eth1", "R6A:eth1"]
+    - endpoints: ["R7A:eth2", "R8C:Ethernet0/2"]
+    - endpoints: ["R6A:eth2", "R8C:Ethernet0/1"]
+    - endpoints: ["R8C:Ethernet0/3", "R9C:Ethernet0/1"]
