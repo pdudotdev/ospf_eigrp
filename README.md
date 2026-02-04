@@ -1,4 +1,4 @@
-# ✨ Troubleshooting CCNA/CCNP Concepts with Claude & MCP ✨
+# ✨ Troubleshooting CCNA/CCNP Concepts with AI & MCP ✨
 
 [![Last Commit](https://img.shields.io/github/last-commit/pdudotdev/netaimcp)](https://github.com/pdudotdev/netaimcp/commits/main/)
 
