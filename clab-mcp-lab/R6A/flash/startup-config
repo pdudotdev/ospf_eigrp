@@ -1,4 +1,4 @@
-! Startup-config last modified at Wed Feb  4 08:01:31 2026 by root
+! Startup-config last modified at Wed Feb  4 08:53:59 2026 by root
 ! device: R6A (cEOSLab, EOS-4.35.0F-44178984.4350F (engineering build))
 !
 no aaa root
@@ -33,12 +33,16 @@ interface Ethernet1
    no switchport
    ip address 10.1.1.13/30
    ip ospf network point-to-point
+   ip ospf authentication message-digest
+   ip ospf message-digest-key 1 md5 7 cPJDR7WarHTWLNmizABMlQ==
 !
 interface Ethernet2
    description TO-R8C
    no switchport
    ip address 10.1.1.2/30
    ip ospf network point-to-point
+   ip ospf authentication message-digest
+   ip ospf message-digest-key 1 md5 7 n9WRlnPw52vFGviUBTwgxw==
 !
 interface Loopback1
    ip address 6.6.6.6/32
