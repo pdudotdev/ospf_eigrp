@@ -1,8 +1,9 @@
-# ✨ CCNP Troubleshooting & Automation with Claude and MCP ✨
+# ✨ Troubleshooting CCNA/CCNP Concepts with Claude & MCP ✨
 
 [![Last Commit](https://img.shields.io/github/last-commit/pdudotdev/netaimcp)](https://github.com/pdudotdev/netaimcp/commits/main/)
 
-- [🛡️ Automating Network Tasks with Claude and MCP]
+## 📖 Table of Contents
+- [🛡️ Automating Network Tasks with Claude and MCP]()
   - [🔍 Overview](#-overview)
   - [🎓 Concepts](#-features)
   - [🖥️ Test Environment](#%EF%B8%8F-system-requirements)
