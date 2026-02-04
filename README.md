@@ -20,11 +20,11 @@ By design, the project is **multi-vendor**, **multi-protocol**, **multi-area/mul
 
 This project assumes at least **CCNA**-level knowledge (**CCNP** preferred), as well as familiarity with **Linux** terminal commands, **Python** syntax, and multi-vendor **CLIs**.
 
-I am **NOT** going to explain here how to build the topology | configure the routers | write the MCP server in Python | enhance the MCP server with new tools. I already did that from scratch in my beginner-friendly [**Udemy course**](https://www.udemy.com/course/mcp-server/?referralCode=D62613A8194D2D915B55). Feel free to join to get instructor support, regular updates, access to Discord etc.
+I am **NOT** going to explain here how to build the topology | write the MCP server in Python | enhance the MCP server with new tools. I already did that from scratch in my beginner-friendly [**Udemy course**](https://www.udemy.com/course/mcp-server/?referralCode=D62613A8194D2D915B55). Feel free to join to get instructor support, regular updates, access to Discord etc.
 
 🍀 **NOTE**: This is an evolving project, with new features being added periodically, so feel free to check back once in a while.
 
-# 🖥️ Tech Stack
+## 🖥️ Tech Stack
 The main tools and technologies used for building the project:
 - [x] Claude AI (Claude Code)
 - [x] MCP Server (FastMCP)
@@ -38,15 +38,15 @@ The main tools and technologies used for building the project:
 - [x] Arista EOS (cEOS)
 - [x] Cisco IOS/IOS-XE (IOL)
 
-# 🎓 Networking Topics
+## 🎓 Networking Topics
 Below you'll find the network protocols and concepts that are part of this topology:
 
 
 
-## 🎯 Planned Upgrades
+## 🧪 Planned Upgrades
 - [ ] Adding BGP
 - [ ] Adding IS-IS
-- [ ] Adding a new vendor
+- [ ] Adding new vendors
 
 ## ⚠️ Disclaimer
 This project is intended for educational purposes only. Users are responsible for building their own lab environment and meeting the necessary conditions (e.g., RAM/vCPU, router OS images, Claude subscription/API key, etc.). Users are responsible for ensuring that their use of this tool complies with all applicable laws and regulations. The developer of this project does not endorse or support any malicious or unauthorized activities. Use this tool responsibly.
