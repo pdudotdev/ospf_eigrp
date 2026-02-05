@@ -5,7 +5,8 @@
 ## 📖 Table of Contents
 - 🔥 **Troubleshooting Networks with Claude and MCP**
   - [🔍 Overview](#-overview)
-  - [🖥️ Tech Stack]()
+  - [⚒️ Tech Stack]()
+  - [📋 Included Vendors]()
   - [🎓 Networking Topics]()
   - [🔄 Network Topology]()
   - [🧪 Automation and Troubleshooting Tests]()
@@ -18,13 +19,15 @@ The purpose of this project is to showcase the capabilities of **Claude AI** and
 
 By design, the project is **multi-vendor**, **multi-protocol**, **multi-area/multi-AS**, **OSI L3-focused**, in order to automate and troubleshoot various scenarios in a diverse and complex network.
 
-This project assumes at least **CCNA**-level knowledge (**CCNP** preferred), as well as familiarity with **Linux** terminal commands, **Python** syntax, and multi-vendor **CLIs**.
-
 I am **NOT** going to explain here how to build the topology | write the MCP server in Python | enhance the MCP server with new tools. I already did that from scratch in my beginner-friendly [**Udemy course**](https://www.udemy.com/course/mcp-server/?referralCode=D62613A8194D2D915B55). Feel free to join to get instructor support, regular updates, access to Discord etc.
+
+However, I am providing the **topology diagram**, the **startup config** of each router, as well as the actual **Containerlab YAML file** defining the network.
+
+⚠️ **NOTE**: This project assumes at least **CCNA**-level knowledge (**CCNP** preferred), as well as familiarity with **Linux** terminal commands, **Python** syntax, and multi-vendor **CLIs**.
 
 🍀 **NOTE**: This is an evolving project, with new features being added periodically, so feel free to check back once in a while.
 
-## 🖥️ Tech Stack
+## ⚒️ Tech Stack
 The main tools and technologies used for building the project:
 - [x] Claude AI (Claude Code)
 - [x] MCP Server (FastMCP)
@@ -35,12 +38,38 @@ The main tools and technologies used for building the project:
 - [x] VS Code
 - [x] Ubuntu 24
 - [x] VirtualBox/VMware
-- [x] Arista EOS (cEOS)
-- [x] Cisco IOS/IOS-XE (IOL)
+
+## 📋 Included Vendors
+- [x] Arista: EOS (cEOS)
+- [x] Cisco: IOS/IOS-XE (IOL)
 
 ## 🎓 Networking Topics
-Below you'll find the network protocols and concepts that are part of this topology:
+Network concepts currently in this topology:
+- [x] OSPF multi-area:
+  - Basic protocol config
+    - Reference bandwidth
+    - Point-to-point links
+    - Passive interfaces
+    - MD5 authentication
+    - External type 1 routes
+  - Route redistribution
+  - Route summarization (ABR)
+  - Route filtering with prefix lists
+  - Route filtering with distribute lists
+  - Area types: normal, totally stubby, totally nssa
 
+- [x] EIGRP:
+  - Basic protocol config
+    - Passive interfaces
+    - MD5 authentication
+    - Stub connected/summary
+  - Local summarization
+  - Route redistribution
+  - Default metric via route map
+
+- [x] Others:
+  - Policy-Based Routing
+  - IP SLA icmp-echo
 
 
 ## 🧪 Planned Upgrades
