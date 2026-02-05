@@ -5,7 +5,7 @@ In this file you'll find troubleshooting scenarios based on the structure discus
 
 ## 🍀 CCNA-level scenarios
 
-### Scenario 1
+### ▫️ Scenario 1
 
 - [x] **Summary**:
 ```
@@ -60,7 +60,7 @@ Neighbor ID     Instance VRF      Pri State                  Dead Time   Address
 6.6.6.6         1        default  0   FULL                   00:00:33    10.1.1.13       Ethernet1 
 ```
 
-### Scenario 2
+### ▫️ Scenario 2
 
 - [x] **Summary**:
 ```
@@ -107,7 +107,7 @@ Neighbor ID     Pri   State           Dead Time   Address         Interface
 1.1.1.1           0   FULL/  -        00:00:30    10.0.0.5        Ethernet0/3
 ```
 
-### Scenario 3
+### ▫️ Scenario 3
 
 - [x] **Summary**:
 ```
@@ -169,3 +169,94 @@ Neighbor ID     Instance VRF      Pri State                  Dead Time   Address
 
 ## 🔥 CCNP-level scenarios
 
+### Scenario 1
+
+- [x] **Summary**:
+```
+Routers don't have a summary route to R9C's Loopback interfaces, instead they show separate entries for each Loopback in their routing tables.
+```
+- [x] **Causing Failure**: 
+```
+Omitting to advertise summary routes on R9C (EIGRP stub) to its R8C neighbor, using the commands below:
+
+R9C(config)interface Ethernet0/1
+R9C(config-if)ip summary-address eigrp 20 9.9.0.0 255.255.252.0
+R9C(config)#router eigrp 20
+R9C(config-router)#eigrp stub connected
+```
+- [x] **Confirming Failure**:
+```
+Checking the effects of the commands above, on R1A:
+
+R1A#show ip route
+<...>
+ O E1     9.9.1.0/24 [110/320]
+           via 10.0.0.2, Ethernet4
+ O E1     9.9.2.0/24 [110/320]
+           via 10.0.0.2, Ethernet4
+ O E1     9.9.3.0/24 [110/320]
+           via 10.0.0.2, Ethernet4
+```
+- [x] **User Prompt**:
+```
+Why are all routers in the network showing individual routes to R9C's loopbacks. Check this and give me all potential fixes to choose from.
+```
+- [x] **Commands issued by Claude**:
+```
+show ip route | include 9.9.9
+show ip route eigrp | include 9.9.9
+show ip interface brief | include Loopback
+show running-config | section router eigrp
+show running-config | section router ospf
+show running-config | include redistribute
+show ip ospf database external
+show ip eigrp neighbors detail
+show ip eigrp topology
+```
+
+```
+Root Cause
+
+R9C is configured as: eigrp stub connected
+
+This tells R9C to advertise its connected routes (the loopback /24s). Even though ip summary-address eigrp 20 9.9.0.0 255.255.252.0 is configured on interface Et0/1, the stub connected configuration is causing it to still advertise the individual connected routes.
+
+Fix Options
+
+Option 1: Change Stub to Summary (Recommended)
+
+Location: R9C
+Result: Advertises only the summary route, suppresses component routes
+Impact: R9C will stop advertising individual loopbacks
+
+Option 2: Add Summary to Stub
+
+Location: R9C
+Result: Advertises both connected AND summary routes (summary should be preferred by R8C due to better metric)
+Impact: Both routes present in EIGRP, but routing table should prefer summary
+
+Option 3: Summarize at ASBR (R8C)
+
+Location: R8C
+Result: Individual routes enter OSPF from EIGRP, but get summarized before propagating
+Impact: Fixes OSPF domain, doesn't fix EIGRP domain
+
+Which approach would you like to take?
+```
+
+```
+Let's go with option 2.
+```
+
+```
+router eigrp 20
+eigrp stub connected summary
+```
+
+- [x] **Confirmation**:
+```
+R1A#show ip route
+<...>
+ O E1     9.9.0.0/22 [110/320]
+           via 10.0.0.2, Ethernet4
+```
