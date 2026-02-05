@@ -77,7 +77,7 @@ Network concepts currently in this topology:
 ![topology](/topology/TOPOLOGY.png)
 
 - [x] Containerlab YAML file:
-  - [Lab topology](lab.yaml)
+  - [Lab topology](lab.yml)
 
 - [x] Router naming convention:
   - **RXY** where:
