@@ -1,4 +1,4 @@
-# ✨ Troubleshooting CCNP Concepts with AI & MCP ✨
+# ✨ Troubleshooting CCNP Concepts with Claude AI, MCP, and Python
 
 [![Last Commit](https://img.shields.io/github/last-commit/pdudotdev/netaimcp)](https://github.com/pdudotdev/netaimcp/commits/main/)
 
@@ -9,7 +9,7 @@
   - [📋 Included Vendors](#-included-vendors)
   - [🎓 Networking Topics](#-networking-topics)
   - [🔄 Network Topology](#-network-topology)
-  - [🔥 Scenarios](#-scenarios)
+  - [🔥 Automation and Troubleshooting](#-scenarios)
   - [⬆️ Planned Upgrades](#-planned-upgrades)
   - [⚠️ Disclaimer](#-disclaimer)
   - [📜 License](#-license)
@@ -44,7 +44,7 @@ The main tools and technologies used for building the project:
 - [x] Cisco: IOS/IOS-XE (IOL)
 
 ## 🎓 Networking Topics
-Network concepts currently in this topology:
+Networking topics in this topology:
 - [x] OSPF multi-area:
   - Basic protocol config
     - Reference bandwidth
@@ -72,7 +72,8 @@ Network concepts currently in this topology:
   - IP SLA icmp-echo
 
 ## 🔄 Network Topology
-- [x] Current network topology - subject to periodic upgrades:
+- [x] Current network topology
+  - *Subject to periodic upgrades*
 
 ![topology](/topology/TOPOLOGY.png)
 
@@ -100,9 +101,13 @@ Network concepts currently in this topology:
 
 ⚠️ **NOTE**: To see the contents of the **nvram** files for Cisco routers, simply use **Notepad** in Windows or **cat** in Linux.
 
-⚠️ **NOTE**: The config files above are considered the **default configuration** for this network, and their contents may change (or new files may be added) with each new Release, as the topology grows in complexity. Watch the release number and notes for this repository.
+⚠️ **NOTE**: The config files above are considered the **default configuration** for this network, and their contents may change (or new files may be added) with each new **Release**, as the topology grows in complexity. Watch the release number and notes for this repository.
 
 ⚠️ **NOTE**: Since these config files above are considered the **default configuration** for this network, they are going to be your fallback config whenever you use `containerlab redeploy -t lab.yml`
+
+## 🔥 Automation and Troubleshooting
+
+
 
 ## 🧪 Planned Upgrades
 - [ ] Adding BGP
