@@ -130,11 +130,11 @@ Checking the effects of the commands above:
 show interfaces FastEthernet0/1
 show ip ospf neighbor
 ```
-- [x] **Claude Prompt**:
+- [x] **User Prompt**:
 ```
 Why is the R2A-R3C OSPF neighborship broken? Can you check and fix please?
 ```
-- [x] **Commands by Claude**:
+- [x] **Commands issued by Claude**:
 ```
 show ip ospf neighbor
 show interfaces FastEthernet0/1
@@ -142,7 +142,7 @@ show ip ospf interface FastEthernet0/1
 interface FastEthernet0/1
 mtu 1500
 ```
-- [x] **Confirmation by Claude**:
+- [x] **Confirmation provided by Claude**:
 ```
 Problem found!
 Cause: The MTU on R2A's FastEthernet0/1 doesn't match R3C's.
