@@ -22,7 +22,7 @@ By design, the project is **multi-vendor**, **multi-protocol**, **multi-area/mul
 I am **NOT** going to explain here how to: build the topology • write the MCP server in Python • enhance the MCP server with new tools. I already did that from scratch in my beginner-friendly [**Udemy course**](https://www.udemy.com/course/mcp-server/?referralCode=D62613A8194D2D915B55). 
 
 **Join the course to get:**
-- [x] **Lab manual** (PDF) for this project
+- [x] **Lab manual** for this project
 - [x] Full instructor support (Q&A)
 - [x] Regular upgrades (monthly)
 - [x] Access to a private Discord
