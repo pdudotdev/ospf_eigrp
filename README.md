@@ -90,6 +90,21 @@ Networking topics in this topology:
     - **X**: device number id
     - **Y**: vendor (A-Arista, C-Cisco, etc.)
 
+- [x] Interface naming convention:
+  - Interface **0/1** in the diagram:
+    - Corresponds to **Eth1** on Arista
+    - Corresponds to **Eth0/1** on Cisco
+
+- [x] Default SSH credentials:
+  - Arista: `admin:admin`
+  - Cisco: `admin:admin`
+
+- [x] **.env** credentials file:
+```
+ROUTER_USERNAME=admin
+ROUTER_PASSWORD=admin
+```
+
 ## 🔥 Automation and Troubleshooting
 Troubleshooting scenarios are located in the [**troubleshoot.md**](https://github.com/pdudotdev/netaimcp/blob/main/scenarios/troubleshoot.md) file that is going to be constantly updated as the network grows in complexity.
 
