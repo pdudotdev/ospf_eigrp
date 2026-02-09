@@ -6,12 +6,12 @@
 ## 📖 Table of Contents
 - ⚙️ **Troubleshooting Networks with Claude and MCP**
   - [🔭 Overview](#-overview)
-  - [⚒️ Tech Stack](#-tech-stack)
+  - [⚒️ Tech Stack](#%EF%B8%8F-tech-stack)
   - [📋 Included Vendors](#-included-vendors)
   - [🎓 Networking Topics](#-networking-topics)
   - [🔄 Network Topology](#-network-topology)
   - [🔥 Automation and Troubleshooting](#-automation-and-troubleshooting)
-  - [⚠️ Disclaimer](#-disclaimer)
+  - [⚠️ Disclaimer](#%EF%B8%8F-disclaimer)
   - [📜 License](#-license)
 
 ## 🔭 Overview
@@ -108,7 +108,7 @@ ROUTER_PASSWORD=admin
 ## 🔥 Automation and Troubleshooting
 Troubleshooting scenarios are located in the [**troubleshoot.md**](https://github.com/pdudotdev/netaimcp/blob/main/scenarios/troubleshoot.md) file that is going to be constantly updated as the network grows in complexity.
 
-✍️ **NOTE**: Each scenario is created by starting from the **default configuration** of the network (see [Network Topology](#-network-topology)) and intentionally breaking one or more things to trigger a certain type of failure. Then, with just a simple prompt, we enable Claude to use the MCP server for identifying the root cause(s) and fixing the network. 
+✍️ **NOTE**: Each scenario is created by starting from the **default configuration** of the network (see [Network Topology](#-network-topology) and the config of each router in the **Lab Manual**) and intentionally breaking one or more things to trigger a certain type of failure. Then, with just a simple prompt, we enable Claude to use the MCP server for identifying the root cause(s) and fixing the network. 
 
 ### Example of scenario workflow
 Each **troubleshooting scenario** has the following structure:
