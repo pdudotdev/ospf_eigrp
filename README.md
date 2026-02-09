@@ -24,7 +24,7 @@ I am **NOT** going to explain here how to: build the topology • write the MCP 
 **Join the course to get:**
 - [x] **Lab manual** for this project
 - [x] Full instructor support (Q&A)
-- [x] Regular upgrades (monthly)
+- [x] Upgrades on a regular basis
 - [x] Access to a private Discord
 
 ⚠️ **NOTE**: This project assumes at least **CCNA**-level knowledge (**CCNP** preferred), as well as familiarity with **Linux** terminal commands, **Python** syntax, and multi-vendor **CLIs**.
