@@ -1,293 +1,334 @@
 {
+  "autonomous_systems": {
+    "AS1010": {
+      "description": "New York HQ",
+      "role": "enterprise_core",
+      "igp": ["OSPF", "EIGRP"],
+      "edge_routers": ["R2C", "R3C"]
+    },
+    "AS2020": {
+      "description": "London Branch",
+      "role": "enterprise_branch",
+      "igp": ["OSPF"],
+      "edge_routers": ["R18M", "R19M"]
+    },
+    "AS4040": {
+      "description": "ISP A",
+      "role": "transit_provider",
+      "route_reflector": "R12C",
+      "customers": ["AS1010", "AS2020"]
+    },
+    "AS5050": {
+      "description": "ISP B",
+      "role": "transit_provider",
+      "customers": ["AS1010", "AS2020"]
+    }
+  },
+
   "routers": {
+
     "R1A": {
-      "hostname": {
-        "name": "R1A"
-      },
-      "roles": {
-        "type": ["ABR"]
-      },
-      "ospf": {
-        "process_id": 1,
-        "router_id": "1.1.1.1",
-        "areas": {
-            "0.0.0.0": ["10.0.0.0/30", "10.0.0.4/30"],
-            "0.0.0.2": ["172.16.0.4/30", "172.16.0.8/30"]
+      "roles": ["ABR"],
+      "igp": {
+        "ospf": {
+          "process_id": 1,
+          "areas": {
+            "0": ["10.0.0.0/30", "10.0.0.4/30"],
+            "2": ["172.16.0.4/30", "172.16.0.8/30"]
+          }
         }
-      }
+      },
+      "default_route_source": "OSPF"
     },
+
     "R2C": {
-      "hostname": {
-        "name": "R2C"
-      },
-      "roles": {
-        "type": ["ABR", "ASBR"]
-      },
-      "ospf": {
-        "process_id": 1,
-        "router_id": "2.2.2.2",
-        "areas": {
-            "0.0.0.0": ["10.0.0.0/30", "10.0.0.8/30"],
-            "0.0.0.1": ["10.1.1.8/30", "10.1.1.12/30", "2.2.2.66/32"]
+      "roles": ["ABR", "ASBR", "NAT_EDGE"],
+      "asn": 1010,
+      "igp": {
+        "ospf": {
+          "areas": {
+            "0": ["10.0.0.0/30", "10.0.0.8/30"],
+            "1": ["10.1.1.8/30", "10.1.1.12/30"]
+          },
+          "area_types": {
+            "1": "NSSA"
+          },
+          "default_originate": {
+            "enabled": true,
+            "type": "E1"
+          }
         }
       },
       "bgp": {
-        "as": "1010"
+        "neighbors": {
+          "R3C": {"type": "iBGP"},
+          "ISP_A": {"peer": "200.40.40.2", "as": 4040},
+          "ISP_B": {"peer": "200.50.50.2", "as": 5050}
+        },
+        "policy": {
+          "accept_default_only": true,
+          "advertise_internal": false
+        }
+      },
+      "nat": {
+        "mode": "PAT",
+        "inside_domains": ["OSPF"],
+        "outside_links": ["ISP_A", "ISP_B"]
       }
     },
+
     "R3C": {
-      "hostname": {
-        "name": "R3C"
-      },
-      "roles": {
-        "type": ["ASBR", "redistribution"]
-      },
-      "ospf": {
-        "process_id": 1,
-        "router_id": "3.3.3.3",
-        "areas": {
-            "0.0.0.0": ["10.0.0.4/30", "10.0.0.8/30", "3.3.3.0/24"]
+      "roles": ["ASBR", "IGP_REDISTRIBUTOR", "NAT_EDGE"],
+      "asn": 1010,
+      "igp": {
+        "ospf": {
+          "areas": {
+            "0": ["10.0.0.4/30", "10.0.0.8/30"]
+          },
+          "default_originate": {
+            "enabled": true,
+            "type": "E1"
+          },
+          "redistribution": {
+            "from_eigrp": true
+          }
+        },
+        "eigrp": {
+          "as": 10,
+          "default_summary": true,
+          "edge_behavior": "default-only",
+          "redistribution": {
+            "from_ospf": false
+          }
         }
       },
-      "eigrp": {
-        "as_number": 10,
-        "networks": ["192.168.10.0/30", "192.168.10.4/30"]
-      },
       "bgp": {
-        "as": "1010"
+        "neighbors": {
+          "R2C": {"type": "iBGP"},
+          "ISP_A": {"peer": "200.40.40.6", "as": 4040},
+          "ISP_B": {"peer": "200.50.50.6", "as": 5050}
+        },
+        "policy": {
+          "accept_default_only": true,
+          "advertise_internal": false
+        }
+      },
+      "nat": {
+        "mode": "PAT",
+        "inside_domains": ["OSPF", "EIGRP"],
+        "outside_links": ["ISP_A", "ISP_B"]
       }
     },
+
     "R4C": {
-      "hostname": {
-        "name": "R4C"
+      "roles": ["EIGRP_LEAF"],
+      "igp": {
+        "eigrp": {"as": 10}
       },
-      "roles": {
-        "type": ["regular"]
-      },
-      "eigrp": {
-        "as_number": 10,
-        "networks": ["192.168.10.0/30", "192.168.10.8/30", "4.4.1.0/24", "4.4.2.0/24"]
-      }
+      "default_gateway": "R3C"
     },
+
     "R5C": {
-      "hostname": {
-        "name": "R5C"
+      "roles": ["EIGRP_LEAF"],
+      "igp": {
+        "eigrp": {"as": 10}
       },
-      "roles": {
-        "type": ["regular"]
-      },
-      "eigrp": {
-        "as_number": 10,
-        "networks": ["192.168.10.4/30", "192.168.10.8/30", "5.5.1.0/24", "5.5.2.0/24"]
-      }
+      "default_gateway": "R3C"
     },
+
     "R6A": {
-      "hostname": {
-        "name": "R6A"
-      },
-      "roles": {
-        "type": ["regular"]
-      },
-      "ospf": {
-        "process_id": 1,
-        "router_id": "6.6.6.6",
-        "areas": {
-            "0.0.0.1": ["10.1.1.0/30", "10.1.1.12/30", "6.6.6.6/32"]
+      "roles": ["OSPF_AREA1_ROUTER"],
+      "igp": {
+        "ospf": {
+          "areas": {
+            "1": ["10.1.1.0/30", "10.1.1.12/30", "6.6.6.6/32"]
+          },
+          "area_type": "NSSA"
         }
-      }
+      },
+      "default_gateway": "R2C"
     },
+
     "R7A": {
-      "hostname": {
-        "name": "R7A"
-      },
-      "roles": {
-        "type": ["regular"]
-      },
-      "ospf": {
-        "process_id": 1,
-        "router_id": "7.7.7.7",
-        "areas": {
-            "0.0.0.1": ["10.1.1.4/30", "10.1.1.8/30", "7.7.7.7/32"]
+      "roles": ["OSPF_AREA1_ROUTER"],
+      "igp": {
+        "ospf": {
+          "areas": {
+            "1": ["10.1.1.4/30", "10.1.1.8/30", "7.7.7.7/32"]
+          },
+          "area_type": "NSSA"
         }
-      }
+      },
+      "default_gateway": "R2C"
     },
+
     "R8C": {
-      "hostname": {
-        "name": "R8C"
-      },
-      "roles": {
-        "type": ["ASBR", "redistribution"]
-      },
-      "ospf": {
-        "process_id": 1,
-        "router_id": "8.8.8.8",
-        "areas": {
-            "0.0.0.1": ["10.1.1.0/30", "10.1.1.4/30"]
+      "roles": ["ASBR", "IGP_REDISTRIBUTOR"],
+      "igp": {
+        "ospf": {
+          "areas": {
+            "1": ["10.1.1.0/30", "10.1.1.4/30"]
+          },
+          "area_type": "NSSA",
+          "redistribution": {
+            "from_eigrp": true
+          }
+        },
+        "eigrp": {
+          "as": 20,
+          "redistribution": {
+            "from_ospf": true
+          }
         }
-      },
-      "eigrp": {
-        "as_number": 20,
-        "networks": ["192.168.20.0/30", "8.8.8.8/32"]
       }
     },
+
     "R9C": {
-      "hostname": {
-        "name": "R9C"
+      "roles": ["EIGRP_STUB"],
+      "igp": {
+        "eigrp": {
+          "as": 20,
+          "stub": ["connected", "summary"]
+        }
       },
-      "roles": {
-        "type": ["regular"]
-      },
-      "eigrp": {
-        "as_number": 20,
-        "networks": ["192.168.20.0/30", "9.9.1.1/24", "9.9.2.1/24", "9.9.3.1/24"]
-      }
+      "default_gateway": "R8C"
     },
+
     "R10C": {
-      "hostname": {
-        "name": "R10C"
-      },
-      "roles": {
-        "type": ["regular"]
-      },
-      "ospf": {
-        "process_id": 1,
-        "router_id": "10.10.10.10",
-        "areas": {
-            "0.0.0.2": ["172.16.0.0/30", "172.16.0.4/30", "10.10.10.0/24"]
+      "roles": ["OSPF_AREA2_LEAF"],
+      "igp": {
+        "ospf": {
+          "areas": {
+            "2": ["172.16.0.0/30", "172.16.0.4/30", "10.10.10.10/32"]
+          },
+          "area_type": "stub"
         }
-      }
+      },
+      "default_gateway": "R1A"
     },
+
     "R11C": {
-      "hostname": {
-        "name": "R11C"
-      },
-      "roles": {
-        "type": ["regular"]
-      },
-      "ospf": {
-        "process_id": 1,
-        "router_id": "11.11.11.11",
-        "areas": {
-            "0.0.0.2": ["172.16.0.0/30", "172.16.0.8/30", "11.11.11.0/24"]
+      "roles": ["OSPF_AREA2_LEAF"],
+      "igp": {
+        "ospf": {
+          "areas": {
+            "2": ["172.16.0.0/30", "172.16.0.8/30", "11.11.11.11/32"]
+          },
+          "area_type": "stub"
         }
-      }
+      },
+      "default_gateway": "R1A"
     },
+
     "R12C": {
-      "hostname": {
-        "name": "R12C"
-      },
-      "roles": {
-        "type": ["ISP A", "BGP", "Route Reflector"]
-      },
-      "bgp": {
-        "as": "4040"
+      "roles": ["ISP_A_EDGE", "ROUTE_REFLECTOR"],
+      "asn": 4040,
+      "reflector_clients": ["R13C", "R14C", "R15C"],
+      "policy": {
+        "block_customer_default": true,
+        "send_default_to_customers": true,
+        "advertise_transit_only": true
       }
     },
+
     "R13C": {
-      "hostname": {
-        "name": "R13C"
-      },
-      "roles": {
-        "type": ["ISP A", "BGP"]
-      },
-      "bgp": {
-        "as": "4040"
-      }
+      "roles": ["ISP_A_CORE"],
+      "asn": 4040
     },
+
     "R14C": {
-      "hostname": {
-        "name": "R14C"
-      },
-      "roles": {
-        "type": ["ISP A", "BGP"]
-      },
-      "bgp": {
-        "as": "4040"
+      "roles": ["ISP_A_EDGE"],
+      "asn": 4040,
+      "policy": {
+        "block_customer_default": true,
+        "send_default_to_customers": true
       }
     },
+
     "R15C": {
-      "hostname": {
-        "name": "R15C"
-      },
-      "roles": {
-        "type": ["ISP A", "BGP"]
-      },
-      "bgp": {
-        "as": "4040"
-      }
+      "roles": ["ISP_A_CORE"],
+      "asn": 4040
     },
+
     "R16C": {
-      "hostname": {
-        "name": "R16C"
-      },
-      "roles": {
-        "type": ["ISP B", "BGP"]
-      },
-      "bgp": {
-        "as": "5050"
+      "roles": ["ISP_B_EDGE"],
+      "asn": 5050,
+      "policy": {
+        "block_customer_default": true,
+        "send_default_to_customers": true
       }
     },
+
     "R17C": {
-      "hostname": {
-        "name": "R17C"
-      },
-      "roles": {
-        "type": ["ISP B", "BGP"]
-      },
-      "bgp": {
-        "as": "5050"
+      "roles": ["ISP_B_EDGE"],
+      "asn": 5050,
+      "policy": {
+        "block_customer_default": true,
+        "send_default_to_customers": true
       }
     },
+
     "R18M": {
-      "hostname": {
-        "name": "R18M"
-      },
-      "roles": {
-        "type": ["ASBR"]
-      },
-      "ospf": {
-        "instance": "default",
-        "router_id": "18.18.18.18",
-        "areas": {
-            "0.0.0.0": ["172.16.77.0/30", "172.16.77.4/30", "18.18.18.0/24"]
+      "roles": ["ASBR", "NAT_EDGE"],
+      "asn": 2020,
+      "igp": {
+        "ospf": {
+          "areas": {
+            "0": ["172.16.77.0/30", "172.16.77.4/30", "18.18.18.0/24"]
+          },
+          "default_originate": {
+            "enabled": true,
+            "condition": "if-installed",
+            "type": "E1"
+          }
         }
       },
       "bgp": {
-        "as": "2020"
-      }
+        "neighbors": {
+          "R19M": {"type": "iBGP"},
+          "ISP_A": {"peer": "220.40.40.1", "as": 4040},
+          "ISP_B": {"peer": "220.50.50.1", "as": 5050}
+        }
+      },
+      "nat": {"mode": "masquerade"}
     },
+
     "R19M": {
-      "hostname": {
-        "name": "R19M"
-      },
-      "roles": {
-        "type": ["ASBR"]
-      },
-      "ospf": {
-        "instance": "default",
-        "router_id": "19.19.19.19",
-        "areas": {
-            "0.0.0.0": ["172.16.77.0/30", "172.16.77.8/30", "19.19.19.0/24"]
+      "roles": ["ASBR", "NAT_EDGE"],
+      "asn": 2020,
+      "igp": {
+        "ospf": {
+          "areas": {
+            "0": ["172.16.77.0/30", "172.16.77.8/30", "19.19.19.0/24"]
+          },
+          "default_originate": {
+            "enabled": true,
+            "condition": "if-installed",
+            "type": "E1"
+          }
         }
       },
       "bgp": {
-        "as": "2020"
-      }
-    },
-    "R20M": {
-      "hostname": {
-        "name": "R20M"
-      },
-      "roles": {
-        "type": ["regular"]
-      },
-      "ospf": {
-        "instance": "default",
-        "router_id": "20.20.20.20",
-        "areas": {
-            "0.0.0.0": ["172.16.77.4/30", "172.16.77.8/30", "20.20.20.0/24"]
+        "neighbors": {
+          "R18M": {"type": "iBGP"},
+          "ISP_A": {"peer": "220.40.40.5", "as": 4040},
+          "ISP_B": {"peer": "220.50.50.5", "as": 5050}
         }
-      }
+      },
+      "nat": {"mode": "masquerade"}
+    },
+
+    "R20M": {
+      "roles": ["OSPF_LEAF"],
+      "igp": {
+        "ospf": {
+          "areas": {
+            "0": ["172.16.77.4/30", "172.16.77.8/30", "20.20.20.0/24"]
+          }
+        }
+      },
+      "default_gateway": ["R18M", "R19M"],
+      "ecmp": true
     }
   }
 }
