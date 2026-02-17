@@ -77,14 +77,15 @@ PLATFORM_MAP = {
         },
         "bgp": {
             "summary": {"method": "GET", "path": "/rest/routing/bgp/connection"},
-            "detail": {"method": "GET", "path": "/rest/routing/bgp/instance"},
+            "table": {"method": "GET", "path": "/rest/routing/route"},
             "config": {"method": "GET", "path": "/rest/routing/bgp/session"}
         },
         "routing_table": {
             "ip_route": {"method": "GET", "path": "/rest/ip/route"}
         },
         "routing_policies": {
-            "redistribution": {"method": "GET", "path": "/rest/routing/filter/rule"}
+            "prefix_lists": {"method": "GET", "path": "/rest/routing/filter/rule"},
+            "route_maps": {"method": "GET", "path": "/rest/routing/filter/chain/"}
         },
         "interfaces": {
             "interface_status": {"method": "GET", "path": "/rest/interface"}

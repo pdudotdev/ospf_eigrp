@@ -68,7 +68,6 @@ async def execute_command(device_name: str, cmd_or_action: str, ttl: int = CMD_T
     try:
         # REST transport
         if transport == "rest":
-            action = cmd_or_action  # dict with method/path
             raw_output = await execute_rest(device, cmd_or_action)
             parsed_output = raw_output
 
@@ -267,7 +266,7 @@ async def get_bgp(params: BgpQuery) -> dict:
 
     Supported queries:
     - summary  → Check neighbor state, uptime, and prefixes exchanged
-    - detail   → Inspect detailed BGP table and path attributes
+    - table    → Inspect detailed BGP table and path attributes
     - config   → Review BGP configuration
 
     Notes:
