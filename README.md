@@ -283,7 +283,7 @@ For this reason, I'm using **Tabby**:
 ## 🔄 Network Topology
 - [x] Current network topology:
 
-![topology](TOPOLOGY-v2.0.png)
+![topology](topology/TOPOLOGY-v2.0.png)
 
 - [x] Containerlab **lab.yml** file:
 ```
