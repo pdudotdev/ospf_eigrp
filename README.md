@@ -7,7 +7,7 @@
 - 📜 **Lab Manual**
   - [🔭 Overview](#-overview)
   - [⭐ What's New in v2.0](#-whats-new-in-v20)
-  - [🌱 AI Network Automation 101](#-ai-network-automation-101)
+  - [🌱 AI Automation 101](#-ai-automation-101)
   - [♻️ Repository Lifecycle](#%EF%B8%8F-repository-lifecycle)
   - [⚒️ Tech Stack](#%EF%B8%8F-tech-stack)
   - [📋 Included Vendors](#-included-vendors)
@@ -25,7 +25,7 @@
 ## 🔭 Overview
 The purpose of this project is to showcase the capabilities of **Claude Code**, **MCP**, **Python**, and other tools, in regards to troubleshooting and automating network tasks.
 
-Key characteristics of this project:
+Key characteristics of this automation project:
 - [x] **Multi-vendor**
 - [x] **Multi-protocol**
 - [x] **Multi-area/multi-AS**
@@ -43,7 +43,7 @@ What you'll find below:
 ⚠️ **NOTE**: This project assumes **CCNP**-level knowledge, as well as familiarity with **Linux** terminal commands, **Python** syntax, and multi-vendor **CLIs**.
 
 ## ⭐ What's New in v2.0
-• The 2.0.0 upgrade is focused on:
+• The **v2.0.0** upgrade is focused on:
 - [x] Network topology expansion
 - [x] Improving the MCP toolset
 - [x] Optimizing AI performance
@@ -73,7 +73,7 @@ What you'll find below:
 - [x] Improved topology diagram
 - [x] Minor bug fixing
 
-## 🌱 AI Network Automation 101
+## 🌱 AI Automation 101
 If you're completely new to Network Automation using AI & MCP, then you may want to [start here](#-starting-fresh) before moving on with this lab.
 
 ## ♻️ Repository Lifecycle
@@ -134,6 +134,7 @@ Networking topics in this topology:
   - ISP default-originate
   - Prefix list and route map
   - Route reflector in ISP A
+  - *More to come soon*
 
 - [x] **Others**:
   - Policy-Based Routing
@@ -233,8 +234,7 @@ claude mcp list
 
 ## 📂 Router OS Images
 ### Arista EOS
-To download the official **Arista cEOS** file, Google it or see the **Full Guide** in Section 2 of the [course](https://www.udemy.com/course/mcp-server/?referralCode=D62613A8194D2D915B55).
-
+- [x] Download the official [Arista cEOS](https://www.arista.com/en/login) image.
 - [x] You need to import it into Docker using:
 ```
 sudo docker import ~/cEOS64-lab-4.35.0F.tar.xz ceos:4.35.0F
@@ -434,7 +434,7 @@ topology:
 "R20M": {"host": "172.20.20.220", "platform": "mikrotik_routeros", "transport": "rest", "cli_style": "routeros", "location": "London Branch"}
 }
 ```
-⚠️ **NOTE**: Adding `"cli_style": "eos"` or `"cli_style": "ios"` to the **NETWORK.json** inventory file provides additional context to Claude when executing commands on one type of device or another, and it's also useful for further reference in the **MCPServer.py** code.
+⚠️ **NOTE**: Fields such as `"cli_style": "eos"` in the **NETWORK.json** inventory file provide additional context to Claude when executing commands on one type of device or another, and it's also useful for further reference in the **MCPServer.py** code.
 
 - [x] Router naming convention:
   - **RXY** where:
@@ -460,7 +460,7 @@ ROUTER_PASSWORD=admin
 ```
 
 - [x] Router configurations:
-  - Each config below refers to only the most relevant parts of the startup-config files
+  - Each config below refers to only the most relevant parts of the startup-config files.
 
 - [x] Startup configuration files:
   - Saved as:
