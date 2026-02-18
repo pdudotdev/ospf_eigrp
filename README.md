@@ -1722,10 +1722,10 @@ add interfaces=lo1 area=backbone passive
 
 ⚠️ **NOTE**: Check the **MikroTik REST API** from your Ubuntu terminal with:
 ```
-curl -u admin:admin https://172.20.20.218/rest/system/resource
-curl -u admin:admin https://172.20.20.219/rest/interface
-curl -u admin:admin https://172.20.20.219/rest/ip/route
-curl -u admin:admin -X POST https://172.20.20.220/rest/tool/ping -H "Content-Type: application/json" -d '{"address":"172.16.77.9","count":4}'
+curl -u admin:admin http://172.20.20.218/rest/system/resource
+curl -u admin:admin http://172.20.20.219/rest/interface
+curl -u admin:admin http://172.20.20.219/rest/ip/route
+curl -u admin:admin -X POST http://172.20.20.220/rest/tool/ping -H "Content-Type: application/json" -d '{"address":"172.16.77.9","count":4}'
 ```
 
 ⚠️ **NOTE**: The router configurations above are considered the **default configuration** for this network and in **this version of the project**, and they are **subject to change** with each new release, as the topology grows in complexity.
@@ -1806,7 +1806,6 @@ Now let's go [back](#%EF%B8%8F-repository-lifecycle) to the top of this lab manu
 
 ## ⬆️ Planned Upgrades
 Expected in version v3.0:
-- [ ] New branch with mixed vendors
 - [ ] New troubleshooting scenarios
 - [ ] Extra features: NetBox, RAG
 - [ ] Multi-agent architecture
