@@ -9,7 +9,7 @@
   - [⭐ What's New in v2.0](#-whats-new-in-v20)
   - [🌱 AI Automation 101](#-ai-automation-101)
   - [♻️ Repository Lifecycle](#%EF%B8%8F-repository-lifecycle)
-  - [⚒️ Tech Stack](#%EF%B8%8F-tech-stack)
+  - [⚒️ Project Tech Stack](#%EF%B8%8F-project-tech-stack)
   - [📋 Included Vendors](#-included-vendors)
   - [🎓 Networking Topics](#-networking-topics)
   - [🛠️ Environment Setup](#%EF%B8%8F-environment-setup)
@@ -85,7 +85,7 @@ This repository is **NOT** static. I am periodically adding **new features** (de
 **Current version**:
 - [x] The current version of this project is **v2.0**
 
-## ⚒️ Tech Stack
+## ⚒️ Project Tech Stack
 The main tools and technologies used for building the project:
 - [x] Claude AI (Claude Code)
 - [x] MCP Server (FastMCP)
@@ -284,6 +284,11 @@ For this reason, I'm using **Tabby**:
 - [x] Current network topology:
 
 ![topology](topology/TOPOLOGY-v2.0.png)
+
+- [x] Multiple connection types, for diversity:
+  - **Cisco IOS**: Scrapli SSH
+  - **Arista EOS**: Arista eAPI
+  - **MikroTik RouterOS**: REST API
 
 - [x] Containerlab **lab.yml** file:
 ```
