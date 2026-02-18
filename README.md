@@ -165,13 +165,13 @@ Mem:            31Gi        14Gi        10Gi       732Mi       7.8Gi        16Gi
 - [x] Initial configuration:
 ```
 sudo apt update && sudo apt upgrade -y
-sudo apt install curl python3.12-venv python3-pip vim
+sudo apt install python3.12-venv python3-pip curl git
 ```
 - [x] Install VS Code.
 - [x] Directory setup:
 ```
-mkdir mcp-project
-cd mcp-project
+git clone https://github.com/pdudotdev/netaimcp/
+cd netaimcp
 python3 -m venv mcp
 source mcp/bin/activate
 pip install --upgrade pip
@@ -464,9 +464,9 @@ ROUTER_PASSWORD=admin
 
 - [x] Startup configuration files:
   - Saved as:
-    - Arista: `/mcp-project/clab-mcp-lab/RXA/flash/startup-config`
-    - Cisco: `/mcp-project/clab-mcp-lab/RXC/nvram_number`
-    - MikroTik: `/mcp-project/clab-mcp-lab/RXM/ftpboot/config.auto.rsc`
+    - Arista: `/netaimcp/clab-mcp-lab/RXA/flash/startup-config`
+    - Cisco: `/netaimcp/clab-mcp-lab/RXC/nvram_number`
+    - MikroTik: `/netaimcp/clab-mcp-lab/RXM/ftpboot/config.auto.rsc`
   - Save the running configs to the startup config files with:
     - `clab save -t lab.yml`
   - Restore the lab to the startup configurations with:
