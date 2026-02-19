@@ -1,4 +1,4 @@
-# ✨ Network Automation and Troubleshooting with Claude, MCP, and Python
+# ✨ NetAIMCP
 
 [![Latest Release](https://img.shields.io/badge/version-2.0.0-blue.svg)](https://github.com/pdudotdev/netaimcp/releases/tag/2.0.0)
 [![Last Commit](https://img.shields.io/github/last-commit/pdudotdev/netaimcp)](https://github.com/pdudotdev/netaimcp/commits/main/)
