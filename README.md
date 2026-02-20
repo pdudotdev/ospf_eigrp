@@ -1,7 +1,7 @@
 # ✨ aiNOC
 
-[![Latest Release](https://img.shields.io/badge/version-2.0.0-blue.svg)](https://github.com/pdudotdev/netaimcp/releases/tag/2.0.0)
-[![Last Commit](https://img.shields.io/github/last-commit/pdudotdev/netaimcp)](https://github.com/pdudotdev/netaimcp/commits/main/)
+[![Latest Release](https://img.shields.io/badge/version-2.0.0-blue.svg)](https://github.com/pdudotdev/aiNOC/releases/tag/2.0.0)
+[![Last Commit](https://img.shields.io/github/last-commit/pdudotdev/aiNOC)](https://github.com/pdudotdev/aiNOCcommits/main/)
 
 ## 📖 **Table of Contents**
 - 📜 **Lab Manual**
@@ -170,8 +170,8 @@ sudo apt install python3.12-venv python3-pip curl git
 - [x] Install VS Code.
 - [x] Directory setup:
 ```
-git clone https://github.com/pdudotdev/netaimcp/
-cd netaimcp
+git clone https://github.com/pdudotdev/aiNOC/
+cd aiNOC
 python3 -m venv mcp
 source mcp/bin/activate
 pip install --upgrade pip
@@ -469,9 +469,9 @@ ROUTER_PASSWORD=admin
 
 - [x] Startup configuration files:
   - Saved as:
-    - Arista: `/netaimcp/clab-mcp-lab/RXA/flash/startup-config`
-    - Cisco: `/netaimcp/clab-mcp-lab/RXC/nvram_number`
-    - MikroTik: `/netaimcp/clab-mcp-lab/RXM/ftpboot/config.auto.rsc`
+    - Arista: `/aiNOC/clab-mcp-lab/RXA/flash/startup-config`
+    - Cisco: `/aiNOC/clab-mcp-lab/RXC/nvram_number`
+    - MikroTik: `/aiNOC/clab-mcp-lab/RXM/ftpboot/config.auto.rsc`
   - Save the running configs to the startup config files with:
     - `clab save -t lab.yml`
   - Restore the lab to the startup configurations with:
@@ -1738,7 +1738,7 @@ curl -u admin:admin -X POST http://172.20.20.220/rest/tool/ping -H "Content-Type
 ⚠️ **NOTE**: Since these configurations are considered the **default configuration** for the current network version, they are going to be your fallback config whenever you use `containerlab redeploy -t lab.yml`
 
 ## 🔥 Troubleshooting
-Troubleshooting scenarios are located in the [troubleshoot.md](https://github.com/pdudotdev/netaimcp/blob/main/scenarios/troubleshoot.md) file that is going to be constantly updated as the network grows in complexity.
+Troubleshooting scenarios are located in the [troubleshoot.md](https://github.com/pdudotdev/aiNOC/blob/main/scenarios/troubleshoot.md) file that is going to be constantly updated as the network grows in complexity.
 
 ✍️ **NOTE**: Each scenario is created by starting from the **default configuration** of the network (see [Network Topology](#-network-topology)) and intentionally breaking one or more things to trigger a certain type of failure. Then, with just a simple prompt, we enable Claude to use the MCP server's tools for identifying the root cause(s) and fixing the issue. 
 
@@ -1819,4 +1819,4 @@ Expected in version v3.0:
 This project is intended for educational purposes only. You are responsible for building your own lab environment and meeting the necessary conditions (e.g., RAM/vCPU, router OS images, Claude subscription/API key, etc.).
 
 ## 📜 License
-Licensed under the [GNU GENERAL PUBLIC LICENSE Version 3](https://github.com/pdudotdev/netaimcp/blob/main/LICENSE).
+Licensed under the [GNU GENERAL PUBLIC LICENSE Version 3](https://github.com/pdudotdev/aiNOC/blob/main/LICENSE).
