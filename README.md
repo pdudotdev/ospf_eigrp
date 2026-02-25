@@ -328,7 +328,6 @@ Now let's go [back](#%EF%B8%8F-repository-lifecycle) to the top of this lab manu
 ## ⬆️ Planned Upgrades
 Expected in version v4.0:
 - [ ] New branch and vendors
-- [ ] Multi-agent architecture
 - [ ] Performance-based SLA
 - [ ] Discord integration
 - [ ] Netbox integration
