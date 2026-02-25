@@ -37,6 +37,10 @@ Operating modes of **aiNOC**:
 - [x] **On-Call mode (OC)**
   - Agent is invoked by SLA Path failure (See On-Call Mode)
 
+High-level architecture:
+
+![arch](topology/ARCHv3.png)
+
 ⚠️ **NOTE**: This project assumes **CCNP**-level knowledge, as well as familiarity with **Linux** terminal commands, **Python** syntax, and multi-vendor **CLIs**.
 
 ## ⭐ What's New in v3.0
