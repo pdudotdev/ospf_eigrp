@@ -49,13 +49,15 @@ Each platform defines commands for OSPF, EIGRP, BGP, routing policies, interface
 
 **Example:** `get_ospf(device="R3C", query="neighbors")` automatically translates to `show ip ospf neighbor` on Cisco but returns REST JSON from MikroTik.
 
-**MikroTik RouterOS config push**: `push_config` commands for RouterOS devices must be JSON-encoded REST action strings (not CLI commands). Each command takes the form:
-```
-'{"method": "PATCH", "path": "/rest/routing/ospf/interface/<id>", "body": {"area": "0.0.0.0"}}'
-```
-Supported methods: `POST` (create resource), `PUT` (replace resource), `PATCH` (modify by ID), `DELETE` (remove by ID).
+**MikroTik RouterOS config push**: `push_config` commands for RouterOS devices must be JSON-encoded REST action strings (not CLI commands). Use `PUT` to create, `PATCH` to modify (by ID), `DELETE` to remove (by ID). **Do NOT use POST** — it fails on RouterOS 7.x. See full reference at `vendors/mikrotik_api_reference.md`.
 
-**Important**: Always use protocol tools (`get_ospf`, `get_bgp`, etc.) to discover RouterOS resource IDs before issuing PATCH or DELETE — these tools return the `.id` field needed for targeted updates.
+## Vendor Specifics
+
+Vendor-specific API references and behavioral notes live in the `/vendors/` directory. **Read the relevant file before pushing config to that vendor's devices.**
+
+| Vendor | Reference File | When to Read |
+|--------|---------------|--------------|
+| MikroTik RouterOS | `vendors/mikrotik_api_reference.md` | Before any `push_config` to `cli_style="routeros"` devices |
 
 ## Network Inventory & Intent
 
