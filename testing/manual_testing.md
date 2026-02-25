@@ -10,7 +10,6 @@ Run these after significant codebase changes to confirm correct agent behavior.
 - Lab is up (`sudo clab redeploy -t lab.yml`) for each test
 - All devices reachable (verify with `./run_tests.sh integration`)
 - MCP server running or accessible (check with `claude mcp list`)
-- `oncall_watcher.py` not already running (for On-Call tests)
 
 ---
 
@@ -208,16 +207,16 @@ interface Ethernet0/3
 
 #### Verify break
 
-From R8C, trace from R9C toward R2A loopback:
+From R9C toward R2A loopback:
 ```
-traceroute 2.2.2.66 source 192.168.20.2
+traceroute 2.2.2.66
 ```
 Expected: Path goes through `10.1.1.6` (R7A), not R6A.
 
 #### Agent prompt
 
 ```
-Why does R8C forward packets from R9C destined for 2.2.2.66 to R7A?
+Why does R8C forward packets from R9C's 192.168.20.2 interface destined for 2.2.2.66 to R7A every time?
 ```
 
 #### Expected agent behavior
@@ -228,9 +227,7 @@ Why does R8C forward packets from R9C destined for 2.2.2.66 to R7A?
 4. Calls `get_routing_policies(R8C, "access_lists")` → finds ACL 100 matching host 192.168.20.2 → host 2.2.2.66
 5. Identifies PBR on Et0/3 overriding normal routing decisions
 6. Correctly diagnoses root cause with explanation of ACL match and next-hop override
-7. Proposes removal of PBR config
-8. User responds "No" → agent gracefully accepts without applying changes
-9. Documents case (diagnostic scenario, no fix applied)
+7. No fix or documentation needed, it was just a user question.
 
 #### Verify (diagnostic only)
 
@@ -238,18 +235,10 @@ Agent correctly identified:
 - PBR as root cause
 - The specific ACL and route-map involved
 - The forced next-hop (10.1.1.6 = R7A)
-- Clear explanation of why traffic is asymmetric
-
-Agent gracefully accepted "No" and documented the case without forcing changes.
 
 #### Teardown (if agent did not fix, restore clean state)
 
-```
-interface Ethernet0/3
-  no ip policy route-map ACCESS-R2-LO
-no route-map ACCESS-R2-LO
-no ip access-list extended 100
-```
+N/A
 
 ---
 
@@ -276,19 +265,19 @@ Expected: Three separate `O E1 9.9.x.0/24` entries visible instead of a single `
 #### Agent prompt
 
 ```
-Why are all routers in the network showing individual routes to R9C's loopbacks.
+Why are all routers in the network (e.g. R1A) showing individual routes to R9C's loopbacks.
 Check this and give me all potential fixes to choose from.
 ```
 
 #### Expected agent behavior
 
 1. Reads `skills/eigrp/SKILL.md`
-2. Calls `get_routing(R1A, "9.9.0.0")` → confirms individual /24 routes
+2. Calls `get_routing()` and/or `get_routing_policies` 
 3. Calls `get_eigrp(R9C, "config")` → finds `eigrp stub connected` (no `summary` keyword)
 4. Calls `get_eigrp(R9C, "interfaces")` → identifies summary-address on Et0/1
 5. Identifies conflict: stub `connected` without `summary` overrides and advertises individual connected routes
-6. Presents 3 fix options (change stub to include `summary`, modify interface summary, summarize at R8C)
-7. User selects Option 2 (`eigrp stub connected summary`)
+6. Presents multiple fix options (change stub to include `summary`, modify interface summary, summarize at R8C, etc.)
+7. User selects Option that configures `eigrp stub summary` on R9C
 8. Applies fix, verifies /22 summary now present and individual /24s suppressed on R1A
 
 #### Verify fix
@@ -334,9 +323,10 @@ Generate real IP SLA path failures for On-Call tests.
 
 ---
 
-### OC-001 - OSPF Passive Interface → R4C SLA Failure
+### OC-001 - OSPF Passive Interface → R4C/R9C SLA Failure
 
 **SLA Path**: `R4C_TO_R10C` | **Break device**: R3C | **SLA source**: R4C (172.20.20.204)
+**Implicit**: `R9C_TO_R5C` | R3C failure breaks two SLA paths at once
 
 #### Setup (break)
 
@@ -344,6 +334,7 @@ SSH to R3C:
 ```
 router ospf 1
   passive-interface Ethernet0/3
+  passive-interface Ethernet1/0
 ```
 
 #### Verify break
@@ -353,6 +344,7 @@ From R3C:
 show ip ospf neighbor
 ```
 Expected: R1A (via Ethernet0/3) **absent**.
+Expected: R2C (via Ethernet1/0) **absent**.
 
 From R4C:
 ```
@@ -360,17 +352,21 @@ show ip route 10.10.10.10
 ```
 Expected: Route to R10C loopback `10.10.10.10` **absent**.
 
-#### Inject SLA event
+#### Check /var/log/network.json
 
-```bash
-TS=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
-echo "{\"ts\":\"${TS}\",\"device\":\"172.20.20.204\",\"msg\":\"BOM%TRACK-6-STATE: 1 ip sla 1 reachability Up -> Down\"}" >> /var/log/network.json
+Two IP SLA paths failed as a result of the misconfiguration above:
+```
+{"device":"172.20.20.204","facility":"local7","msg":"BOM%TRACK-6-STATE: 1 ip sla 1 reachability Up -> Down","severity":"info","ts":"2026-02-25T07:26:05.065Z"}
+{"device":"172.20.20.209","facility":"local7","msg":"BOM%TRACK-6-STATE: 1 ip sla 1 reachability Up -> Down","severity":"info","ts":"2026-02-25T07:26:09.841Z"}
 ```
 
-#### Expected watcher behavior
+#### Check oncall_watcher.log
 
-Within 2 seconds: watcher logs `Agent invoked for event on R4C`.
-Claude Code session opens automatically.
+Agent starts working on the first failure (reported by R4C):
+```
+[2026-02-25 07:26:06 UTC] Agent invoked for event on R4C: BOM%TRACK-6-STATE: 1 ip sla 1 reachability Up -> Down
+```
+Claude Code session opens automatically in the terminal where `oncall_watcher.log` runs.
 
 #### Expected agent behavior
 
@@ -379,11 +375,14 @@ Claude Code session opens automatically.
 3. Traceroutes from R4C to `10.10.10.10` → stops at R3C
 4. Reads `skills/ospf/SKILL.md`
 5. Calls `get_ospf(R3C, "neighbors")` → R1A missing
-6. Calls `get_ospf(R3C, "config")` → passive-interface on Ethernet0/3
-7. Proposes removing passive-interface on R3C Ethernet0/3
+6. Calls `get_ospf(R3C, "config")` → passive-interface on Ethernet0/3 and Ethernet1/0
+7. Proposes removing passive-interface on R3C Ethernet0/3 and Ethernet1/0
 8. Asks user approval (displayed in the agent session)
 9. Applies fix, verifies R4C route to 10.10.10.10 returns
-10. Documents case, asks user to type `/exit`
+10. Asks user to document case inside `cases.md`
+11. If step 10 is approved, adds new lesson to `lessons.md`
+
+**NOTE: Keep the session open and see step 12 below after verifying the fix!**
 
 #### Verify fix
 
@@ -391,7 +390,12 @@ From R3C:
 ```
 show ip ospf neighbor
 ```
-Expected: R1A FULL.
+Expected: R1A and R2C FULL.
+
+In `/var/log/network.json`:
+```
+{"device":"172.20.20.204","facility":"local7","msg":"BOM%TRACK-6-STATE: 1 ip sla 1 reachability Down -> Up","severity":"info","ts":"2026-02-25T07:33:45.102Z"}
+```
 
 From R4C:
 ```
@@ -399,9 +403,14 @@ show ip route 10.10.10.10
 ```
 Expected: Route present via OSPF/EIGRP redistribution path.
 
+```
+show ip sla statistics
+```
+Expected: Latest operation return code: OK
+
 #### Documentation check
 
-- New case in `cases/cases.md` with R3C, R4C context
+- New case in `cases/cases.md` with R4C context
 - `Verification: PASSED`
 - `Case Status: FIXED`
 
@@ -410,132 +419,41 @@ Expected: Route present via OSPF/EIGRP redistribution path.
 ```
 router ospf 1
   no passive-interface Ethernet0/3
+  no passive-interface Ethernet1/0
 ```
 
----
-
-### OC-002 - EIGRP Interface Shutdown → R9C SLA Failure
-
-**SLA Path**: `R9C_TO_R5C` or `R9C_TO_R11C` | **Break device**: R8C | **SLA source**: R9C (172.20.20.209)
-
-#### Setup (break)
-
-SSH to R8C:
-```
-interface Ethernet0/3
-  shutdown
-```
-
-#### Verify break
-
-From R9C:
-```
-show ip eigrp neighbors
-```
-Expected: R8C **absent** (R9C is fully isolated).
-
-#### Inject SLA event
-
-```bash
-TS=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
-echo "{\"ts\":\"${TS}\",\"device\":\"172.20.20.209\",\"msg\":\"BOM%TRACK-6-STATE: 2 ip sla 2 reachability Up -> Down\"}" >> /var/log/network.json
-```
-
-#### Expected agent behavior
-
-1. Reads `skills/oncall/SKILL.md`
-2. Looks up `R9C_TO_R5C` in paths.json → scope includes R9C, R8C
-3. Traceroutes from R9C → fails at first hop
-4. Reads `skills/eigrp/SKILL.md`
-5. Calls `get_eigrp(R9C, "neighbors")` → empty
-6. Calls `get_interfaces(R8C)` → Ethernet0/3 admin down
-7. Proposes `no shutdown` on R8C Ethernet0/3
-8. Asks approval, applies, verifies R9C neighbor restored
-
-#### Verify fix
-
-From R8C:
-```
-show interfaces Ethernet0/3
-```
-Expected: Line protocol up.
-
-From R9C:
-```
-show ip eigrp neighbors
-```
-Expected: R8C present.
-
-#### Teardown (if agent did not fix)
-
-```
-interface Ethernet0/3
-  no shutdown
-```
-
----
-
-### OC-003 - Deferred Event Handling (Storm Prevention)
+#### Deferred Event Handling (Storm Prevention)
 
 **Purpose**: Validate that concurrent SLA events during an active session are deferred
 and surfaced in a follow-up review session.
 
-#### Setup
+**Reason**: The R3C passive-interface configurations broke two SLA paths:
+- R4C to R10C
+- R9C to R5C
 
-1. Start the watcher.
-2. Break R3C OSPF (same as OC-001) and inject the R4C SLA Down event.
-3. **While the agent session is active** (within 30s of injection), inject a second SLA event
-   for a different device - e.g., R9C:
+**NOTE:** The agent is invoked for the **first failure only**. If a second failure occurs during the investigation of the first one, agent skips it - this avoids any agent storms during outages, thus preventing chaotic config changes on multiple devices and increased API costs.
 
-```bash
-TS=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
-echo "{\"ts\":\"${TS}\",\"device\":\"172.20.20.209\",\"msg\":\"BOM%TRACK-6-STATE: 2 ip sla 2 reachability Up -> Down\"}" >> /var/log/network.json
+12. After the fix for the first failure is applied and documentation written, type `/exit`
+13. Check second event logged as: `SKIPPED (deferred - occurred during active session) - R9C (...)` in `oncall_watcher.log`:
 ```
-
-#### Expected watcher behavior
-
-- Second event logged as: `SKIPPED (deferred - occurred during active session) - R9C (...)`
-- After first agent session closes (user types `/exit`), a **second agent session** opens automatically
-  with the deferred review prompt listing the R9C failure.
-
-#### Verify
-
-Check `oncall_watcher.log`:
+[2026-02-25 07:53:52 UTC] SKIPPED (deferred - occurred during active session) - R9C (172.20.20.209): BOM%TRACK-6-STATE: 1 ip sla 1 reachability Up -> Down
 ```
-SKIPPED (deferred - occurred during active session) - R9C ...
-Saved 1 deferred failure(s) to pending_events.json
-Deferred review session invoked for 1 failure(s).
+14. After first agent session closes (user types `/exit`), a **second agent session** opens automatically with the deferred review prompt listing the R9C failure.
 ```
+During the previous On-Call session the following SLA path failures were detected but could not be investigated at the time (logged as SKIPPED in oncall_watcher.log):
 
-Second Claude session opens and presents the deferred failure list.
+1. R9C (172.20.20.209): BOM%TRACK-6-STATE: 1 ip sla 1 reachability Up -> Down (at 2026-02-25T07:26:09.841Z)
 
----
+Would you like to investigate any of these? Reply with a number, 'all', or 'none'.
 
-### OC-004 - Stale Lock Cleanup
-
-**Purpose**: Validate that a crashed agent session does not permanently block new events.
-
-#### Steps
-
-1. Manually create a lock file with a nonexistent PID:
-```bash
-echo "999999" > /home/mcp/mcp-project/oncall.lock
+- Number or 'all': I'll investigate using the full On-Call workflow, document the case in cases/cases.md, curate cases/lessons.md, and return to the deferred list for any remaining failures.
+- 'none': Type /exit to close this review session.
 ```
-
-2. Restart the watcher:
-```bash
-python3 oncall_watcher.py
+15. If multiple SLA path failures occured during the initial investigation, they will be listed here and the user can choose a number to investigate a specific issue, or `/exit` to exit.
+16. If the user enters `/exit`, then the agent quits and the monitoring process resumes automatically to listen for new issues:
 ```
-
-#### Expected behavior
-
-Watcher startup log shows:
+[Watcher] Deferred review session ended. Resuming monitoring
 ```
-[Watcher] ... Watcher started. Monitoring ...
-```
-No error about locked state. The stale lock was removed automatically.
-
-3. Inject an SLA event - watcher should invoke the agent normally.
 
 ---
 
@@ -571,33 +489,25 @@ Expected: Watcher **does** invoke agent (MikroTik format matched).
 
 After any Standalone or On-Call test run:
 
-1. **New case added**:
-```bash
-grep "📄 CASE NO." /home/mcp/mcp-project/cases/cases.md | tail -5
-```
+1. **New case added to cases.md**:
+Check the last `📄 CASE NO.` in the file, e.g. `CASE NO. - 00019-R4C-SLA`
 
 2. **Case contains required fields**:
-   - `Device:` (affected device name)
-   - `Reported Issue:`
-   - `Verification: PASSED`
-   - `Case Status: FIXED`
+All fields described in `case_format.md` are present.
 
-3. **Lessons curated** (optional, check if lessons.md was updated):
-```bash
-cat /home/mcp/mcp-project/cases/lessons.md
-```
+3. **Lessons learned** (optional, check if lessons.md was updated):
 
 ---
 
 ## Maintenance Window Policy
 
 The agent must refuse config pushes outside the maintenance window defined in
-`policy/MAINTENANCE.json` (UTC Mon–Fri 06:00–18:00).
+`policy/MAINTENANCE.json` (UTC Mon–Fri 05:00–20:00).
 
 ### MW-001 - Change Blocked Outside Window
 
 To test this, temporarily edit the maintenance window to exclude the current time
-(or run this test after 18:00 UTC on a weekday / any time on weekend).
+(or run this test after 20:00 UTC on a weekday / any time on weekend).
 
 Apply a break, submit a Standalone prompt, and confirm:
 - Agent diagnoses the issue correctly

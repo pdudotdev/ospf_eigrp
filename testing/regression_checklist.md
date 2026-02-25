@@ -13,9 +13,7 @@ Run this checklist after any significant change to `MCPServer.py`, `oncall_watch
 | 6 | Policy-based routing diagnosis works | ST-004 |
 | 7 | EIGRP stub configuration works | ST-005 |
 | 8 | On-Call agent invoked and diagnoses correctly | OC-001 |
-| 9 | On-Call agent invoked and diagnoses correctly | OC-002 |
-| 10 | Deferred events handled properly | OC-003 |
-| 11 | Stale lock cleaned up at startup | OC-004 |
-| 12 | On-Call watcher log interactions | WB-001 - WB-003 |
-| 13 | Maintenance windows policy check | MW-001 |
-| 14 | All cases documented in cases.md | Post-test check |
+| 9 | On-Call watcher log interactions | WB-001 - WB-003 |
+| 10 | Maintenance windows policy check | MW-001 |
+
+**NOTE:** All Standalone or On-Call cases are documented in `cases.md` | Post-test check |
