@@ -22,8 +22,11 @@ from input_models.models import (
     ConfigCommand,
     EmptyInput,
     SnapshotInput,
-    RiskInput
+    RiskInput,
+    JiraCommentInput,
+    JiraResolveInput,
 )
+from jira_client import add_comment as jira_add_comment_fn, resolve_issue as jira_resolve_issue_fn
 
 # Load environment variables
 load_dotenv()
@@ -344,10 +347,12 @@ async def get_routing_policies(params: RoutingPolicyQuery) -> dict:
     - prefix_lists           → Inspect prefix filtering rules
     - policy_based_routing   → Verify PBR configuration
     - access_lists           → Review ACLs affecting routing or filtering
+    - nat_pat               → Check NAT/PAT translations and rules
 
     Notes:
     - Supported queries vary by platform.
     - Results may be cached briefly.
+    - Use nat_pat only on NAT_EDGE devices (R2C, R3C, R18M, R19M) after ruling out routing issues.
 
     Recommended usage:
     - Use when routes are filtered, modified, or unexpectedly redirected.
@@ -775,6 +780,19 @@ async def assess_risk(params: RiskInput) -> dict:
         "devices": device_count,
         "reasons": reasons or ["Minor configuration change"]
     }
+
+# Jira case management tools
+@mcp.tool(name="jira_add_comment")
+async def jira_add_comment_tool(params: JiraCommentInput) -> str:
+    """Add a comment to the active Jira incident ticket."""
+    await jira_add_comment_fn(params.issue_key, params.comment)
+    return f"Comment added to {params.issue_key}"
+
+@mcp.tool(name="jira_resolve_issue")
+async def jira_resolve_issue_tool(params: JiraResolveInput) -> str:
+    """Transition Jira ticket to resolved state with a resolution summary."""
+    await jira_resolve_issue_fn(params.issue_key, params.resolution_comment, params.resolution)
+    return f"{params.issue_key} marked as resolved"
 
 # Run the MCP Server
 if __name__ == "__main__":

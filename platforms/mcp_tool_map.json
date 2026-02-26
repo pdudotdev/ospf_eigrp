@@ -42,11 +42,11 @@
   "get_routing_policies": {
     "platform_map_section": "routing_policies",
     "queries": {
-      "ios":      ["redistribution", "route_maps", "prefix_lists", "policy_based_routing", "access_lists"],
-      "eos":      ["redistribution", "route_maps", "prefix_lists", "access_lists"],
-      "routeros": ["prefix_lists", "route_maps"]
+      "ios":      ["redistribution", "route_maps", "prefix_lists", "policy_based_routing", "access_lists", "nat_pat"],
+      "eos":      ["redistribution", "route_maps", "prefix_lists", "access_lists", "nat_pat"],
+      "routeros": ["prefix_lists", "route_maps", "nat_pat"]
     },
-    "notes": "policy_based_routing is ios-only. routeros supports only prefix_lists and route_maps."
+    "notes": "policy_based_routing is ios-only. nat_pat is supported on all platforms but should only be checked on NAT_EDGE devices (R2C, R3C, R18M, R19M) after ruling out routing issues."
   },
 
   "get_interfaces": {

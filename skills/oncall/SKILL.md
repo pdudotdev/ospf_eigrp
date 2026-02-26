@@ -73,9 +73,9 @@ What would you like to do?
   C) Return to the deferred SLA list / exit without investigating further
 ```
 
-- If user picks **A**: document the case (mark as FIXED - transient/recovered), curate lessons.md, then proceed to session closure.
+- If user picks **A**: proceed to session closure (Jira will be updated and lessons evaluated per CLAUDE.md On-Call Session Closure).
 - If user picks **B**: proceed to Step 2.5 on the source device, then Step 3 if neighbors are healthy.
-- If user picks **C**: proceed to session closure without documentation (the event was transient and self-resolved).
+- If user picks **C**: proceed to session closure (log to Jira as transient/self-resolved, evaluate lessons per CLAUDE.md On-Call Session Closure).
 - **Do NOT proceed to Step 3 without the user explicitly requesting it** — unnecessary investigation wastes time and cost.
 
 **Branch B — Issue still present** (source interface down OR expected neighbor missing):
@@ -164,3 +164,34 @@ Always present your analysis summary in a Markdown table before proposing a fix:
 | Root cause | Brief description | ✗ |
 
 Use ✓ for healthy items and ✗ for the identified issues. This lets the user scan the summary instantly before approving any configuration change.
+
+---
+
+## Jira Updates (On-Call)
+
+If a Jira issue key was provided in the invocation prompt, use the structured format from `cases/case_format.md` for all Jira comments. This ensures consistent, professional case records in Jira.
+
+**After presenting the findings table:**
+```
+jira_add_comment(issue_key=<key>, comment=<structured comment using case_format.md>)
+```
+Include: Reported Issue, All Commands Used To Isolate Issue, Commands That Actually Identified the Issue, and the findings table with ✓/✗ status markers.
+
+**After fix is verified PASSED:**
+```
+jira_resolve_issue(issue_key=<key>, resolution_comment=<structured resolution>, resolution="Done")
+```
+Include: Proposed Fixes (Per Device), Commands Used Upon User Approval, Post-Fix State, Verification result.
+
+**If fix is declined by operator:**
+```
+jira_add_comment(issue_key=<key>, comment=<structured comment with proposed fix details>)
+```
+Include: "Proposed fix was declined by operator. Issue remains open." followed by what was proposed and why. Do NOT resolve the ticket.
+
+**For transient/recovered (no fix applied):**
+```
+jira_resolve_issue(issue_key=<key>, resolution_comment=<brief summary>, resolution="Won't Fix")
+```
+
+If Jira is not configured, these tools return a skip notice — continue without them.

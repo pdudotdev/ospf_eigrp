@@ -1,0 +1,185 @@
+"""Async Jira REST API v3 client.
+
+Used by oncall_watcher.py (via asyncio.run) for ticket creation, and by
+MCPServer.py (via MCP tools) for comments and resolution.
+
+All functions check for required env vars — if absent, log a warning and
+return gracefully so the workflow continues unchanged.
+"""
+
+import base64
+import logging
+import os
+
+import aiohttp
+from dotenv import load_dotenv
+
+load_dotenv()
+
+JIRA_BASE_URL    = os.getenv("JIRA_BASE_URL", "").rstrip("/")
+JIRA_EMAIL       = os.getenv("JIRA_EMAIL", "")
+JIRA_API_TOKEN   = os.getenv("JIRA_API_TOKEN", "")
+JIRA_PROJECT_KEY = os.getenv("JIRA_PROJECT_KEY", "")
+JIRA_ISSUE_TYPE  = os.getenv("JIRA_ISSUE_TYPE", "[System] Incident")
+
+log = logging.getLogger(__name__)
+
+
+def _is_configured() -> bool:
+    return bool(JIRA_BASE_URL and JIRA_EMAIL and JIRA_API_TOKEN and JIRA_PROJECT_KEY)
+
+
+def _headers() -> dict:
+    creds = base64.b64encode(f"{JIRA_EMAIL}:{JIRA_API_TOKEN}".encode()).decode()
+    return {
+        "Authorization": f"Basic {creds}",
+        "Content-Type":  "application/json",
+        "Accept":        "application/json",
+    }
+
+
+def _to_adf(text: str) -> dict:
+    """Convert a plain-text string to minimal Atlassian Document Format (ADF)."""
+    paragraphs = []
+    for line in text.strip().split("\n"):
+        paragraphs.append({
+            "type": "paragraph",
+            "content": [{"type": "text", "text": line or " "}],
+        })
+    return {"version": 1, "type": "doc", "content": paragraphs}
+
+
+async def create_issue(
+    summary:     str,
+    description: str,
+    priority:    str = "High",
+    labels:      list[str] | None = None,
+) -> str | None:
+    """Create a Jira incident. Returns the issue key (e.g. 'SUP-12') or None on failure.
+
+    Tries JIRA_ISSUE_TYPE first; falls back to 'Task' if the configured type is rejected.
+    """
+    if not _is_configured():
+        log.warning("Jira not configured — skipping issue creation")
+        return None
+
+    if labels is None:
+        labels = ["network-incident", "automated", "on-call"]
+
+    body = {
+        "fields": {
+            "project":     {"key": JIRA_PROJECT_KEY},
+            "summary":     summary,
+            "description": _to_adf(description),
+            "issuetype":   {"name": JIRA_ISSUE_TYPE},
+            "priority":    {"name": priority},
+            "labels":      labels,
+        }
+    }
+
+    async with aiohttp.ClientSession(headers=_headers()) as session:
+        url = f"{JIRA_BASE_URL}/rest/api/3/issue"
+        async with session.post(url, json=body) as resp:
+            if resp.status == 201:
+                data = await resp.json()
+                return data["key"]
+
+            # Fall back to Task if the configured issue type is rejected
+            if resp.status == 400:
+                body["fields"]["issuetype"] = {"name": "Task"}
+                async with session.post(url, json=body) as resp2:
+                    if resp2.status == 201:
+                        data = await resp2.json()
+                        log.warning(
+                            "Jira: issue type '%s' rejected, created as Task: %s",
+                            JIRA_ISSUE_TYPE, data["key"],
+                        )
+                        return data["key"]
+                    err = await resp2.text()
+                    log.error(
+                        "Jira create_issue failed (fallback): %s %s",
+                        resp2.status, err[:200],
+                    )
+                    return None
+
+            err = await resp.text()
+            log.error("Jira create_issue failed: %s %s", resp.status, err[:200])
+            return None
+
+
+async def add_comment(issue_key: str, comment_text: str) -> None:
+    """Add a plain-text comment to a Jira issue."""
+    if not _is_configured():
+        log.warning("Jira not configured — skipping comment on %s", issue_key)
+        return
+
+    body = {"body": _to_adf(comment_text)}
+    async with aiohttp.ClientSession(headers=_headers()) as session:
+        url = f"{JIRA_BASE_URL}/rest/api/3/issue/{issue_key}/comment"
+        async with session.post(url, json=body) as resp:
+            if resp.status not in (200, 201):
+                err = await resp.text()
+                log.error(
+                    "Jira add_comment failed on %s: %s %s",
+                    issue_key, resp.status, err[:200],
+                )
+
+
+async def resolve_issue(
+    issue_key:          str,
+    resolution_comment: str,
+    resolution:         str = "Done",
+) -> None:
+    """Transition a Jira issue to resolved state and add a resolution comment.
+
+    Fetches available transitions and picks the first one whose name matches
+    `resolution` (case-insensitive). Also checks for 'done', 'resolve', 'resolved',
+    'close', 'closed' as fallback names.
+    Falls back to comment-only if no matching transition is found.
+    """
+    if not _is_configured():
+        log.warning("Jira not configured — skipping resolve of %s", issue_key)
+        return
+
+    async with aiohttp.ClientSession(headers=_headers()) as session:
+        url = f"{JIRA_BASE_URL}/rest/api/3/issue/{issue_key}/transitions"
+        async with session.get(url) as resp:
+            if resp.status != 200:
+                log.warning(
+                    "Jira: could not fetch transitions for %s — comment only",
+                    issue_key,
+                )
+                await add_comment(issue_key, resolution_comment)
+                return
+            data = await resp.json()
+
+    transitions = data.get("transitions", [])
+    target_names = {resolution.lower(), "done", "resolve", "resolved", "close", "closed"}
+    transition_id = None
+    for t in transitions:
+        if t["name"].lower() in target_names:
+            transition_id = t["id"]
+            break
+
+    if transition_id:
+        resolution_name = "Won't Fix" if resolution.lower() in {"won't fix", "wont fix"} else "Done"
+        async with aiohttp.ClientSession(headers=_headers()) as session:
+            payload = {
+                "transition": {"id": transition_id},
+                "fields": {"resolution": {"name": resolution_name}},
+            }
+            async with session.post(url, json=payload) as resp:
+                if resp.status not in (200, 204):
+                    err = await resp.text()
+                    log.warning(
+                        "Jira transition failed for %s: %s %s",
+                        issue_key, resp.status, err[:200],
+                    )
+    else:
+        log.warning(
+            "Jira: no matching transition for '%s' on %s — comment only",
+            resolution, issue_key,
+        )
+
+    # Always add the resolution comment regardless of transition outcome
+    await add_comment(issue_key, resolution_comment)

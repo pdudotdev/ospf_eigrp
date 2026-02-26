@@ -18,6 +18,7 @@ FastMCP server that provides protocol-specific tools to interact with network de
 - **Operational tools**: `ping`, `traceroute`, `get_interfaces`, `run_show` (fallback)
 - **Configuration tools**: `push_config`, `check_maintenance_window`, `assess_risk`
 - **Network state tool**: `get_intent`
+- **Case management tools**: `jira_add_comment`, `jira_resolve_issue`
 
 ## Skills Library
 
@@ -139,8 +140,6 @@ Check in this order. Stop as soon as you find a mismatch:
 8. **Present findings**: Markdown table (| Finding | Detail | Status |) using ✓/✗ for quick visual scanning, with proposed remediation steps for each issue.
 9. **Always ask the user whether to proceed with the proposed configuration change(s)** — and which one, if multiple.
 10. **If changes are approved by the user, always verify if the issue was indeed fixed.** Don't assume, don't hope — verify with the same tools that identified the problem.
-11. **Document the case — execute before step 12**: append the case to `cases/cases.md` and curate `cases/lessons.md` per the Case Management section. Mark the documentation TaskCreate task as `completed`. Do not proceed to step 12 until this is done (or explicitly noted as skipped due to Edit denial).
-12. **Confirm to the user**: "I've documented this as case NNNNN-[device]-TYPE." If the user declined documentation, acknowledge it: "No case was documented. Session complete."
 
 ### On-Call Mode (SLA Paths)
 > The **Core Troubleshooting Methodology** above applies to On-Call mode. The oncall skill's Steps 1-2.5 implement Principles 1-5. After Step 2.5, follow Principle 6 (simple before complex) in the protocol skill.
@@ -160,34 +159,45 @@ Check in this order. Stop as soon as you find a mismatch:
 5. **Always ask the user for approval before applying any configuration change.** Never call `push_config` without explicit user confirmation. Wait for the user to approve.
 6. **After user approves, apply the fix and verify** it resolved the issue. Don't assume — verify.
 
+**Jira updates (if issue key was provided in the invocation prompt):**
+Follow the Jira comment workflow in the **Case Management** section. Use the `cases/case_format.md` structure for all comments. If the issue key is absent (Jira not configured), skip all Jira calls silently.
+
 ### On-Call Mode — Session Closure
-After the fix is applied and verified (Verification: PASSED):
-1. **Document the case and curate lessons** per the Case Management section below. If the user declines documentation, skip it gracefully — proceed to steps 2 and 3 (summary + `/exit` prompt) regardless.
-2. **Present a concise summary to the user** (include lessons update if one was made):
+After the investigation is complete (fix applied, fix declined, or transient):
+1. **Log to Jira** per the Case Management section (findings comment, then resolve or note declined). This step is mandatory when an issue key is present.
+2. **Evaluate `cases/lessons.md`** — read the file and decide whether any new lesson should be added or an existing one updated. This step is mandatory for every On-Call session — even if no change is made, the evaluation must happen. Do not ask the user — just do it silently.
+3. **Present a concise summary to the user** (always, regardless of outcome):
    - Issue detected
    - Root cause identified
-   - Fix applied
-   - Verification result
+   - Fix applied / declined / not needed (transient)
+   - Verification result (if fix was applied)
    - Lessons updated (if applicable): "Added/updated lesson #N: \<brief description\>"
-3. **Then prompt the user**:
+4. **Then prompt the user**:
    "Type `/exit` to close this On-Call session and resume watcher monitoring, or keep the session open if you want to continue investigating."
-4. **Do NOT exit autonomously** — wait for the user to type `/exit`.
+5. **Do NOT exit autonomously** — wait for the user to type `/exit`.
 
 ## Case Management
-**IMPORTANT!**
-- Regardless if you operate in **Standalone** or **On-Call** mode, always **document each case** by automatically appending it to the `cases/cases.md` file, after you've done the work. Do not preview or seek approval of the documentation content, just write it. Documentation is never a blocker for session closure.
-- Both `cases/cases.md` and `cases/lessons.md` are pre-approved for Edit in `.claude/settings.local.json` — no user confirmation is required. Use the **Edit** tool directly; do not fall back to Bash for these files.
-- Make sure to not overwrite the `cases.md` file, only append to it. The structure of each documented case is at `cases/case_format.md`.
-- **Case numbering**: Each case gets a globally sequential 5-digit number followed by the primary device and type: `NNNNN-<device>-SLA` (e.g., `00001-R10C-SLA`, `00012-R4C-SLA`). Before creating a new case, read the last case number in `cases/cases.md` and increment by 1.
+
+### Jira as the Case Record
+Case Management applies to **On-Call mode only**. Standalone mode has no documentation steps.
+
+All case documentation is written to the Jira ticket. There is no local `cases.md` file. The structured comment format from `cases/case_format.md` defines how Jira comments should be formatted.
+
+**Jira comment workflow (when issue key is present):**
+1. **After presenting findings** (On-Call step 4): call `jira_add_comment` with the full findings using the `cases/case_format.md` structure — include: Reported Issue, Commands Used To Isolate Issue, Commands That Actually Identified the Issue, and the findings table.
+2. **After fix is verified PASSED**: call `jira_resolve_issue` with a resolution comment that includes: Proposed Fixes (Per Device), Commands Used Upon User Approval, Post-Fix State, and Verification result.
+3. **If fix is declined by operator**: call `jira_add_comment` with: "Proposed fix was declined by operator. Issue remains open." followed by the proposed fix details (what was proposed and why).
+4. **For transient/recovered cases**: call `jira_resolve_issue` with resolution="Won't Fix" and a summary of the transient condition.
+5. **If Jira is not configured** (no issue key): skip all Jira calls silently. The session still proceeds normally.
+
+### Lessons Learned (`cases/lessons.md`)
+- `cases/lessons.md` is pre-approved for Edit in `.claude/settings.local.json` — no user confirmation is required. Use the **Edit** tool directly; do not fall back to Bash.
+- **Review Lessons**: Read `cases/lessons.md` at session start — it contains the top 20 lessons from past cases.
+- **Curate Lessons**: After each case (whether fixed, declined, or transient), read `cases/lessons.md` and decide if any new lesson should be added (if < 20 entries) or should replace a less broadly-applicable entry (if 20 entries). Promotion criteria: the lesson applies broadly to future cases, corrects a methodology mistake, and isn't already captured. Always use the **Edit** tool (not Bash) to update `cases/lessons.md`.
 
 ### Task Management per Case
-- **Plan First**: Write a plan (before starting) with checkable items for the full session lifecycle — investigation steps AND a mandatory final item: `[ ] Document case to cases/cases.md and curate lessons.md`. Record this in the **Case Handling Plan:** sub-section of the **CASE METADATA** section, AND use **TaskCreate** to register the same tasks in-session so documentation is visibly tracked. The documentation task must be the last one marked `completed`.
-- **Verify Plan**: Review the plan before starting the troubleshooting process.
+- **Plan First**: Write a plan (before starting) with checkable items for the full session lifecycle — investigation steps AND a final item: `[ ] Curate lessons.md`. Use **TaskCreate** to register the same tasks in-session so progress is visibly tracked.
 - **Track Progress**: Mark items (steps) complete as you go.
-- **Capture Lessons**: Update the **Lessons Learned:** sub-section of the **CASE METADATA** section of the case with learned lessons from troubleshooting this issue - these are important for future workflow optimizations. Use bullet points for enumerating the lessons and be very specific about what you've learned.
-- **Review Lessons**: Read `cases/lessons.md` at session start — it contains the top 10 lessons from past cases. Only read the full `cases/cases.md` if you need detailed context on a similar device or protocol.
-- **Case Completion**: After the fix is applied and you verify it, mark the Verification: field in `cases.md` as PASSED. Also mark the case as Case Status: **FIXED**.
-- **Curate Lessons**: After documenting a case, read `cases/lessons.md` and decide if any new lesson should be added (if < 10 entries) or should replace a less broadly-applicable entry (if 10 entries). Promotion criteria: the lesson applies broadly to future cases, corrects a methodology mistake, and isn't already captured. Always use the **Edit** tool (not Bash) to update `cases/lessons.md`.
 
 ## Your Work Style and Ethics
 - **Simplicity first, minimal impact**: every troubleshooting step and proposed fix should be as simple as possible. Only touch what's necessary. Find root causes — no wandering the network or temporary fixes. Senior network engineer (CCIE) standards.
@@ -209,3 +219,4 @@ After the fix is applied and verified (Verification: PASSED):
 8. **Investigating non-scope devices during on-call** (violates Principle 1): `scope_devices` in paths.json is the complete investigation boundary. If traceroute transits a non-scope device, treat the last in-scope hop as the breaking hop and apply Principle 3. Never run protocol tools on out-of-scope devices.
 9. **Chasing a missing route through downstream devices** (violates Principle 4): A missing route on device X means check X's neighbors first — not other path devices. Missing adjacencies on X explain missing routes everywhere downstream.
 10. **Skipping adjacency check before protocol skill deep-dive** (violates Principle 3): When a breaking hop has zero neighbors, go directly to the Adjacency Checklist. Do not read LSDB, NSSA, redistribution, or path-selection sections. Timer/passive/area/auth checks resolve the vast majority of root causes.
+11. **Jira issue_key scope**: The issue key is provided in the On-Call invocation prompt (if Jira is configured). Never attempt to create a Jira issue yourself — the watcher already created it before starting your session. If the key is absent, skip all `jira_add_comment` and `jira_resolve_issue` calls silently.

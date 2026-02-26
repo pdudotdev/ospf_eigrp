@@ -14,8 +14,11 @@ import time
 import subprocess
 import signal
 import sys
+import asyncio
 from datetime import datetime, timezone
 from pathlib import Path
+
+import jira_client
 
 
 # Configuration
@@ -173,6 +176,25 @@ def invoke_claude(event, device_map):
         f"  Event     : {event.get('msg', 'unknown')}\n\n"
         "Please follow the On-Call Mode troubleshooting workflow as defined in your instructions."
     )
+
+    # Create Jira incident ticket before starting the Claude session
+    issue_key = asyncio.run(jira_client.create_issue(
+        summary=f"Network Incident: {device_name} — SLA Path Failure",
+        description=(
+            f"Source Device: {device_name} ({device_ip})\n"
+            f"Timestamp: {event.get('ts', 'unknown')}\n"
+            f"Event: {event.get('msg', 'unknown')}\n\n"
+            "NetAdmin agent is investigating."
+        ),
+        priority="High",
+    ))
+    if issue_key:
+        prompt += (
+            f"\n\nJira ticket created: {issue_key}. "
+            f"Call jira_add_comment(issue_key='{issue_key}', comment=...) after presenting findings. "
+            f"Call jira_resolve_issue(issue_key='{issue_key}', resolution_comment=...) at session closure."
+        )
+        log_watcher(f"Jira ticket created: {issue_key}")
 
     # Write lock file with this process's PID
     LOCK_FILE.write_text(str(os.getpid()))

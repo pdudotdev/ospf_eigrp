@@ -97,6 +97,46 @@ If only one path is installed when two are expected:
 
 ---
 
+## Symptom: NAT/PAT Translation Issues
+
+> **Low priority** — only investigate NAT after all routing, adjacency, and policy checks pass. NAT issues are rare root causes in this network.
+
+When the breaking hop is a **NAT_EDGE** device (R2C, R3C, R18M, R19M per INTENT.json) and all of the following are true:
+- All interfaces Up/Up
+- All protocol neighbors FULL
+- Routes present in RIB with correct next-hops
+- No PBR, route-map, or prefix-list anomalies
+
+Then check NAT translations:
+
+    get_routing_policies(device, "nat_pat")
+
+### Cisco IOS (R2C, R3C) — PAT mode
+`show ip nat translation` returns the active translation table.
+
+| Finding | Root Cause |
+|---------|-----------|
+| Empty translation table | No traffic is being NATed — check `ip nat inside`/`ip nat outside` interface designations and NAT ACL/route-map |
+| Translations present but destination unreachable | NAT is working; issue is upstream (ISP) or return-path related |
+| Only inside→outside entries, no outside→inside | One-way NAT — return traffic may be blocked by ISP or missing reverse route |
+
+Also verify NAT interface designations:
+
+    run_show(device, "show ip nat statistics")
+
+Look for: inside/outside interface counts, active translations, expired translations, and pool exhaustion.
+
+### MikroTik RouterOS (R18M, R19M) — Masquerade mode
+The REST endpoint `/rest/ip/firewall/nat` returns NAT rules.
+
+| Finding | Root Cause |
+|---------|-----------|
+| No masquerade rule present | NAT not configured — traffic exits with private source IP, ISP drops it |
+| Masquerade rule disabled | Same as above — rule exists but is not active |
+| Rule present and enabled, out-interface correct | NAT is working; issue is upstream |
+
+---
+
 ## Query Reference
 
 | Query | What it returns | Platform support |
@@ -106,6 +146,7 @@ If only one path is installed when two are expected:
 | `prefix_lists` | Prefix-list definitions (permit/deny per range) | ios, eos, routeros |
 | `access_lists` | ACL definitions — used to identify PBR match criteria | ios, eos only |
 | `redistribution` | Active redistribution statements | ios, eos only |
+| `nat_pat` | NAT/PAT translations (ios) or firewall NAT rules (routeros) | ios, eos, routeros — **NAT_EDGE devices only** |
 
 ---
 
@@ -116,3 +157,4 @@ If only one path is installed when two are expected:
 - [ ] `get_routing_policies(device, "prefix_lists")` — affected prefix is covered by `permit`, not `deny`
 - [ ] `get_routing(device, prefix="<destination>")` — correct number of next-hops installed in RIB
 - [ ] `traceroute(device, destination="<dest>")` — actual forwarding path matches expected topology
+- [ ] `get_routing_policies(device, "nat_pat")` — if NAT_EDGE device: translations present and NAT rules active (check only when relevant)

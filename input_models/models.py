@@ -44,7 +44,7 @@ class RoutingQuery(BaseParamsModel):
 # Routing policies query - input model
 class RoutingPolicyQuery(BaseParamsModel):
     device: str
-    query: str = Field(..., description="route_maps | prefix_lists | policy_based_routing | access_lists")
+    query: str = Field(..., description="route_maps | prefix_lists | policy_based_routing | access_lists | nat_pat")
 
 # Interfaces query - input model
 class InterfacesQuery(BaseParamsModel):
@@ -87,3 +87,13 @@ class SnapshotInput(BaseParamsModel):
 class RiskInput(BaseParamsModel):
     devices: list[str] = Field(..., description="Devices affected by the config change")
     commands: list[str] = Field(..., description="The configuration commands to apply")
+
+# Jira case management - input models
+class JiraCommentInput(BaseParamsModel):
+    issue_key: str = Field(..., description="Jira issue key (e.g. 'SUP-12')")
+    comment: str = Field(..., description="Comment text to add to the ticket")
+
+class JiraResolveInput(BaseParamsModel):
+    issue_key: str = Field(..., description="Jira issue key (e.g. 'SUP-12')")
+    resolution_comment: str = Field(..., description="Resolution summary to add as final comment")
+    resolution: str = Field("Done", description="Transition name: 'Done', 'Resolved', or \"Won't Fix\"")

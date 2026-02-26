@@ -27,7 +27,8 @@ PLATFORM_MAP = {
             "route_maps": "show route-map",
             "prefix_lists": "show ip prefix-list",
             "policy_based_routing": "show ip policy",
-            "access_lists": "show ip access-lists"
+            "access_lists": "show ip access-lists",
+            "nat_pat": "show ip nat translation"
         },
         "interfaces": {
             "interface_status": "show ip interface brief"
@@ -58,7 +59,8 @@ PLATFORM_MAP = {
             "redistribution": "show run | section redistribute",
             "route_maps": "show route-map",
             "prefix_lists": "show ip prefix-list",
-            "access_lists": "show ip access-lists"
+            "access_lists": "show ip access-lists",
+            "nat_pat": "show ip nat translation"
         },
         "interfaces": {
             "interface_status": "show ip interface brief"
@@ -85,7 +87,9 @@ PLATFORM_MAP = {
         },
         "routing_policies": {
             "prefix_lists": {"method": "GET", "path": "/rest/routing/filter/rule"},
-            "route_maps": {"method": "GET", "path": "/rest/routing/filter/chain/"}
+            "route_maps": {"method": "GET", "path": "/rest/routing/filter/chain"},
+            "access_lists": {"method": "GET", "path": "/rest/ip/firewall/filter"},
+            "nat_pat": {"method": "GET", "path": "/rest/ip/firewall/nat"}
         },
         "interfaces": {
             "interface_status": {"method": "GET", "path": "/rest/interface"}
