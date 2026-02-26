@@ -125,6 +125,20 @@
         "ecmp_next_hops": ["R18M", "R19M"],
         "egress_devices": ["R18M", "R19M"],
         "scope_devices": ["R20M", "R18M", "R19M", "R17C"]
+    },
+    {
+        "id": "R1A_TO_R8C",
+        "description": "R1A, with ECMP via R2C and R3C, with ECMP via R7A and R6A, to R8C's Loopback 1",
+        "source_device": "R1A",
+        "source_interface": "Ethernet4",
+        "source_ip": "10.0.0.1",
+        "destination_device": "R8C",
+        "destination_ip": "8.8.8.8",
+        "ecmp": true,
+        "ecmp_node": "R2C",
+        "ecmp_next_hops": ["R2C", "R3C"],
+        "egress_devices": ["R2C"],
+        "scope_devices": ["R1A", "R2C", "R3C", "R6A", "R7A", "R8C"]
     }
   ]
 }

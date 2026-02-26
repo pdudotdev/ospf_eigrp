@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 aiNOC On-Call Watcher
-Monitors /var/log/network.json for IP SLA Down events and invokes Claude Code.
+Monitors /var/log/network.json for network probe failures (Down events) and invokes Claude Code.
 Implements storm prevention (single-instance guard) and graceful shutdown.
 Deferred failures (events arriving during an active agent session) are saved to
 pending_events.json for the agent to present to the user at session closure.
@@ -39,6 +39,9 @@ SLA_DOWN_RE = re.compile(
     r'|'
     # MikroTik Netwatch: netwatch,info event down [ type: simple, host: x.x.x.x ]
     r'down\s*\[.*host:'
+    r'|'
+    # Arista EOS ConnectivityMonitor: %CONNECTIVITYMON-5-HOST_UNREACHABLE: Host ... unreachable
+    r'%CONNECTIVITYMON-\d+-HOST_UNREACHABLE'
     r')',
     re.IGNORECASE
 )
@@ -163,7 +166,7 @@ def invoke_claude(event, device_map):
     device_name = resolve_device(device_ip, device_map)
 
     prompt = (
-        "On-Call Mode triggered: IP SLA path failure detected.\n\n"
+        "On-Call Mode triggered: Network probe failure detected.\n\n"
         f"Log event:\n"
         f"  Timestamp : {event.get('ts', 'unknown')}\n"
         f"  Source    : {device_name} ({device_ip})\n"

@@ -37,8 +37,8 @@ set enabled=yes
 /system ntp client servers
 add address=172.20.20.1
 /tool netwatch
-add host=220.40.40.1 interval=5s src-address=172.16.77.6 type=simple
-add host=220.50.50.5 interval=5s src-address=172.16.77.10 type=simple
+add host=220.40.40.1 interval=5s src-address=172.16.77.6 startup-delay=1m type=simple
+add host=220.50.50.5 interval=5s src-address=172.16.77.10 startup-delay=1m type=simple
 
 # USEFUL SHOW COMMANDS
 # /interface ethernet print
