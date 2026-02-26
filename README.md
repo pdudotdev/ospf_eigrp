@@ -38,7 +38,7 @@ Operating modes of **aiNOC**:
 - [x] **Standalone mode (ST)**
   - User specifies network issue and symptomps at the prompt
 - [x] **On-Call mode (OC)**
-  - Agent is invoked by SLA path failure, see [**On-Call Mode**](#-on-call-mode)
+  - Agent is invoked by SLA path failure, see [On-Call Mode](#-on-call-mode)
 
 **Agent guardrails**:
 - [x] See [guardrails.txt](metadata/about/guardrails.txt)
@@ -265,6 +265,12 @@ claude auth login
 claude mcp add mcp_automation -s user -- ./mcp/bin/python MCPServer.py
 claude mcp list
 ```
+- [x] Jira setup:
+  - Sign up for **Jira** free at [atlassian.com](https://www.atlassian.com/software/jira/pricing)
+  - Log in to **Jira** → create a project (key SUP, type: Service Management)
+  - In your account, go to [API tokens](https://id.atlassian.com/manage-profile/security/api-tokens) → Create API token → copy it
+  - Add all the necessary env vars to **.env**
+  - Add **[System] Incident** issue type
 
 ## ⏰ NTP, Syslog, Vector
 ### Configuring NTP server on Ubuntu
@@ -395,7 +401,7 @@ sudo ss -lunp | grep 514
 ```
 
 ### Configuring the connectivity paths
-- [x] Already configured in [lab_configs/](https://github.com/pdudotdev/aiNOC/tree/main/lab_configs)
+- [x] Already configured in [lab_configs](https://github.com/pdudotdev/aiNOC/tree/main/lab_configs)
 
 ## 📂 Router OS Images
 ### Arista EOS
@@ -476,7 +482,7 @@ For this reason, I'm using **Tabby**:
   - Cisco: `admin:admin`
   - MikroTik: `admin:admin`
 
-- [x] **.env** file: see [**.env.example**](.env.example)
+- [x] **.env** file: see [.env.example](.env.example)
 
 - [x] Router configurations:
   - Please find all the configuration files under the [lab_configs](https://github.com/pdudotdev/aiNOC/tree/main/lab_configs) directory
