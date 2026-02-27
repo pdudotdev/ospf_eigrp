@@ -126,6 +126,7 @@ def scan_for_deferred_events(trigger_event, session_start, session_end, device_m
     """
     trigger_key = (trigger_event.get("ts"), trigger_event.get("device")) if trigger_event else None
     deferred = []
+    seen = set()  # Deduplicate by (device, msg) to avoid noise from repeated SLA polls
     try:
         with open(LOG_FILE) as f:
             for line in f:
@@ -143,6 +144,10 @@ def scan_for_deferred_events(trigger_event, session_start, session_end, device_m
                     continue
                 if is_sla_down_event(event.get("msg", "")):
                     device_ip = event.get("device", "?")
+                    dedup_key = (device_ip, event.get("msg", ""))
+                    if dedup_key in seen:
+                        continue
+                    seen.add(dedup_key)
                     device_name = resolve_device(device_ip, device_map)
                     deferred.append({**event, "device_name": device_name})
                     log_watcher(
@@ -213,7 +218,12 @@ def invoke_claude(event, device_map):
     LOCK_FILE.write_text(str(os.getpid()))
     log_watcher(f"Agent invoked for event on {device_name}: {event.get('msg', '')}")
 
-    session_start = datetime.now(timezone.utc)
+    # Use the trigger event's timestamp so concurrent events (which share
+    # similar timestamps) fall within the deferred scan window.
+    # The trigger event itself is excluded by trigger_key matching in
+    # scan_for_deferred_events.
+    trigger_ts = parse_event_ts(event)
+    session_start = trigger_ts if trigger_ts else datetime.now(timezone.utc)
     session_end = None
 
     try:

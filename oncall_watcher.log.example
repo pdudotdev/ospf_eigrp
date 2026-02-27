@@ -1,0 +1,404 @@
+[2026-02-24 04:38:00 UTC] Watcher started. Monitoring /var/log/network.json for IP SLA Down events.
+[2026-02-24 04:38:13 UTC] Agent invoked for event on R10C: BOM%TRACK-6-STATE: 1 ip sla 1 reachability Up -> Down
+[2026-02-24 04:43:45 UTC] Agent session ended. Resuming monitoring.
+[2026-02-24 04:44:18 UTC] Watcher stopped (signal received).
+[2026-02-24 06:52:57 UTC] Watcher started. Monitoring /var/log/network.json for IP SLA Down events.
+[2026-02-24 06:53:07 UTC] Watcher stopped (signal received).
+[2026-02-24 06:53:34 UTC] Watcher started. Monitoring /var/log/network.json for IP SLA Down events.
+[2026-02-24 06:53:46 UTC] Agent invoked for event on R10C: BOM%TRACK-6-STATE: 1 ip sla 1 reachability Up -> Down
+[2026-02-24 07:10:38 UTC] Agent session ended. Resuming monitoring.
+[2026-02-24 07:15:42 UTC] Agent invoked for event on R4C: BOM%TRACK-6-STATE: 1 ip sla 1 reachability Up -> Down
+[2026-02-24 07:45:15 UTC] Agent session ended. Resuming monitoring.
+[2026-02-24 07:45:15 UTC] Agent invoked for event on R11C: BOM%TRACK-6-STATE: 1 ip sla 1 reachability Up -> Down
+[2026-02-24 07:45:25 UTC] Agent session ended. Resuming monitoring.
+[2026-02-24 07:45:25 UTC] Agent invoked for event on R10C: BOM%TRACK-6-STATE: 1 ip sla 1 reachability Up -> Down
+[2026-02-24 07:45:26 UTC] Agent session ended. Resuming monitoring.
+[2026-02-24 07:45:26 UTC] Agent invoked for event on R9C: BOM%TRACK-6-STATE: 2 ip sla 2 reachability Up -> Down
+[2026-02-24 07:45:26 UTC] Watcher stopped (signal received).
+[2026-02-24 07:45:26 UTC] Agent session ended. Resuming monitoring.
+[2026-02-24 08:14:58 UTC] Watcher started. Monitoring /var/log/network.json for IP SLA Down events.
+[2026-02-24 08:15:32 UTC] Agent invoked for event on R4C: BOM%TRACK-6-STATE: 1 ip sla 1 reachability Up -> Down
+[2026-02-24 08:33:29 UTC] Agent session ended. Resuming monitoring.
+[2026-02-24 08:33:29 UTC] SKIPPED (deferred - occurred during active session) - R9C (172.20.20.209): BOM%TRACK-6-STATE: 2 ip sla 2 reachability Up -> Down
+[2026-02-24 08:33:29 UTC] SKIPPED (deferred - occurred during active session) - R10C (172.20.20.210): BOM%TRACK-6-STATE: 1 ip sla 1 reachability Up -> Down
+[2026-02-24 08:33:29 UTC] Saved 2 deferred failure(s) to pending_events.json
+[2026-02-24 08:33:29 UTC] Agent invoked for event on R11C: BOM%TRACK-6-STATE: 1 ip sla 1 reachability Up -> Down
+[2026-02-24 08:33:39 UTC] Agent session ended. Resuming monitoring.
+[2026-02-24 08:33:39 UTC] SKIPPED (deferred - already queued in pending_events.json) - 172.20.20.209: BOM%TRACK-6-STATE: 2 ip sla 2 reachability Up -> Down
+[2026-02-24 08:33:39 UTC] SKIPPED (deferred - already queued in pending_events.json) - 172.20.20.210: BOM%TRACK-6-STATE: 1 ip sla 1 reachability Up -> Down
+[2026-02-24 08:33:40 UTC] Watcher stopped (signal received).
+[2026-02-24 08:50:47 UTC] Watcher started. Monitoring /var/log/network.json for IP SLA Down events.
+[2026-02-24 08:54:37 UTC] Loaded 2 deferred event(s) from previous session into new prompt.
+[2026-02-24 08:54:37 UTC] Agent invoked for event on R10C: BOM%TRACK-6-STATE: 1 ip sla 1 reachability Up -> Down
+[2026-02-24 08:55:16 UTC] Agent session ended. Resuming monitoring.
+[2026-02-24 08:55:16 UTC] SKIPPED (deferred - occurred during active session) - R9C (172.20.20.209): BOM%TRACK-6-STATE: 2 ip sla 2 reachability Up -> Down
+[2026-02-24 08:55:16 UTC] Saved 1 deferred failure(s) to pending_events.json
+[2026-02-24 08:55:16 UTC] Loaded 1 deferred event(s) from previous session into new prompt.
+[2026-02-24 08:55:16 UTC] Agent invoked for event on R4C: BOM%TRACK-6-STATE: 1 ip sla 1 reachability Up -> Down
+[2026-02-24 08:55:17 UTC] Agent session ended. Resuming monitoring.
+[2026-02-24 08:55:17 UTC] Agent invoked for event on R11C: BOM%TRACK-6-STATE: 1 ip sla 1 reachability Up -> Down
+[2026-02-24 08:55:17 UTC] Agent session ended. Resuming monitoring.
+[2026-02-24 08:55:17 UTC] SKIPPED (deferred - already queued in pending_events.json) - 172.20.20.209: BOM%TRACK-6-STATE: 2 ip sla 2 reachability Up -> Down
+[2026-02-24 08:55:20 UTC] Watcher stopped (signal received).
+[2026-02-24 09:03:27 UTC] Watcher started. Monitoring /var/log/network.json for IP SLA Down events.
+[2026-02-24 09:04:06 UTC] Agent invoked for event on R11C: BOM%TRACK-6-STATE: 1 ip sla 1 reachability Up -> Down
+[2026-02-24 09:10:23 UTC] Agent session ended. Resuming monitoring.
+[2026-02-24 09:10:23 UTC] Agent invoked for event on R4C: BOM%TRACK-6-STATE: 1 ip sla 1 reachability Up -> Down
+[2026-02-24 09:10:29 UTC] Watcher stopped (signal received).
+[2026-02-24 09:10:29 UTC] Agent session ended. Resuming monitoring.
+[2026-02-24 09:17:04 UTC] Watcher started. Monitoring /var/log/network.json for IP SLA Down events.
+[2026-02-24 09:17:26 UTC] Agent invoked for event on R11C: BOM%TRACK-6-STATE: 1 ip sla 1 reachability Up -> Down
+[2026-02-24 09:26:29 UTC] Agent session ended. Resuming monitoring.
+[2026-02-24 09:26:29 UTC] Agent invoked for event on R4C: BOM%TRACK-6-STATE: 1 ip sla 1 reachability Up -> Down
+[2026-02-24 09:26:33 UTC] Agent session ended. Resuming monitoring.
+[2026-02-24 09:26:33 UTC] Agent invoked for event on R10C: BOM%TRACK-6-STATE: 1 ip sla 1 reachability Up -> Down
+[2026-02-24 09:26:37 UTC] Agent session ended. Resuming monitoring.
+[2026-02-24 09:26:37 UTC] Agent invoked for event on R9C: BOM%TRACK-6-STATE: 2 ip sla 2 reachability Up -> Down
+[2026-02-24 09:26:38 UTC] Agent session ended. Resuming monitoring.
+[2026-02-24 09:26:38 UTC] Watcher stopped (signal received).
+[2026-02-24 09:45:52 UTC] Watcher started. Monitoring /var/log/network.json for IP SLA Down events.
+[2026-02-24 09:47:12 UTC] Agent invoked for event on R10C: BOM%TRACK-6-STATE: 1 ip sla 1 reachability Up -> Down
+[2026-02-24 09:59:41 UTC] Agent session ended. Resuming monitoring.
+[2026-02-24 09:59:41 UTC] SKIPPED (deferred - occurred during active session) - R11C (172.20.20.211): BOM%TRACK-6-STATE: 1 ip sla 1 reachability Up -> Down
+[2026-02-24 09:59:41 UTC] SKIPPED (deferred - occurred during active session) - R4C (172.20.20.204): BOM%TRACK-6-STATE: 1 ip sla 1 reachability Up -> Down
+[2026-02-24 09:59:41 UTC] SKIPPED (deferred - occurred during active session) - R9C (172.20.20.209): BOM%TRACK-6-STATE: 2 ip sla 2 reachability Up -> Down
+[2026-02-24 09:59:41 UTC] Saved 3 deferred failure(s) to pending_events.json
+[2026-02-24 09:59:41 UTC] Deferred review session invoked for 3 failure(s).
+[2026-02-24 10:10:42 UTC] Deferred review session ended. Resuming monitoring.
+[2026-02-24 10:10:42 UTC] SKIPPED (deferred - already queued in pending_events.json) - 172.20.20.211: BOM%TRACK-6-STATE: 1 ip sla 1 reachability Up -> Down
+[2026-02-24 10:10:42 UTC] SKIPPED (deferred - already queued in pending_events.json) - 172.20.20.204: BOM%TRACK-6-STATE: 1 ip sla 1 reachability Up -> Down
+[2026-02-24 10:10:42 UTC] SKIPPED (deferred - already queued in pending_events.json) - 172.20.20.209: BOM%TRACK-6-STATE: 2 ip sla 2 reachability Up -> Down
+[2026-02-24 10:10:42 UTC] Agent invoked for event on R9C: BOM%TRACK-6-STATE: 1 ip sla 1 reachability Up -> Down
+[2026-02-24 10:10:56 UTC] Agent session ended. Resuming monitoring.
+[2026-02-24 10:10:56 UTC] Agent invoked for event on R9C: BOM%TRACK-6-STATE: 2 ip sla 2 reachability Up -> Down
+[2026-02-24 10:10:57 UTC] Agent session ended. Resuming monitoring.
+[2026-02-24 10:10:57 UTC] Watcher stopped (signal received).
+[2026-02-24 10:34:26 UTC] Watcher started. Monitoring /var/log/network.json for IP SLA Down events.
+[2026-02-24 10:35:41 UTC] Agent invoked for event on R11C: BOM%TRACK-6-STATE: 1 ip sla 1 reachability Up -> Down
+[2026-02-24 10:40:05 UTC] Agent session ended. Resuming monitoring.
+[2026-02-24 10:40:05 UTC] SKIPPED (deferred - occurred during active session) - R9C (172.20.20.209): BOM%TRACK-6-STATE: 2 ip sla 2 reachability Up -> Down
+[2026-02-24 10:40:05 UTC] SKIPPED (deferred - occurred during active session) - R4C (172.20.20.204): BOM%TRACK-6-STATE: 1 ip sla 1 reachability Up -> Down
+[2026-02-24 10:40:05 UTC] Saved 2 deferred failure(s) to pending_events.json
+[2026-02-24 10:40:05 UTC] Deferred review session invoked for 2 failure(s).
+[2026-02-24 10:40:06 UTC] Deferred review session ended. Resuming monitoring.
+[2026-02-24 10:40:06 UTC] Agent invoked for event on R10C: BOM%TRACK-6-STATE: 1 ip sla 1 reachability Up -> Down
+[2026-02-24 10:40:06 UTC] Agent session ended. Resuming monitoring.
+[2026-02-24 10:40:06 UTC] SKIPPED (deferred - already handled) - 172.20.20.209: BOM%TRACK-6-STATE: 2 ip sla 2 reachability Up -> Down
+[2026-02-24 10:40:06 UTC] SKIPPED (deferred - already handled) - 172.20.20.204: BOM%TRACK-6-STATE: 1 ip sla 1 reachability Up -> Down
+[2026-02-24 10:40:06 UTC] Watcher stopped (signal received).
+[2026-02-24 10:43:12 UTC] Watcher started. Monitoring /var/log/network.json for IP SLA Down events.
+[2026-02-24 10:44:06 UTC] Agent invoked for event on R9C: BOM%TRACK-6-STATE: 2 ip sla 2 reachability Up -> Down
+[2026-02-24 10:44:53 UTC] Agent session ended. Resuming monitoring.
+[2026-02-24 10:44:53 UTC] Agent invoked for event on R10C: BOM%TRACK-6-STATE: 1 ip sla 1 reachability Up -> Down
+[2026-02-24 10:44:54 UTC] Agent session ended. Resuming monitoring.
+[2026-02-24 10:44:54 UTC] Agent invoked for event on R4C: BOM%TRACK-6-STATE: 1 ip sla 1 reachability Up -> Down
+[2026-02-24 10:44:54 UTC] Watcher stopped (signal received).
+[2026-02-24 10:44:54 UTC] Agent session ended. Resuming monitoring.
+[2026-02-24 10:50:30 UTC] Watcher started. Monitoring /var/log/network.json for IP SLA Down events.
+[2026-02-24 10:51:21 UTC] Agent invoked for event on R4C: BOM%TRACK-6-STATE: 1 ip sla 1 reachability Up -> Down
+[2026-02-24 11:04:01 UTC] Agent session ended. Resuming monitoring.
+[2026-02-24 11:04:01 UTC] SKIPPED (deferred - occurred during active session) - R9C (172.20.20.209): BOM%TRACK-6-STATE: 2 ip sla 2 reachability Up -> Down
+[2026-02-24 11:04:01 UTC] SKIPPED (deferred - occurred during active session) - R10C (172.20.20.210): BOM%TRACK-6-STATE: 1 ip sla 1 reachability Up -> Down
+[2026-02-24 11:04:01 UTC] SKIPPED (deferred - occurred during active session) - R11C (172.20.20.211): BOM%TRACK-6-STATE: 1 ip sla 1 reachability Up -> Down
+[2026-02-24 11:04:01 UTC] Saved 3 deferred failure(s) to pending_events.json
+[2026-02-24 11:04:01 UTC] Deferred review session invoked for 3 failure(s).
+[2026-02-24 11:04:25 UTC] Deferred review session ended. Resuming monitoring.
+[2026-02-24 11:04:25 UTC] SKIPPED (deferred - already handled) - 172.20.20.209: BOM%TRACK-6-STATE: 2 ip sla 2 reachability Up -> Down
+[2026-02-24 11:04:25 UTC] SKIPPED (deferred - already handled) - 172.20.20.210: BOM%TRACK-6-STATE: 1 ip sla 1 reachability Up -> Down
+[2026-02-24 11:04:25 UTC] SKIPPED (deferred - already handled) - 172.20.20.211: BOM%TRACK-6-STATE: 1 ip sla 1 reachability Up -> Down
+[2026-02-24 11:09:36 UTC] Agent invoked for event on R11C: BOM%TRACK-6-STATE: 1 ip sla 1 reachability Up -> Down
+[2026-02-24 11:13:31 UTC] Agent session ended. Resuming monitoring.
+[2026-02-24 11:13:31 UTC] SKIPPED (deferred - occurred during active session) - R9C (172.20.20.209): BOM%TRACK-6-STATE: 2 ip sla 2 reachability Up -> Down
+[2026-02-24 11:13:31 UTC] SKIPPED (deferred - occurred during active session) - R4C (172.20.20.204): BOM%TRACK-6-STATE: 1 ip sla 1 reachability Up -> Down
+[2026-02-24 11:13:31 UTC] Saved 2 deferred failure(s) to pending_events.json
+[2026-02-24 11:13:31 UTC] Deferred review session invoked for 2 failure(s).
+[2026-02-24 11:16:03 UTC] Deferred review session ended. Resuming monitoring.
+[2026-02-24 11:16:03 UTC] Agent invoked for event on R10C: BOM%TRACK-6-STATE: 1 ip sla 1 reachability Up -> Down
+[2026-02-24 11:24:01 UTC] Agent session ended. Resuming monitoring.
+[2026-02-24 11:24:01 UTC] SKIPPED (deferred - occurred during active session) - R9C (172.20.20.209): BOM%TRACK-6-STATE: 1 ip sla 1 reachability Up -> Down
+[2026-02-24 11:24:01 UTC] Saved 1 deferred failure(s) to pending_events.json
+[2026-02-24 11:24:01 UTC] Deferred review session invoked for 1 failure(s).
+[2026-02-24 11:24:02 UTC] Deferred review session ended. Resuming monitoring.
+[2026-02-24 11:24:02 UTC] SKIPPED (deferred - already handled) - 172.20.20.209: BOM%TRACK-6-STATE: 2 ip sla 2 reachability Up -> Down
+[2026-02-24 11:24:02 UTC] SKIPPED (deferred - already handled) - 172.20.20.204: BOM%TRACK-6-STATE: 1 ip sla 1 reachability Up -> Down
+[2026-02-24 11:24:02 UTC] SKIPPED (deferred - already handled) - 172.20.20.209: BOM%TRACK-6-STATE: 1 ip sla 1 reachability Up -> Down
+[2026-02-24 11:24:02 UTC] Watcher stopped (signal received).
+[2026-02-24 11:24:08 UTC] Watcher started. Monitoring /var/log/network.json for IP SLA Down events.
+[2026-02-24 11:24:18 UTC] Agent invoked for event on R11C: BOM%TRACK-6-STATE: 1 ip sla 1 reachability Up -> Down
+[2026-02-24 11:42:14 UTC] Agent session ended. Resuming monitoring.
+[2026-02-24 11:42:14 UTC] SKIPPED (deferred - occurred during active session) - R4C (172.20.20.204): BOM%TRACK-6-STATE: 1 ip sla 1 reachability Up -> Down
+[2026-02-24 11:42:14 UTC] SKIPPED (deferred - occurred during active session) - R9C (172.20.20.209): BOM%TRACK-6-STATE: 2 ip sla 2 reachability Up -> Down
+[2026-02-24 11:42:14 UTC] SKIPPED (deferred - occurred during active session) - R11C (172.20.20.211): BOM%TRACK-6-STATE: 1 ip sla 1 reachability Up -> Down
+[2026-02-24 11:42:14 UTC] SKIPPED (deferred - occurred during active session) - R10C (172.20.20.210): BOM%TRACK-6-STATE: 1 ip sla 1 reachability Up -> Down
+[2026-02-24 11:42:14 UTC] SKIPPED (deferred - occurred during active session) - R4C (172.20.20.204): BOM%TRACK-6-STATE: 1 ip sla 1 reachability Up -> Down
+[2026-02-24 11:42:14 UTC] SKIPPED (deferred - occurred during active session) - R9C (172.20.20.209): BOM%TRACK-6-STATE: 2 ip sla 2 reachability Up -> Down
+[2026-02-24 11:42:14 UTC] SKIPPED (deferred - occurred during active session) - R11C (172.20.20.211): BOM%TRACK-6-STATE: 1 ip sla 1 reachability Up -> Down
+[2026-02-24 11:42:14 UTC] SKIPPED (deferred - occurred during active session) - R10C (172.20.20.210): BOM%TRACK-6-STATE: 1 ip sla 1 reachability Up -> Down
+[2026-02-24 11:42:14 UTC] SKIPPED (deferred - occurred during active session) - R11C (172.20.20.211): BOM%TRACK-6-STATE: 1 ip sla 1 reachability Up -> Down
+[2026-02-24 11:42:14 UTC] SKIPPED (deferred - occurred during active session) - R10C (172.20.20.210): BOM%TRACK-6-STATE: 1 ip sla 1 reachability Up -> Down
+[2026-02-24 11:42:14 UTC] SKIPPED (deferred - occurred during active session) - R11C (172.20.20.211): BOM%TRACK-6-STATE: 1 ip sla 1 reachability Up -> Down
+[2026-02-24 11:42:14 UTC] SKIPPED (deferred - occurred during active session) - R10C (172.20.20.210): BOM%TRACK-6-STATE: 1 ip sla 1 reachability Up -> Down
+[2026-02-24 11:42:14 UTC] SKIPPED (deferred - occurred during active session) - R11C (172.20.20.211): BOM%TRACK-6-STATE: 1 ip sla 1 reachability Up -> Down
+[2026-02-24 11:42:14 UTC] SKIPPED (deferred - occurred during active session) - R10C (172.20.20.210): BOM%TRACK-6-STATE: 1 ip sla 1 reachability Up -> Down
+[2026-02-24 11:42:14 UTC] SKIPPED (deferred - occurred during active session) - R4C (172.20.20.204): BOM%TRACK-6-STATE: 1 ip sla 1 reachability Up -> Down
+[2026-02-24 11:42:14 UTC] SKIPPED (deferred - occurred during active session) - R9C (172.20.20.209): BOM%TRACK-6-STATE: 2 ip sla 2 reachability Up -> Down
+[2026-02-24 11:42:14 UTC] SKIPPED (deferred - occurred during active session) - R11C (172.20.20.211): BOM%TRACK-6-STATE: 1 ip sla 1 reachability Up -> Down
+[2026-02-24 11:42:14 UTC] SKIPPED (deferred - occurred during active session) - R10C (172.20.20.210): BOM%TRACK-6-STATE: 1 ip sla 1 reachability Up -> Down
+[2026-02-24 11:42:14 UTC] SKIPPED (deferred - occurred during active session) - R11C (172.20.20.211): BOM%TRACK-6-STATE: 1 ip sla 1 reachability Up -> Down
+[2026-02-24 11:42:14 UTC] SKIPPED (deferred - occurred during active session) - R4C (172.20.20.204): BOM%TRACK-6-STATE: 1 ip sla 1 reachability Up -> Down
+[2026-02-24 11:42:14 UTC] SKIPPED (deferred - occurred during active session) - R9C (172.20.20.209): BOM%TRACK-6-STATE: 2 ip sla 2 reachability Up -> Down
+[2026-02-24 11:42:14 UTC] SKIPPED (deferred - occurred during active session) - R10C (172.20.20.210): BOM%TRACK-6-STATE: 1 ip sla 1 reachability Up -> Down
+[2026-02-24 11:42:14 UTC] SKIPPED (deferred - occurred during active session) - R11C (172.20.20.211): BOM%TRACK-6-STATE: 1 ip sla 1 reachability Up -> Down
+[2026-02-24 11:42:14 UTC] SKIPPED (deferred - occurred during active session) - R10C (172.20.20.210): BOM%TRACK-6-STATE: 1 ip sla 1 reachability Up -> Down
+[2026-02-24 11:42:14 UTC] SKIPPED (deferred - occurred during active session) - R11C (172.20.20.211): BOM%TRACK-6-STATE: 1 ip sla 1 reachability Up -> Down
+[2026-02-24 11:42:14 UTC] SKIPPED (deferred - occurred during active session) - R10C (172.20.20.210): BOM%TRACK-6-STATE: 1 ip sla 1 reachability Up -> Down
+[2026-02-24 11:42:14 UTC] SKIPPED (deferred - occurred during active session) - R11C (172.20.20.211): BOM%TRACK-6-STATE: 1 ip sla 1 reachability Up -> Down
+[2026-02-24 11:42:14 UTC] SKIPPED (deferred - occurred during active session) - R10C (172.20.20.210): BOM%TRACK-6-STATE: 1 ip sla 1 reachability Up -> Down
+[2026-02-24 11:42:14 UTC] SKIPPED (deferred - occurred during active session) - R4C (172.20.20.204): BOM%TRACK-6-STATE: 1 ip sla 1 reachability Up -> Down
+[2026-02-24 11:42:14 UTC] SKIPPED (deferred - occurred during active session) - R9C (172.20.20.209): BOM%TRACK-6-STATE: 2 ip sla 2 reachability Up -> Down
+[2026-02-24 11:42:14 UTC] SKIPPED (deferred - occurred during active session) - R11C (172.20.20.211): BOM%TRACK-6-STATE: 1 ip sla 1 reachability Up -> Down
+[2026-02-24 11:42:14 UTC] SKIPPED (deferred - occurred during active session) - R10C (172.20.20.210): BOM%TRACK-6-STATE: 1 ip sla 1 reachability Up -> Down
+[2026-02-24 11:42:14 UTC] Saved 32 deferred failure(s) to pending_events.json
+[2026-02-24 11:42:14 UTC] Deferred review session invoked for 32 failure(s).
+[2026-02-24 11:42:43 UTC] Deferred review session ended. Resuming monitoring.
+[2026-02-24 11:42:43 UTC] Agent invoked for event on R10C: BOM%TRACK-6-STATE: 1 ip sla 1 reachability Up -> Down
+[2026-02-24 11:42:59 UTC] Agent session ended. Resuming monitoring.
+[2026-02-24 11:42:59 UTC] SKIPPED (deferred - already handled) - 172.20.20.204: BOM%TRACK-6-STATE: 1 ip sla 1 reachability Up -> Down
+[2026-02-24 11:42:59 UTC] SKIPPED (deferred - already handled) - 172.20.20.209: BOM%TRACK-6-STATE: 2 ip sla 2 reachability Up -> Down
+[2026-02-24 11:42:59 UTC] SKIPPED (deferred - already handled) - 172.20.20.211: BOM%TRACK-6-STATE: 1 ip sla 1 reachability Up -> Down
+[2026-02-24 11:42:59 UTC] SKIPPED (deferred - already handled) - 172.20.20.210: BOM%TRACK-6-STATE: 1 ip sla 1 reachability Up -> Down
+[2026-02-24 11:42:59 UTC] SKIPPED (deferred - already handled) - 172.20.20.204: BOM%TRACK-6-STATE: 1 ip sla 1 reachability Up -> Down
+[2026-02-24 11:42:59 UTC] SKIPPED (deferred - already handled) - 172.20.20.209: BOM%TRACK-6-STATE: 2 ip sla 2 reachability Up -> Down
+[2026-02-24 11:42:59 UTC] SKIPPED (deferred - already handled) - 172.20.20.211: BOM%TRACK-6-STATE: 1 ip sla 1 reachability Up -> Down
+[2026-02-24 11:42:59 UTC] SKIPPED (deferred - already handled) - 172.20.20.210: BOM%TRACK-6-STATE: 1 ip sla 1 reachability Up -> Down
+[2026-02-24 11:42:59 UTC] SKIPPED (deferred - already handled) - 172.20.20.211: BOM%TRACK-6-STATE: 1 ip sla 1 reachability Up -> Down
+[2026-02-24 11:42:59 UTC] SKIPPED (deferred - already handled) - 172.20.20.210: BOM%TRACK-6-STATE: 1 ip sla 1 reachability Up -> Down
+[2026-02-24 11:42:59 UTC] SKIPPED (deferred - already handled) - 172.20.20.211: BOM%TRACK-6-STATE: 1 ip sla 1 reachability Up -> Down
+[2026-02-24 11:42:59 UTC] SKIPPED (deferred - already handled) - 172.20.20.210: BOM%TRACK-6-STATE: 1 ip sla 1 reachability Up -> Down
+[2026-02-24 11:42:59 UTC] SKIPPED (deferred - already handled) - 172.20.20.211: BOM%TRACK-6-STATE: 1 ip sla 1 reachability Up -> Down
+[2026-02-24 11:42:59 UTC] SKIPPED (deferred - already handled) - 172.20.20.210: BOM%TRACK-6-STATE: 1 ip sla 1 reachability Up -> Down
+[2026-02-24 11:42:59 UTC] SKIPPED (deferred - already handled) - 172.20.20.204: BOM%TRACK-6-STATE: 1 ip sla 1 reachability Up -> Down
+[2026-02-24 11:42:59 UTC] SKIPPED (deferred - already handled) - 172.20.20.209: BOM%TRACK-6-STATE: 2 ip sla 2 reachability Up -> Down
+[2026-02-24 11:42:59 UTC] SKIPPED (deferred - already handled) - 172.20.20.211: BOM%TRACK-6-STATE: 1 ip sla 1 reachability Up -> Down
+[2026-02-24 11:42:59 UTC] SKIPPED (deferred - already handled) - 172.20.20.210: BOM%TRACK-6-STATE: 1 ip sla 1 reachability Up -> Down
+[2026-02-24 11:42:59 UTC] SKIPPED (deferred - already handled) - 172.20.20.211: BOM%TRACK-6-STATE: 1 ip sla 1 reachability Up -> Down
+[2026-02-24 11:42:59 UTC] SKIPPED (deferred - already handled) - 172.20.20.204: BOM%TRACK-6-STATE: 1 ip sla 1 reachability Up -> Down
+[2026-02-24 11:42:59 UTC] SKIPPED (deferred - already handled) - 172.20.20.209: BOM%TRACK-6-STATE: 2 ip sla 2 reachability Up -> Down
+[2026-02-24 11:42:59 UTC] SKIPPED (deferred - already handled) - 172.20.20.210: BOM%TRACK-6-STATE: 1 ip sla 1 reachability Up -> Down
+[2026-02-24 11:42:59 UTC] SKIPPED (deferred - already handled) - 172.20.20.211: BOM%TRACK-6-STATE: 1 ip sla 1 reachability Up -> Down
+[2026-02-24 11:42:59 UTC] SKIPPED (deferred - already handled) - 172.20.20.210: BOM%TRACK-6-STATE: 1 ip sla 1 reachability Up -> Down
+[2026-02-24 11:42:59 UTC] SKIPPED (deferred - already handled) - 172.20.20.211: BOM%TRACK-6-STATE: 1 ip sla 1 reachability Up -> Down
+[2026-02-24 11:42:59 UTC] SKIPPED (deferred - already handled) - 172.20.20.210: BOM%TRACK-6-STATE: 1 ip sla 1 reachability Up -> Down
+[2026-02-24 11:42:59 UTC] SKIPPED (deferred - already handled) - 172.20.20.211: BOM%TRACK-6-STATE: 1 ip sla 1 reachability Up -> Down
+[2026-02-24 11:42:59 UTC] SKIPPED (deferred - already handled) - 172.20.20.210: BOM%TRACK-6-STATE: 1 ip sla 1 reachability Up -> Down
+[2026-02-24 11:42:59 UTC] SKIPPED (deferred - already handled) - 172.20.20.204: BOM%TRACK-6-STATE: 1 ip sla 1 reachability Up -> Down
+[2026-02-24 11:42:59 UTC] SKIPPED (deferred - already handled) - 172.20.20.209: BOM%TRACK-6-STATE: 2 ip sla 2 reachability Up -> Down
+[2026-02-24 11:42:59 UTC] SKIPPED (deferred - already handled) - 172.20.20.211: BOM%TRACK-6-STATE: 1 ip sla 1 reachability Up -> Down
+[2026-02-24 11:42:59 UTC] SKIPPED (deferred - already handled) - 172.20.20.210: BOM%TRACK-6-STATE: 1 ip sla 1 reachability Up -> Down
+[2026-02-24 11:57:43 UTC] Watcher stopped (signal received).
+[2026-02-24 11:57:47 UTC] Watcher started. Monitoring /var/log/network.json for IP SLA Down events.
+[2026-02-24 11:58:03 UTC] Agent invoked for event on R11C: BOM%TRACK-6-STATE: 1 ip sla 1 reachability Up -> Down
+[2026-02-24 12:01:07 UTC] Agent session ended. Resuming monitoring.
+[2026-02-24 12:01:07 UTC] SKIPPED (deferred - occurred during active session) - R9C (172.20.20.209): BOM%TRACK-6-STATE: 2 ip sla 2 reachability Up -> Down
+[2026-02-24 12:01:07 UTC] SKIPPED (deferred - occurred during active session) - R4C (172.20.20.204): BOM%TRACK-6-STATE: 1 ip sla 1 reachability Up -> Down
+[2026-02-24 12:01:07 UTC] Saved 2 deferred failure(s) to pending_events.json
+[2026-02-24 12:01:07 UTC] Deferred review session invoked for 2 failure(s).
+[2026-02-24 12:02:07 UTC] Deferred review session ended. Resuming monitoring.
+[2026-02-24 12:02:07 UTC] SKIPPED (deferred - occurred during active/review session) - R9C (172.20.20.209): BOM%TRACK-6-STATE: 2 ip sla 2 reachability Up -> Down
+[2026-02-24 12:02:07 UTC] SKIPPED (deferred - occurred during active/review session) - R4C (172.20.20.204): BOM%TRACK-6-STATE: 1 ip sla 1 reachability Up -> Down
+[2026-02-24 12:02:07 UTC] Agent invoked for event on R10C: BOM%TRACK-6-STATE: 1 ip sla 1 reachability Up -> Down
+[2026-02-24 12:19:08 UTC] Agent session ended. Resuming monitoring.
+[2026-02-24 12:19:08 UTC] SKIPPED (deferred - already handled) - 172.20.20.209: BOM%TRACK-6-STATE: 2 ip sla 2 reachability Up -> Down
+[2026-02-24 12:19:08 UTC] SKIPPED (deferred - already handled) - 172.20.20.204: BOM%TRACK-6-STATE: 1 ip sla 1 reachability Up -> Down
+[2026-02-24 12:19:09 UTC] Watcher stopped (signal received).
+[2026-02-24 12:19:14 UTC] Watcher started. Monitoring /var/log/network.json for IP SLA Down events.
+[2026-02-24 12:20:09 UTC] Agent invoked for event on R10C: BOM%TRACK-6-STATE: 1 ip sla 1 reachability Up -> Down
+[2026-02-24 12:26:02 UTC] Agent session ended.
+[2026-02-24 12:26:02 UTC] SKIPPED (deferred - occurred during active session) - R9C (172.20.20.209): BOM%TRACK-6-STATE: 2 ip sla 2 reachability Up -> Down
+[2026-02-24 12:26:02 UTC] SKIPPED (deferred - occurred during active session) - R4C (172.20.20.204): BOM%TRACK-6-STATE: 1 ip sla 1 reachability Up -> Down
+[2026-02-24 12:26:02 UTC] SKIPPED (deferred - occurred during active session) - R11C (172.20.20.211): BOM%TRACK-6-STATE: 1 ip sla 1 reachability Up -> Down
+[2026-02-24 12:26:02 UTC] Saved 3 deferred failure(s) to pending_events.json
+[2026-02-24 12:26:02 UTC] Deferred review session invoked for 3 failure(s).
+[2026-02-24 12:26:24 UTC] Deferred review session ended. Resuming monitoring.
+[2026-02-24 12:37:56 UTC] Watcher stopped (signal received).
+[2026-02-24 12:37:59 UTC] Watcher started. Monitoring /var/log/network.json for IP SLA Down events.
+[2026-02-24 12:39:24 UTC] Agent invoked for event on R11C: BOM%TRACK-6-STATE: 1 ip sla 1 reachability Up -> Down
+[2026-02-24 12:46:11 UTC] Agent session ended.
+[2026-02-24 12:46:11 UTC] SKIPPED (deferred - occurred during active session) - R9C (172.20.20.209): BOM%TRACK-6-STATE: 2 ip sla 2 reachability Up -> Down
+[2026-02-24 12:46:11 UTC] SKIPPED (deferred - occurred during active session) - R4C (172.20.20.204): BOM%TRACK-6-STATE: 1 ip sla 1 reachability Up -> Down
+[2026-02-24 12:46:11 UTC] Saved 2 deferred failure(s) to pending_events.json
+[2026-02-24 12:46:11 UTC] Deferred review session invoked for 2 failure(s).
+[2026-02-24 12:46:27 UTC] Deferred review session ended. Resuming monitoring.
+[2026-02-24 12:51:35 UTC] Watcher stopped (signal received).
+[2026-02-24 12:51:37 UTC] Watcher started. Monitoring /var/log/network.json for IP SLA Down events.
+[2026-02-24 12:53:29 UTC] Agent invoked for event on R11C: BOM%TRACK-6-STATE: 1 ip sla 1 reachability Up -> Down
+[2026-02-24 13:06:58 UTC] Agent session ended.
+[2026-02-24 13:06:58 UTC] SKIPPED (deferred - occurred during active session) - R9C (172.20.20.209): BOM%TRACK-6-STATE: 2 ip sla 2 reachability Up -> Down
+[2026-02-24 13:06:58 UTC] SKIPPED (deferred - occurred during active session) - R4C (172.20.20.204): BOM%TRACK-6-STATE: 1 ip sla 1 reachability Up -> Down
+[2026-02-24 13:06:58 UTC] Saved 2 deferred failure(s) to pending_events.json
+[2026-02-24 13:06:58 UTC] Deferred review session invoked for 2 failure(s).
+[2026-02-24 13:06:59 UTC] Deferred review session ended. Resuming monitoring.
+[2026-02-24 13:07:00 UTC] Watcher stopped (signal received).
+[2026-02-24 13:07:03 UTC] Watcher started. Monitoring /var/log/network.json for IP SLA Down events.
+[2026-02-24 13:07:19 UTC] Agent invoked for event on R4C: BOM%TRACK-6-STATE: 1 ip sla 1 reachability Up -> Down
+[2026-02-24 13:30:41 UTC] Watcher stopped (signal received).
+[2026-02-24 13:30:41 UTC] Agent session ended.
+[2026-02-24 13:30:43 UTC] Watcher started. Monitoring /var/log/network.json for IP SLA Down events.
+[2026-02-24 13:31:24 UTC] Agent invoked for event on R4C: BOM%TRACK-6-STATE: 1 ip sla 1 reachability Up -> Down
+[2026-02-24 14:24:39 UTC] Watcher stopped (signal received).
+[2026-02-24 14:24:39 UTC] Agent session ended.
+[2026-02-24 14:24:41 UTC] Watcher started. Monitoring /var/log/network.json for IP SLA Down events.
+[2026-02-24 14:26:55 UTC] Agent invoked for event on R4C: BOM%TRACK-6-STATE: 1 ip sla 1 reachability Up -> Down
+[2026-02-24 14:34:05 UTC] Agent session ended.
+[2026-02-24 14:34:05 UTC] SKIPPED (deferred - occurred during active session) - R9C (172.20.20.209): BOM%TRACK-6-STATE: 2 ip sla 2 reachability Up -> Down
+[2026-02-24 14:34:05 UTC] SKIPPED (deferred - occurred during active session) - R10C (172.20.20.210): BOM%TRACK-6-STATE: 1 ip sla 1 reachability Up -> Down
+[2026-02-24 14:34:05 UTC] SKIPPED (deferred - occurred during active session) - R11C (172.20.20.211): BOM%TRACK-6-STATE: 1 ip sla 1 reachability Up -> Down
+[2026-02-24 14:34:05 UTC] Saved 3 deferred failure(s) to pending_events.json
+[2026-02-24 14:34:05 UTC] Deferred review session invoked for 3 failure(s).
+[2026-02-24 14:34:39 UTC] Deferred review session ended. Resuming monitoring.
+[2026-02-24 16:53:12 UTC] Agent invoked for event on R10C: BOM%TRACK-6-STATE: 1 ip sla 1 reachability Up -> Down
+[2026-02-24 18:13:19 UTC] Agent session ended.
+[2026-02-24 18:13:19 UTC] SKIPPED (deferred - occurred during active session) - R4C (172.20.20.204): BOM%TRACK-6-STATE: 1 ip sla 1 reachability Up -> Down
+[2026-02-24 18:13:19 UTC] SKIPPED (deferred - occurred during active session) - R9C (172.20.20.209): BOM%TRACK-6-STATE: 2 ip sla 2 reachability Up -> Down
+[2026-02-24 18:13:19 UTC] SKIPPED (deferred - occurred during active session) - R11C (172.20.20.211): BOM%TRACK-6-STATE: 1 ip sla 1 reachability Up -> Down
+[2026-02-24 18:13:19 UTC] SKIPPED (deferred - occurred during active session) - R10C (172.20.20.210): BOM%TRACK-6-STATE: 1 ip sla 1 reachability Up -> Down
+[2026-02-24 18:13:19 UTC] SKIPPED (deferred - occurred during active session) - R4C (172.20.20.204): BOM%TRACK-6-STATE: 1 ip sla 1 reachability Up -> Down
+[2026-02-24 18:13:19 UTC] SKIPPED (deferred - occurred during active session) - R9C (172.20.20.209): BOM%TRACK-6-STATE: 2 ip sla 2 reachability Up -> Down
+[2026-02-24 18:13:19 UTC] SKIPPED (deferred - occurred during active session) - R10C (172.20.20.210): BOM%TRACK-6-STATE: 1 ip sla 1 reachability Up -> Down
+[2026-02-24 18:13:19 UTC] SKIPPED (deferred - occurred during active session) - R11C (172.20.20.211): BOM%TRACK-6-STATE: 1 ip sla 1 reachability Up -> Down
+[2026-02-24 18:13:19 UTC] SKIPPED (deferred - occurred during active session) - R4C (172.20.20.204): BOM%TRACK-6-STATE: 1 ip sla 1 reachability Up -> Down
+[2026-02-24 18:13:19 UTC] SKIPPED (deferred - occurred during active session) - R9C (172.20.20.209): BOM%TRACK-6-STATE: 2 ip sla 2 reachability Up -> Down
+[2026-02-24 18:13:19 UTC] Saved 10 deferred failure(s) to pending_events.json
+[2026-02-24 18:13:19 UTC] Deferred review session invoked for 10 failure(s).
+[2026-02-24 18:13:19 UTC] Watcher stopped (signal received).
+[2026-02-24 18:13:19 UTC] Deferred review session ended. Resuming monitoring.
+[2026-02-24 18:13:28 UTC] Watcher started. Monitoring /var/log/network.json for IP SLA Down events.
+[2026-02-24 18:15:59 UTC] Agent invoked for event on R9C: BOM%TRACK-6-STATE: 1 ip sla 1 reachability Up -> Down
+[2026-02-24 18:22:44 UTC] Agent session ended.
+[2026-02-24 18:23:15 UTC] Watcher stopped (signal received).
+[2026-02-25 07:23:47 UTC] Watcher started. Monitoring /var/log/network.json for IP SLA Down events.
+[2026-02-25 07:26:06 UTC] Agent invoked for event on R4C: BOM%TRACK-6-STATE: 1 ip sla 1 reachability Up -> Down
+[2026-02-25 07:53:52 UTC] Agent session ended.
+[2026-02-25 07:53:52 UTC] SKIPPED (deferred - occurred during active session) - R9C (172.20.20.209): BOM%TRACK-6-STATE: 1 ip sla 1 reachability Up -> Down
+[2026-02-25 07:53:52 UTC] Saved 1 deferred failure(s) to pending_events.json
+[2026-02-25 07:53:52 UTC] Deferred review session invoked for 1 failure(s).
+[2026-02-25 07:59:59 UTC] Deferred review session ended. Resuming monitoring.
+[2026-02-25 08:04:30 UTC] Watcher stopped (signal received).
+[2026-02-25 08:04:50 UTC] Watcher started. Monitoring /var/log/network.json for IP SLA Down events.
+[2026-02-25 08:04:52 UTC] Watcher stopped (signal received).
+[2026-02-25 10:04:23 UTC] Watcher started. Monitoring /var/log/network.json for IP SLA Down events.
+[2026-02-25 10:05:08 UTC] Agent invoked for event on R4C: BOM%TRACK-6-STATE: 1 ip sla 1 reachability Up -> Down
+[2026-02-25 10:20:25 UTC] Agent session ended.
+[2026-02-25 10:20:25 UTC] SKIPPED (deferred - occurred during active session) - R9C (172.20.20.209): BOM%TRACK-6-STATE: 1 ip sla 1 reachability Up -> Down
+[2026-02-25 10:20:25 UTC] Saved 1 deferred failure(s) to pending_events.json
+[2026-02-25 10:20:25 UTC] Deferred review session invoked for 1 failure(s).
+[2026-02-25 10:20:37 UTC] Deferred review session ended. Resuming monitoring.
+[2026-02-25 10:20:39 UTC] Watcher stopped (signal received).
+[2026-02-25 10:27:33 UTC] Watcher started. Monitoring /var/log/network.json for IP SLA Down events.
+[2026-02-25 10:29:23 UTC] Agent invoked for event on R4C: BOM%TRACK-6-STATE: 1 ip sla 1 reachability Up -> Down
+[2026-02-25 10:53:21 UTC] Watcher stopped (signal received).
+[2026-02-25 10:53:21 UTC] Agent session ended.
+[2026-02-25 11:25:33 UTC] Watcher started. Monitoring /var/log/network.json for IP SLA Down events.
+[2026-02-25 11:26:15 UTC] Agent invoked for event on R4C: BOM%TRACK-6-STATE: 1 ip sla 1 reachability Up -> Down
+[2026-02-25 11:29:56 UTC] Agent session ended.
+[2026-02-25 11:29:56 UTC] SKIPPED (deferred - occurred during active session) - R9C (172.20.20.209): BOM%TRACK-6-STATE: 1 ip sla 1 reachability Up -> Down
+[2026-02-25 11:29:56 UTC] Saved 1 deferred failure(s) to pending_events.json
+[2026-02-25 11:29:56 UTC] Deferred review session invoked for 1 failure(s).
+[2026-02-25 11:29:56 UTC] Deferred review session ended. Resuming monitoring.
+[2026-02-25 11:29:57 UTC] Watcher stopped (signal received).
+[2026-02-25 11:50:36 UTC] Watcher started. Monitoring /var/log/network.json for IP SLA Down events.
+[2026-02-25 11:51:05 UTC] Agent invoked for event on R4C: BOM%TRACK-6-STATE: 1 ip sla 1 reachability Up -> Down
+[2026-02-25 12:03:50 UTC] Agent session ended.
+[2026-02-25 12:03:50 UTC] SKIPPED (deferred - occurred during active session) - R9C (172.20.20.209): BOM%TRACK-6-STATE: 1 ip sla 1 reachability Up -> Down
+[2026-02-25 12:03:50 UTC] Saved 1 deferred failure(s) to pending_events.json
+[2026-02-25 12:03:50 UTC] Deferred review session invoked for 1 failure(s).
+[2026-02-25 12:04:04 UTC] Deferred review session ended. Resuming monitoring.
+[2026-02-25 12:04:07 UTC] Watcher stopped (signal received).
+[2026-02-26 04:27:45 UTC] Watcher started. Monitoring /var/log/network.json for IP SLA Down events.
+[2026-02-26 04:30:23 UTC] Agent invoked for event on R9C: BOM%TRACK-6-STATE: 1 ip sla 1 reachability Up -> Down
+[2026-02-26 04:57:53 UTC] Agent session ended.
+[2026-02-26 04:57:53 UTC] Resuming monitoring.
+[2026-02-26 04:57:53 UTC] Watcher stopped (signal received).
+[2026-02-26 04:59:42 UTC] Watcher started. Monitoring /var/log/network.json for IP SLA Down events.
+[2026-02-26 05:01:03 UTC] Agent invoked for event on R9C: BOM%TRACK-6-STATE: 1 ip sla 1 reachability Up -> Down
+[2026-02-26 05:29:35 UTC] Agent session ended.
+[2026-02-26 05:29:35 UTC] Resuming monitoring.
+[2026-02-26 05:29:37 UTC] Watcher stopped (signal received).
+[2026-02-26 05:36:14 UTC] Watcher started. Monitoring /var/log/network.json for IP SLA Down events.
+[2026-02-26 05:37:39 UTC] Agent invoked for event on R9C: BOM%TRACK-6-STATE: 1 ip sla 1 reachability Up -> Down
+[2026-02-26 05:43:42 UTC] Agent session ended.
+[2026-02-26 05:43:42 UTC] Resuming monitoring.
+[2026-02-26 05:44:09 UTC] Watcher stopped (signal received).
+[2026-02-26 06:33:43 UTC] Watcher started. Monitoring /var/log/network.json for IP SLA Down events.
+[2026-02-26 06:36:50 UTC] Agent invoked for event on R10C: BOM%TRACK-6-STATE: 1 ip sla 1 reachability Up -> Down
+[2026-02-26 06:45:39 UTC] Agent session ended.
+[2026-02-26 06:45:39 UTC] SKIPPED (deferred - occurred during active session) - R9C (172.20.20.209): BOM%TRACK-6-STATE: 2 ip sla 2 reachability Up -> Down
+[2026-02-26 06:45:39 UTC] SKIPPED (deferred - occurred during active session) - R4C (172.20.20.204): BOM%TRACK-6-STATE: 1 ip sla 1 reachability Up -> Down
+[2026-02-26 06:45:39 UTC] Saved 2 deferred failure(s) to pending_events.json
+[2026-02-26 06:45:39 UTC] Deferred review session invoked for 2 failure(s).
+[2026-02-26 07:09:55 UTC] Deferred review session ended. Resuming monitoring.
+[2026-02-26 07:09:57 UTC] Watcher stopped (signal received).
+[2026-02-26 07:10:03 UTC] Watcher started. Monitoring /var/log/network.json for IP SLA Down events.
+[2026-02-26 07:23:23 UTC] Watcher stopped (signal received).
+[2026-02-26 07:33:57 UTC] Watcher started. Monitoring /var/log/network.json for IP SLA Down events.
+[2026-02-26 07:34:42 UTC] Watcher stopped (signal received).
+[2026-02-26 07:40:06 UTC] Watcher started. Monitoring /var/log/network.json for IP SLA Down events.
+[2026-02-26 07:40:53 UTC] Agent invoked for event on R20M: down [ type: simple, host: 220.50.50.5 ]
+[2026-02-26 07:41:30 UTC] Agent session ended.
+[2026-02-26 07:41:30 UTC] Resuming monitoring.
+[2026-02-26 07:41:32 UTC] Watcher stopped (signal received).
+[2026-02-26 07:50:21 UTC] Watcher started. Monitoring /var/log/network.json for IP SLA Down events.
+[2026-02-26 07:50:44 UTC] Agent invoked for event on R20M: down [ type: simple, host: 220.50.50.5 ]
+[2026-02-26 07:55:03 UTC] Agent session ended.
+[2026-02-26 07:55:03 UTC] Resuming monitoring.
+[2026-02-26 07:55:12 UTC] Watcher stopped (signal received).
+[2026-02-26 13:37:58 UTC] Watcher started. Monitoring /var/log/network.json for IP SLA Down events.
+[2026-02-26 13:38:40 UTC] Jira ticket created: SUP-2
+[2026-02-26 13:38:40 UTC] Agent invoked for event on R9C: BOM%TRACK-6-STATE: 1 ip sla 1 reachability Up -> Down
+[2026-02-26 13:44:35 UTC] Agent session ended.
+[2026-02-26 13:44:35 UTC] SKIPPED (deferred - occurred during active session) - R4C (172.20.20.204): BOM%TRACK-6-STATE: 1 ip sla 1 reachability Up -> Down
+[2026-02-26 13:44:35 UTC] Saved 1 deferred failure(s) to pending_events.json
+[2026-02-26 13:44:35 UTC] Deferred review session invoked for 1 failure(s).
+[2026-02-26 13:44:53 UTC] Deferred review session ended. Resuming monitoring.
+[2026-02-26 13:47:01 UTC] Jira ticket created: SUP-3
+[2026-02-26 13:47:01 UTC] Agent invoked for event on R9C: BOM%TRACK-6-STATE: 1 ip sla 1 reachability Up -> Down
+[2026-02-26 14:50:00 UTC] Agent session ended.
+[2026-02-26 14:50:00 UTC] Resuming monitoring.
+[2026-02-26 14:50:01 UTC] Watcher stopped (signal received).
+[2026-02-26 14:55:01 UTC] Watcher started. Monitoring /var/log/network.json for IP SLA Down events.
+[2026-02-26 14:55:33 UTC] Jira ticket created: SUP-4
+[2026-02-26 14:55:33 UTC] Agent invoked for event on R4C: BOM%TRACK-6-STATE: 1 ip sla 1 reachability Up -> Down
+[2026-02-26 14:59:51 UTC] Agent session ended.
+[2026-02-26 14:59:51 UTC] SKIPPED (deferred - occurred during active session) - R9C (172.20.20.209): BOM%TRACK-6-STATE: 2 ip sla 2 reachability Up -> Down
+[2026-02-26 14:59:51 UTC] SKIPPED (deferred - occurred during active session) - R10C (172.20.20.210): BOM%TRACK-6-STATE: 1 ip sla 1 reachability Up -> Down
+[2026-02-26 14:59:51 UTC] SKIPPED (deferred - occurred during active session) - R11C (172.20.20.211): BOM%TRACK-6-STATE: 1 ip sla 1 reachability Up -> Down
+[2026-02-26 14:59:51 UTC] Saved 3 deferred failure(s) to pending_events.json
+[2026-02-26 14:59:51 UTC] Deferred review session invoked for 3 failure(s).
+[2026-02-26 15:00:03 UTC] Deferred review session ended. Resuming monitoring.
+[2026-02-26 15:01:22 UTC] Jira ticket created: SUP-5
+[2026-02-26 15:01:23 UTC] Agent invoked for event on R4C: BOM%TRACK-6-STATE: 1 ip sla 1 reachability Up -> Down
+[2026-02-26 15:04:31 UTC] Agent session ended.
+[2026-02-26 15:04:31 UTC] SKIPPED (deferred - occurred during active session) - R9C (172.20.20.209): BOM%TRACK-6-STATE: 2 ip sla 2 reachability Up -> Down
+[2026-02-26 15:04:31 UTC] SKIPPED (deferred - occurred during active session) - R11C (172.20.20.211): BOM%TRACK-6-STATE: 1 ip sla 1 reachability Up -> Down
+[2026-02-26 15:04:31 UTC] SKIPPED (deferred - occurred during active session) - R10C (172.20.20.210): BOM%TRACK-6-STATE: 1 ip sla 1 reachability Up -> Down
+[2026-02-26 15:04:31 UTC] Saved 3 deferred failure(s) to pending_events.json
+[2026-02-26 15:04:31 UTC] Deferred review session invoked for 3 failure(s).
+[2026-02-26 15:05:50 UTC] Deferred review session ended. Resuming monitoring.
+[2026-02-26 15:05:51 UTC] Watcher stopped (signal received).
+[2026-02-27 07:38:32 UTC] Watcher started. Monitoring /var/log/network.json for IP SLA Down events.
+[2026-02-27 07:40:03 UTC] [lessons.md reminder injected into agent prompt]
+[2026-02-27 07:40:07 UTC] Jira ticket created: SUP-6
+[2026-02-27 07:40:07 UTC] Agent invoked for event on R11C: BOM%TRACK-6-STATE: 1 ip sla 1 reachability Up -> Down
+[2026-02-27 07:51:37 UTC] Agent session ended.
+[2026-02-27 07:51:37 UTC] Resuming monitoring.
+[2026-02-27 07:51:38 UTC] Watcher stopped (signal received).
+[2026-02-27 09:50:57 UTC] Watcher started. Monitoring /var/log/network.json for IP SLA Down events.
+[2026-02-27 09:51:50 UTC] [lessons.md reminder injected into agent prompt]
+[2026-02-27 09:51:53 UTC] Jira ticket created: SUP-7
+[2026-02-27 09:51:53 UTC] Agent invoked for event on R4C: BOM%TRACK-6-STATE: 1 ip sla 1 reachability Up -> Down
+[2026-02-27 10:05:42 UTC] Agent session ended.
+[2026-02-27 10:05:42 UTC] Resuming monitoring.
+[2026-02-27 10:09:28 UTC] Watcher stopped (signal received).
+[2026-02-27 10:32:37 UTC] SKIPPED (deferred - occurred during active session) - R11C (172.20.20.211): BOM%TRACK-6-STATE: 1 ip sla 1 reachability Up -> Down
+[2026-02-27 10:32:37 UTC] SKIPPED (deferred - occurred during active session) - R9C (172.20.20.209): BOM%TRACK-6-STATE: 2 ip sla 2 reachability Up -> Down
+[2026-02-27 10:32:37 UTC] SKIPPED (deferred - occurred during active session) - R11C (172.20.20.211): BOM%TRACK-6-STATE: 1 ip sla 1 reachability Up -> Down

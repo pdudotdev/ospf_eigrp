@@ -25,6 +25,8 @@ from oncall_watcher import (
     is_sla_down_event,
     is_lock_stale,
     cleanup_lock,
+    parse_event_ts,
+    scan_for_deferred_events,
     LOCK_FILE,
 )
 
@@ -87,3 +89,97 @@ def test_cleanup_lock_no_error_when_absent(tmp_path, monkeypatch):
     lock = tmp_path / "nonexistent.lock"
     monkeypatch.setattr("oncall_watcher.LOCK_FILE", lock)
     cleanup_lock()   # Should not raise
+
+
+# ── IT-002c: Deferred event scan with concurrent timestamps ──────────────────
+
+def test_concurrent_events_captured(tmp_path, monkeypatch):
+    """Events with timestamps between trigger_ts and session_end are captured."""
+    from datetime import datetime, timezone
+
+    trigger_event = {
+        "ts": "2026-02-27T09:51:49.072Z",
+        "device": "172.20.20.204",
+        "msg": "BOM%TRACK-6-STATE: 1 ip sla 1 reachability Up -> Down",
+    }
+
+    # session_start = trigger event's timestamp (the fix)
+    session_start = parse_event_ts(trigger_event)
+    session_end = datetime(2026, 2, 27, 10, 5, 42, tzinfo=timezone.utc)
+
+    # Write a mock network.json with trigger + 2 concurrent events
+    log_file = tmp_path / "network.json"
+    events = [
+        trigger_event,
+        {
+            "ts": "2026-02-27T09:51:49.210Z",
+            "device": "172.20.20.211",
+            "msg": "BOM%TRACK-6-STATE: 1 ip sla 1 reachability Up -> Down",
+        },
+        {
+            "ts": "2026-02-27T09:51:49.539Z",
+            "device": "172.20.20.209",
+            "msg": "BOM%TRACK-6-STATE: 2 ip sla 2 reachability Up -> Down",
+        },
+    ]
+    log_file.write_text("\n".join(json.dumps(e) for e in events))
+    monkeypatch.setattr("oncall_watcher.LOG_FILE", str(log_file))
+
+    device_map = {
+        "172.20.20.204": "R4C",
+        "172.20.20.211": "R11C",
+        "172.20.20.209": "R9C",
+    }
+    deferred = scan_for_deferred_events(
+        trigger_event, session_start, session_end, device_map
+    )
+
+    device_names = [e["device_name"] for e in deferred]
+    assert "R11C" in device_names, "R11C concurrent event should be captured"
+    assert "R9C" in device_names, "R9C concurrent event should be captured"
+    assert "R4C" not in device_names, "Trigger event (R4C) should be excluded"
+
+
+def test_deferred_deduplication(tmp_path, monkeypatch):
+    """Duplicate events from the same device/message are deduplicated."""
+    from datetime import datetime, timezone
+
+    trigger_event = {
+        "ts": "2026-02-27T09:51:49.072Z",
+        "device": "172.20.20.204",
+        "msg": "BOM%TRACK-6-STATE: 1 ip sla 1 reachability Up -> Down",
+    }
+
+    session_start = parse_event_ts(trigger_event)
+    session_end = datetime(2026, 2, 27, 10, 5, 42, tzinfo=timezone.utc)
+
+    # Same device/msg at different timestamps (repeated SLA polls)
+    log_file = tmp_path / "network.json"
+    events = [
+        trigger_event,
+        {
+            "ts": "2026-02-27T09:52:00.000Z",
+            "device": "172.20.20.211",
+            "msg": "BOM%TRACK-6-STATE: 1 ip sla 1 reachability Up -> Down",
+        },
+        {
+            "ts": "2026-02-27T09:57:00.000Z",
+            "device": "172.20.20.211",
+            "msg": "BOM%TRACK-6-STATE: 1 ip sla 1 reachability Up -> Down",
+        },
+        {
+            "ts": "2026-02-27T10:02:00.000Z",
+            "device": "172.20.20.211",
+            "msg": "BOM%TRACK-6-STATE: 1 ip sla 1 reachability Up -> Down",
+        },
+    ]
+    log_file.write_text("\n".join(json.dumps(e) for e in events))
+    monkeypatch.setattr("oncall_watcher.LOG_FILE", str(log_file))
+
+    device_map = {"172.20.20.204": "R4C", "172.20.20.211": "R11C"}
+    deferred = scan_for_deferred_events(
+        trigger_event, session_start, session_end, device_map
+    )
+
+    assert len(deferred) == 1, f"Expected 1 deduplicated event, got {len(deferred)}"
+    assert deferred[0]["device_name"] == "R11C"

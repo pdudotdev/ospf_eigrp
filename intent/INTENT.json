@@ -373,7 +373,7 @@
       "igp": {
         "eigrp": {
           "as": 20,
-          "stub": ["connected", "summary"]
+          "stub": true
         }
       },
       "default_gateway": "R8C"

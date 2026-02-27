@@ -75,6 +75,8 @@ Before running any tool on any device, read `intent/INTENT.json` and construct t
 
 This path is your **investigation scope**. Identify transit points: ABRs, ASBRs, redistribution points. Do not query devices outside this path unless traceroute reveals an unexpected transit device (treat the last on-path device as the breaking hop).
 
+**INTENT.json describes the INTENDED (desired) configuration, not the actual device state.** Attributes such as `stub`, `area_type`, `default_originate`, and redistribution flags may have been overridden or disabled on the live device. Never assume an INTENT.json value is deployed — always verify with the appropriate protocol tool (`get_<protocol>(device, "config")`) before basing decisions on intent values.
+
 ### Principle 2: Localize Before Investigating
 Run a single traceroute from source to destination. The **breaking hop** is the last device that responds (or the source if the first hop times out).
 
@@ -210,7 +212,7 @@ All case documentation is written to the Jira ticket. There is no local `cases.m
 ## Common Pitfalls
 
 1. **Using `run_show` when a protocol tool already covers the query**: `run_show` is a last-resort fallback ONLY for commands not covered by any MCP tool. Before using `run_show`, consult `platforms/mcp_tool_map.json` to find the correct MCP tool and valid query values for the command category you need. An empty result from any MCP tool means the feature is not configured on the device — it does NOT mean the query is unsupported. Never fall back to `run_show` after an empty MCP tool result. `run_show` is only for commands with no entry in `platforms/mcp_tool_map.json`.
-2. **Ignoring intent context**: INTENT.json provides critical context info. Reference it to validate configs.
+2. **Trusting intent as actual state**: INTENT.json defines the *expected* network design (path mapping, roles, scope). It is NOT the device's running config. Always verify intent attributes (e.g., `stub`, `area_type`, `default_originate`) with `get_<protocol>(device, "config")` before basing any diagnosis or fix on them. Use INTENT.json to know *what to look for*, not *what is there*.
 3. **Modifying policy files**: Never edit MAINTENANCE.json or other policy files directly; they're read-only.
 4. **Confusing cli_style**: `cli_style` (ios/eos/routeros) drives command mapping, not the `platform` field.
 5. **Using bash SSH to connect to devices**: Never SSH to devices via the Bash tool. All device interactions must go through MCP tools (`push_config`, `run_show`, `get_ospf`, etc.). Bash SSH bypasses credentials management, transport abstraction, and safety guardrails.

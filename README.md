@@ -40,8 +40,11 @@ Operating modes of **aiNOC**:
 - [x] **On-Call mode (OC)**
   - Agent is invoked by SLA path failure, see [On-Call Mode](#-on-call-mode)
 
+**Important files**:
+- [x] See [file_roles](metadata/about/file_roles.md)
+
 **Agent guardrails**:
-- [x] See [guardrails.txt](metadata/about/guardrails.txt)
+- [x] See [guardrails](metadata/about/guardrails.md)
 
 **Supported models**:
 - [x] Haiku 4.5 (best for costs)
@@ -91,6 +94,7 @@ This repository is **NOT** static. **New features** are being added periodically
 
 ## 📞 On-Call Mode
 **On-Call Mode** has been introduced in v3.0.
+- [x] See a [**DEMO HERE**](https://www.youtube.com/watch?v=oxSa25R6EgI)
 
 ### What it does, in a nutshell?
 - [x] User configures connectivity paths
