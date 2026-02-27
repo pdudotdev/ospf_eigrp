@@ -84,7 +84,7 @@ This repository is **NOT** static. **New features** are being added periodically
 - [x] Added **CLAUDE.md** with clear workflows and guidance
 - [x] Added specific **skills** for troubleshooting coherence
 - [x] Added **cases.md** and **lessons.md** (see **/cases**)
-- [x] aiNOC documents each case and curates lessons for future use
+- [x] Documents to **Jira** and learns lessons for future use
 
 • Enhancements:
 - [x] Well-defined test suites
