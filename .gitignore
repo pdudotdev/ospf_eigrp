@@ -3,7 +3,6 @@ mcp/
 *.pyc
 *.log
 **/.git/
-cases/
 .claude/
 __pycache__/
 clab-mcp-lab/

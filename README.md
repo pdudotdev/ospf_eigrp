@@ -80,7 +80,7 @@ This repository is **NOT** static. **New features** are being added periodically
 - [x] Updated **INTENT.json** for cleaner network context
 - [x] Added **CLAUDE.md** with clear workflows and guidance
 - [x] Added specific **skills** for troubleshooting coherence
-- [x] Added **cases.md** and **lessons.md** (see **/cases.example**)
+- [x] Added **cases.md** and **lessons.md** (see **/cases**)
 - [x] aiNOC documents each case and curates lessons for future use
 
 • Enhancements:
@@ -477,7 +477,7 @@ For this reason, I'm using **Tabby**:
   - **e0/1** on Cisco
   - **ether2** on MikroTik (see comments and link in **lab.yml**)
 
-- [x] Default SSH credentials:
+- [x] Default credentials:
   - Arista: `admin:admin`
   - Cisco: `admin:admin`
   - MikroTik: `admin:admin`
@@ -503,6 +503,7 @@ Expected in version v4.0:
 - [ ] New branch and vendors
 - [ ] Performance-based SLAs
 - [ ] Netbox integration
+- [ ] Surprise update :)
 
 ## 📄 Disclaimer
 This project is intended for educational purposes only. You are responsible for building your own test environment and meeting the necessary conditions (e.g., RAM/vCPU, router OS images, Claude subscription/API key, etc.).
