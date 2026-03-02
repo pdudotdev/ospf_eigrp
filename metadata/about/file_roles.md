@@ -146,7 +146,7 @@ Defines:
 - Expected device path  
 
 When an SLA path fails:
-1. `oncall_watcher` looks up details here  
+1. `oncall/watcher.py` looks up details here
 2. Determines what should be reachable  
 3. Hands off investigation to you  
 

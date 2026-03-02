@@ -1,7 +1,7 @@
 """
 UT-001 — SLA Pattern Detection
 
-Tests the SLA_DOWN_RE regex from oncall_watcher.py against all expected
+Tests the SLA_DOWN_RE regex from oncall/watcher.py against all expected
 log message formats (match) and non-SLA messages (no match).
 """
 
@@ -10,7 +10,7 @@ from pathlib import Path
 
 import pytest
 
-# Import the regex directly from oncall_watcher without running main()
+# Import the regex directly from oncall.watcher without running main()
 sys.path.insert(0, str(Path(__file__).parent.parent.parent.parent))
 from oncall.watcher import SLA_DOWN_RE, SLA_UP_RE
 

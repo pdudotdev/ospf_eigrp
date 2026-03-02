@@ -1,6 +1,6 @@
 """Async Jira REST API v3 client.
 
-Used by oncall_watcher.py (via asyncio.run) for ticket creation, and by
+Used by oncall/watcher.py (via asyncio.run) for ticket creation, and by
 MCPServer.py (via MCP tools) for comments and resolution.
 
 All functions check for required env vars — if absent, log a warning and

@@ -76,7 +76,7 @@ v4.0 is a major **quality, reliability, and security** release - no new protocol
 - [x] TLS/SSL configurable per transport (`VERIFY_TLS`, `ROUTEROS_USE_HTTPS`, `SSH_STRICT_HOST_KEY`)
 
 **Architecture:**
-- [x] Monolithic `MCPServer.py` (798 lines) decomposed into `tools/`, `transport/`, `cache.py`, `input_models/`
+- [x] Monolithic `MCPServer.py` (798 lines) decomposed into `tools/`, `transport/`, `core/`, `input_models/`
 - [x] Bounded LRU cache (256 entries, TTL-based eviction)
 - [x] Connection pooling for eAPI and REST transports
 - [x] HTTP timeouts on all device and Jira connections
@@ -91,7 +91,7 @@ v4.0 is a major **quality, reliability, and security** release - no new protocol
 **On-Call & Operational:**
 - [x] SLA recovery (Up) event detection and logging
 - [x] Daemon mode (`-d` flag) with tmux session support
-- [x] systemd service file (`oncall-watcher.service`) for production deployment
+- [x] systemd service file (`oncall/oncall-watcher.service`) for production deployment
 - [x] Pre-change snapshot support in `push_config`
 - [x] Rollback advisory generation for all config changes
 
@@ -215,7 +215,7 @@ pip install -r requirements.txt
 - [x] Connectivity path failures are logged to **Syslog**
 - [x] **Vector** listens for and parses multi-vendor logs
 - [x] `sla_paths/paths.json` outlines paths for the agent
-- [x] `oncall_watcher.py` monitors Vector for new logs
+- [x] `oncall/watcher.py` monitors Vector for new logs
 - [x] Once a new log arrives, the agent is invoked
 - [x] Agent gets log details pre-filled in prompt
 - [x] Agent starts troubleshooting procedures

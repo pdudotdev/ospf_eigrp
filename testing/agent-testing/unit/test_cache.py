@@ -1,4 +1,4 @@
-"""Unit tests for the bounded LRU cache (cache.py)."""
+"""Unit tests for the bounded LRU cache (core/cache.py)."""
 import time
 from unittest.mock import patch
 
