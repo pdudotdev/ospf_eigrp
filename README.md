@@ -7,6 +7,7 @@
 - 📜 **aiNOC Project**
   - [🔭 Overview](#-overview)
   - [♻️ Repository Lifecycle](#%EF%B8%8F-repository-lifecycle)
+  - [🍀 Here's a Demo](#-heres-a-demo)
   - [⭐ What's New in v4.0](#-whats-new-in-v40)
   - [⚒️ Tech Stack](#%EF%B8%8F-tech-stack)
   - [📋 Supported Vendors](#-supported-vendors)
@@ -33,14 +34,13 @@ Operating modes of **aiNOC**:
 - [x] **Standalone mode (ST)**
   - User specifies network issue and symptoms at the prompt
 - [x] **On-Call mode (OC)**
-  - Agent is invoked by SLA path failure, see [On-Call Mode](#-on-call-mode)
-- [x] ▶ See a [**DEMO HERE**](https://www.youtube.com/watch?v=oxSa25R6EgI)
+  - Agent is invoked by SLA path failure, see [**On-Call Mode**](#-on-call-mode)
 
 **Important files**:
-- [x] See [file_roles](metadata/about/file_roles.md)
+- [x] See [**file_roles**](metadata/about/file_roles.md)
 
 **Agent guardrails**:
-- [x] See [guardrails](metadata/about/guardrails.md)
+- [x] See [**guardrails**](metadata/about/guardrails.md)
 
 **Supported models**:
 - [x] Haiku 4.5 (best for costs)
@@ -50,6 +50,9 @@ Operating modes of **aiNOC**:
 **High-level architecture:**
 
 ![arch](metadata/topology/ARCHv3.png)
+
+## 🍀 Here's a Demo
+- [x] ▶ See a [**DEMO HERE**](https://www.youtube.com/watch?v=oxSa25R6EgI)
 
 ## ♻️ Repository Lifecycle
 This repository is **NOT** static. **New features** are being added periodically (vendors, protocols, integrations, optimizations).
@@ -98,7 +101,7 @@ v4.0 is a major **quality, reliability, and security** release - no new protocol
 - [x] 13 manual E2E scenarios (8 standalone, 2 on-call, 3 watcher)
 - [x] Pydantic `Literal` validation on all query parameters
 
-## ⚒️ Project Tech Stack
+## ⚒️ Tech Stack
 
 | Tool | ✓ |
 |------|---|
@@ -194,9 +197,9 @@ pip install -r requirements.txt
   - **Y**: vendor (A-Arista, C-Cisco, M-MikroTik, etc.)
 
 **Router configurations:**
-- [x] Please find my test lab's config files under the [lab_configs](https://github.com/pdudotdev/aiNOC/tree/main/lab_configs) directory
+- [x] Please find my test lab's config files under the [**lab_configs**](https://github.com/pdudotdev/aiNOC/tree/main/lab_configs) directory
 - [x] They are the network's fallback configs for `containerlab redeploy -t lab.yml`
-- [x] Default credentials: see **.env** file at [.env.example](.env.example)
+- [x] Default credentials: see **.env** file at [**.env.example**](.env.example)
 
 ## 📞 On-Call Mode
 **On-Call Mode** was introduced in v3.0 and enhanced in v4.0.
@@ -224,7 +227,7 @@ pip install -r requirements.txt
 - [x] Skipped events are deferred for later analysis
 
 ## 🌱 AI Automation 101
-If you're completely new to Network Automation using AI & MCP, then you may want to [start here](https://www.udemy.com/course/mcp-server/?referralCode=D62613A8194D2D915B55) before moving on.
+If you're completely new to Network Automation using AI & MCP, then you may want to [**start here**](https://www.udemy.com/course/mcp-server/?referralCode=D62613A8194D2D915B55) before moving on.
 
 ## ⬆️ Planned Upgrades
 Expected in version v5.0:
@@ -238,4 +241,4 @@ Expected in version v5.0:
 You are responsible for defining your own troubleshooting methodologies and context files, as well as building your own test environment and meeting the necessary conditions (e.g., RAM/vCPU, router OS images, Claude subscription/API key, etc.).
 
 ## 📜 License
-Licensed under the [GNU GENERAL PUBLIC LICENSE Version 3](https://github.com/pdudotdev/aiNOC/blob/main/LICENSE).
+Licensed under the [**GNU GENERAL PUBLIC LICENSE Version 3**](https://github.com/pdudotdev/aiNOC/blob/main/LICENSE).
