@@ -135,7 +135,7 @@
         "destination_device": "R8C",
         "destination_ip": "8.8.8.8",
         "ecmp": true,
-        "ecmp_node": "R2C",
+        "ecmp_node": "R1A",
         "ecmp_next_hops": ["R2C", "R3C"],
         "egress_devices": ["R2C"],
         "scope_devices": ["R1A", "R2C", "R3C", "R6A", "R7A", "R8C"]

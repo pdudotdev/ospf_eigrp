@@ -30,6 +30,8 @@ async def execute_ssh(device: dict, command: str) -> tuple[str, object]:
             try:
                 parsed_output = response.genie_parse_output()
             except Exception:
+                # Genie lacks a parser for this command or the output format is unexpected.
+                # Fall back to raw text — the caller handles None parsed_output gracefully.
                 parsed_output = None
     return raw_output, parsed_output
 

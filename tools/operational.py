@@ -3,6 +3,7 @@ from core.inventory import devices
 from platforms.platform_map import PLATFORM_MAP
 from transport import execute_command
 from input_models.models import InterfacesQuery, PingInput, TracerouteInput, ShowCommand
+from tools import _error_response
 
 
 async def get_interfaces(params: InterfacesQuery) -> dict:
@@ -25,15 +26,12 @@ async def get_interfaces(params: InterfacesQuery) -> dict:
     """
     device = devices.get(params.device)
     if not device:
-        return {"error": f"Unknown device: {params.device}"}
+        return _error_response(params.device, f"Unknown device: {params.device}")
 
     try:
         action = PLATFORM_MAP[device["cli_style"]]["interfaces"]["interface_status"]
     except KeyError:
-        return {
-            "device": params.device,
-            "error":  f"Interface status not supported on {device['cli_style'].upper()}",
-        }
+        return _error_response(params.device, f"Interface status not supported on {device['cli_style'].upper()}")
 
     return await execute_command(params.device, action)
 
@@ -55,7 +53,7 @@ async def ping(params: PingInput) -> dict:
     """
     device = devices.get(params.device)
     if not device:
-        return {"error": f"Unknown device: {params.device}"}
+        return _error_response(params.device, f"Unknown device: {params.device}")
 
     cli_style = device["cli_style"]
     base = PLATFORM_MAP[cli_style]["tools"]["ping"]
@@ -93,7 +91,7 @@ async def traceroute(params: TracerouteInput) -> dict:
     """
     device = devices.get(params.device)
     if not device:
-        return {"error": f"Unknown device: {params.device}"}
+        return _error_response(params.device, f"Unknown device: {params.device}")
 
     cli_style = device["cli_style"]
     base = PLATFORM_MAP[cli_style]["tools"]["traceroute"]

@@ -1,8 +1,10 @@
 """Routing table and policy tools: get_routing, get_routing_policies."""
+from urllib.parse import quote
 from core.inventory import devices
 from platforms.platform_map import PLATFORM_MAP
 from transport import execute_command
 from input_models.models import RoutingQuery, RoutingPolicyQuery
+from tools import _error_response
 
 
 async def get_routing(params: RoutingQuery) -> dict:
@@ -19,19 +21,19 @@ async def get_routing(params: RoutingQuery) -> dict:
     """
     device = devices.get(params.device)
     if not device:
-        return {"error": f"Unknown device: {params.device}"}
+        return _error_response(params.device, f"Unknown device: {params.device}")
 
     try:
         base_cmd = PLATFORM_MAP[device["cli_style"]]["routing_table"]["ip_route"]
     except KeyError:
-        return {"error": f"Routing not supported on {device['cli_style'].upper()}"}
+        return _error_response(params.device, f"Routing not supported on {device['cli_style'].upper()}")
 
     if not params.prefix:
         action = base_cmd
     elif isinstance(base_cmd, dict):
         # RouterOS REST: append prefix as a query parameter on the path
         action = dict(base_cmd)
-        action["path"] = f"{base_cmd['path']}?dst-address={params.prefix}"
+        action["path"] = f"{base_cmd['path']}?dst-address={quote(params.prefix, safe='')}"
     else:
         # IOS / EOS: append prefix to the CLI command string
         action = f"{base_cmd} {params.prefix}"
@@ -66,14 +68,11 @@ async def get_routing_policies(params: RoutingPolicyQuery) -> dict:
     """
     device = devices.get(params.device)
     if not device:
-        return {"error": f"Unknown device: {params.device}"}
+        return _error_response(params.device, f"Unknown device: {params.device}")
 
     try:
         action = PLATFORM_MAP[device["cli_style"]]["routing_policies"][params.query]
     except KeyError:
-        return {
-            "device": params.device,
-            "error":  f"Routing policy query '{params.query}' not supported on {device['cli_style'].upper()}",
-        }
+        return _error_response(params.device, f"Routing policy query '{params.query}' not supported on {device['cli_style'].upper()}")
 
     return await execute_command(params.device, action)

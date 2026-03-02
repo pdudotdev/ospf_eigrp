@@ -19,13 +19,16 @@ async def execute_rest(device: dict, action: dict):
 
     elif method in ("POST", "PUT", "PATCH"):
         payload = action.get("body") or action.get("default_body", {})
+        # getattr dispatch avoids a separate branch per HTTP method; method is validated upstream
         async with getattr(session, method.lower())(url, json=payload, ssl=VERIFY_TLS) as resp:
+            # RouterOS returns 200 for updates, 201 for newly created resources
             if resp.status not in (200, 201):
                 return {"error": f"RouterOS REST returned HTTP {resp.status}", "path": action["path"]}
             return await resp.json()
 
     elif method == "DELETE":
         async with session.delete(url, ssl=VERIFY_TLS) as resp:
+            # RouterOS returns 200 with body or 204 No Content on successful DELETE
             if resp.status not in (200, 204):
                 return {"error": f"RouterOS REST returned HTTP {resp.status}", "path": action["path"]}
             text = await resp.text()

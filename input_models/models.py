@@ -93,6 +93,15 @@ class ShowCommand(BaseParamsModel):
                     raise ValueError(
                         f"run_show only allows GET for RouterOS actions, got {method!r}"
                     )
+                path = parsed.get("path", "")
+                if not path.startswith("/rest/"):
+                    raise ValueError(
+                        f"run_show RouterOS path must start with '/rest/'. Got: {path!r}"
+                    )
+                if ".." in path or "\x00" in path:
+                    raise ValueError(
+                        f"run_show RouterOS path contains forbidden sequences. Got: {path!r}"
+                    )
                 return v
         except json.JSONDecodeError:
             pass
@@ -117,7 +126,7 @@ class EmptyInput(BaseParamsModel):
 # Snapshot - input model
 class SnapshotInput(BaseParamsModel):
     devices: list[str] = Field(..., description="Devices to snapshot (e.g. R1, R2, R3)")
-    profile: str = Field(..., description="Snapshot profile (e.g. ospf, stp)")
+    profile: Literal["ospf", "stp"] = Field(..., description="Snapshot profile: 'ospf' or 'stp'")
 
 # Risk score - input model
 class RiskInput(BaseParamsModel):

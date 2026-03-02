@@ -96,7 +96,7 @@ v4.0 is a major **quality, reliability, and security** release - no new protocol
 - [x] Rollback advisory generation for all config changes
 
 **Testing:**
-- [x] 217 unit tests across 9 test files (up from 3 in v3.0)
+- [x] 229 unit tests across 9 test files (up from 3 in v3.0)
 - [x] 4 integration test files with `NO_LAB` skip guards
 - [x] 13 manual E2E scenarios (8 standalone, 2 on-call, 3 watcher)
 - [x] Pydantic `Literal` validation on all query parameters

@@ -5,7 +5,7 @@ from pydantic import ValidationError
 
 from input_models.models import (
     OspfQuery, EigrpQuery, BgpQuery, RoutingPolicyQuery, ShowCommand,
-    ConfigCommand,
+    ConfigCommand, SnapshotInput,
 )
 
 
@@ -154,6 +154,41 @@ def test_show_command_routeros_non_get_rejected(method):
     action = json.dumps({"method": method, "path": "/rest/routing/ospf/instance"})
     with pytest.raises(ValidationError):
         ShowCommand(device="R18M", command=action)
+
+
+@pytest.mark.parametrize("bad_path", [
+    "/ip/route",               # missing /rest/ prefix
+    "rest/routing/ospf",       # missing leading slash
+    "../etc/passwd",           # path traversal
+    "/rest/../../system",      # path traversal within /rest/
+    "/rest/ospf\x00neighbor",  # null byte injection
+])
+def test_show_command_routeros_bad_path_rejected(bad_path):
+    """RouterOS GET actions with invalid or dangerous paths must be rejected by ShowCommand.
+    Paths must start with '/rest/' and must not contain traversal sequences or null bytes.
+    """
+    action = json.dumps({"method": "GET", "path": bad_path})
+    with pytest.raises(ValidationError):
+        ShowCommand(device="R18M", command=action)
+
+
+# ── SnapshotInput profile validation ─────────────────────────────────────────
+
+@pytest.mark.parametrize("profile", ["ospf", "stp"])
+def test_snapshot_profile_valid(profile):
+    """Valid snapshot profiles ('ospf' and 'stp') must be accepted by SnapshotInput."""
+    m = SnapshotInput(devices=["R1A"], profile=profile)
+    assert m.profile == profile
+
+
+@pytest.mark.parametrize("profile", ["bgp", "eigrp", "all", "", "OSPF"])
+def test_snapshot_profile_invalid(profile):
+    """Invalid snapshot profiles must raise ValidationError at model construction.
+    Only 'ospf' and 'stp' are defined in _SNAPSHOT_PROFILES; other values produce empty results
+    without error — the Literal type closes this gap.
+    """
+    with pytest.raises(ValidationError):
+        SnapshotInput(devices=["R1A"], profile=profile)
 
 
 # ── ConfigCommand snapshot_before field ───────────────────────────────────────

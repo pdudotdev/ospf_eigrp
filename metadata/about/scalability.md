@@ -145,7 +145,7 @@ This would catch typos at startup and serve as authoritative documentation of va
 |-----------|-------|----------|
 | Vendors | 3 | ~5 before bottleneck #1 triggers |
 | Protocols per vendor | 5-6 | ~10 before bottleneck #2 triggers |
-| Unit tests | 217 | Each new protocol adds ~10-20 tests |
+| Unit tests | 229 | Each new protocol adds ~10-20 tests |
 | Lines of Python | ~2,000 | No refactoring needed until 5+ vendors |
 
 **Verdict:** The architecture scales cleanly for the next 2-3 protocols and 1-2 vendors with zero refactoring. The bottlenecks above are future considerations only.

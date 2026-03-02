@@ -11,6 +11,7 @@ from transport.ssh  import push_ssh
 from transport.eapi import push_eapi
 from transport.rest import push_rest
 from tools.state import check_maintenance_window, assess_risk, snapshot_state
+from tools import _error_response
 from input_models.models import ConfigCommand, EmptyInput, RiskInput, SnapshotInput
 
 # Forbidden CLI command substrings — matched case-insensitively against any CLI command.
@@ -125,7 +126,7 @@ async def _push_to_device_safe(dev_name: str, device: dict, commands: list[str])
     try:
         return await _push_to_device(dev_name, device, commands)
     except Exception as e:
-        return dev_name, f"ERROR: {e}"
+        return dev_name, _error_response(dev_name, f"ERROR: {e}")
 
 
 async def push_config(params: ConfigCommand) -> dict:
@@ -140,7 +141,7 @@ async def push_config(params: ConfigCommand) -> dict:
     - If a change is blocked, Claude should inform the user and stop.
     - Risk assessment is advisory only and does not block changes.
     """
-    log.warning("push_config called: devices=%s commands=%d", params.devices, len(params.commands))
+    log.info("push_config START: devices=%s commands=%s", params.devices, params.commands)
 
     mw_result = await check_maintenance_window(EmptyInput())
     if not mw_result.get("allowed", True):
@@ -149,6 +150,16 @@ async def push_config(params: ConfigCommand) -> dict:
             "error":        "Configuration changes blocked: outside maintenance window",
             "current_time": mw_result.get("current_time", "unknown"),
             "reason":       mw_result.get("reason", "Outside maintenance window"),
+        }
+
+    # Guard: all devices must share the same cli_style — commands are vendor-specific
+    # and will fail or corrupt state if sent to the wrong transport.
+    known_devices = {d: devices[d]["cli_style"] for d in params.devices if d in devices}
+    cli_styles_present = set(known_devices.values())
+    if len(cli_styles_present) > 1:
+        return {
+            "error":       "Mixed cli_style in device list. Push to each vendor group separately.",
+            "cli_styles":  known_devices,
         }
 
     risk = await assess_risk(RiskInput(devices=params.devices, commands=params.commands))
@@ -168,7 +179,7 @@ async def push_config(params: ConfigCommand) -> dict:
     for dev_name in params.devices:
         device = devices.get(dev_name)
         if not device:
-            results[dev_name] = "Unknown device"
+            results[dev_name] = _error_response(dev_name, "Unknown device")
             continue
         tasks.append(
             asyncio.create_task(
@@ -180,6 +191,7 @@ async def push_config(params: ConfigCommand) -> dict:
         results[dev_name] = result
 
     end = time.perf_counter()
+    log.info("push_config RESULT: %s", json.dumps({k: v for k, v in results.items()}, default=str))
     results["execution_time_seconds"] = round(end - start, 2)
     results["risk_assessment"] = risk
     results["rollback_advisory"] = _generate_rollback_advisory(params.commands)

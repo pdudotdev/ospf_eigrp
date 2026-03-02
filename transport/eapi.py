@@ -17,6 +17,9 @@ async def execute_eapi(device: dict, command: str):
         if resp.status != 200:
             return {"error": f"eAPI returned HTTP {resp.status}", "device": device["host"]}
         data = await resp.json()
+        # JSON-RPC errors arrive as HTTP 200 with an "error" key instead of "result"
+        if "error" in data:
+            return {"device": device["host"], "error": data["error"]}
         return data["result"]
 
 
@@ -28,6 +31,7 @@ async def push_eapi(device: dict, dev_name: str, commands: list[str]) -> tuple[s
         "method":  "runCmds",
         "params":  {
             "version": 1,
+            # Prepend "enable" and "configure" to enter privileged config mode before commands
             "cmds":    ["enable", "configure"] + commands,
             "format":  "text",
         },
@@ -38,4 +42,7 @@ async def push_eapi(device: dict, dev_name: str, commands: list[str]) -> tuple[s
         if resp.status != 200:
             return dev_name, {"transport_used": "eapi", "error": f"eAPI returned HTTP {resp.status}"}
         data = await resp.json()
+        # JSON-RPC errors arrive as HTTP 200 with an "error" key instead of "result"
+        if "error" in data:
+            return dev_name, {"transport_used": "eapi", "error": data["error"]}
         return dev_name, {"transport_used": "eapi", "result": data.get("result", data)}

@@ -3,6 +3,7 @@ from core.inventory import devices
 from platforms.platform_map import PLATFORM_MAP
 from transport import execute_command
 from input_models.models import OspfQuery, EigrpQuery, BgpQuery
+from tools import _error_response
 
 
 async def get_ospf(params: OspfQuery) -> dict:
@@ -35,15 +36,12 @@ async def get_ospf(params: OspfQuery) -> dict:
     """
     device = devices.get(params.device)
     if not device:
-        return {"error": f"Unknown device: {params.device}"}
+        return _error_response(params.device, f"Unknown device: {params.device}")
 
     try:
         action = PLATFORM_MAP[device["cli_style"]]["ospf"][params.query]
     except KeyError:
-        return {
-            "device": params.device,
-            "error":  f"OSPF query '{params.query}' not supported on platform {device['cli_style'].upper()}",
-        }
+        return _error_response(params.device, f"OSPF query '{params.query}' not supported on platform {device['cli_style'].upper()}")
 
     return await execute_command(params.device, action)
 
@@ -74,15 +72,15 @@ async def get_eigrp(params: EigrpQuery) -> dict:
     """
     device = devices.get(params.device)
     if not device:
-        return {"error": f"Unknown device: {params.device}"}
+        return _error_response(params.device, f"Unknown device: {params.device}")
 
     if device["cli_style"] != "ios":
-        return {"error": "EIGRP is supported only on IOS devices"}
+        return _error_response(params.device, "EIGRP is supported only on IOS devices")
 
     try:
         action = PLATFORM_MAP["ios"]["eigrp"][params.query]
     except KeyError:
-        return {"error": f"Unsupported EIGRP query: {params.query}"}
+        return _error_response(params.device, f"Unsupported EIGRP query: {params.query}")
 
     return await execute_command(params.device, action)
 
@@ -111,14 +109,11 @@ async def get_bgp(params: BgpQuery) -> dict:
     """
     device = devices.get(params.device)
     if not device:
-        return {"error": f"Unknown device: {params.device}"}
+        return _error_response(params.device, f"Unknown device: {params.device}")
 
     try:
         action = PLATFORM_MAP[device["cli_style"]]["bgp"][params.query]
     except KeyError:
-        return {
-            "device": params.device,
-            "error":  f"BGP query '{params.query}' not supported on platform {device['cli_style'].upper()}",
-        }
+        return _error_response(params.device, f"BGP query '{params.query}' not supported on platform {device['cli_style'].upper()}")
 
     return await execute_command(params.device, action)

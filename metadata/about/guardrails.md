@@ -251,3 +251,38 @@ Prevents:
 - `snapshot_state` captures device state before applying changes
 - Enables manual before/after diff review
 - Rollback advisory generated for every config change
+
+---
+
+# 📊 Risk Assessment (`assess_risk`)
+
+`assess_risk` assigns a **low / medium / high** risk level before any config push. Risk only escalates — it never de-escalates within a single assessment.
+
+**Escalation rules (applied in order, highest wins):**
+
+| Dimension | Condition | Risk |
+|-----------|-----------|------|
+| Device count | ≥ 3 devices | high |
+| Device count | > 1 device | medium |
+| Device role | Device has role ABR, ASBR, IGP_REDISTRIBUTOR, NAT_EDGE, or ROUTE_REFLECTOR (from `intent/INTENT.json`) | high |
+| SLA path impact | ≥ 3 SLA paths in `scope_devices` include a target device | high |
+| SLA path impact | 1–2 SLA paths affected | medium (upgrades from low only) |
+| Command content | Commands contain: `router`, `ospf`, `bgp`, `isis`, or `eigrp` | high |
+| Command content | Commands contain: `shutdown` or `no shutdown` | high |
+
+`assess_risk` is advisory only — it does not block changes. The user decides whether to proceed regardless of risk level.
+
+---
+
+# 📸 Snapshot Profiles (`snapshot_state`)
+
+`snapshot_state` accepts a `profile` parameter that selects which commands to run per device platform.
+
+**Valid profiles:** `ospf` | `stp`
+
+| Profile | IOS commands captured | EOS commands captured | RouterOS commands captured |
+|---------|----------------------|----------------------|--------------------------|
+| `ospf` | running-config, OSPF config, OSPF neighbors | running-config, OSPF config, OSPF neighbors | IP addresses, OSPF instances, OSPF neighbors |
+| `stp` | running-config, STP general, STP per-VLAN detail | running-config, STP general | *(not supported — no STP in RouterOS)* |
+
+Snapshots are written to the `snapshots/` directory (gitignored). Invalid profiles are rejected at the MCP boundary (`profile` is a validated enum).

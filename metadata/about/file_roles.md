@@ -93,6 +93,12 @@ Important behavior:
 
 Prevents unnecessary fallback commands.
 
+**Tool parameter reference:**
+- Input parameters for every MCP tool are defined as Pydantic models in `input_models/models.py`.
+- Each model field includes a `description=` annotation — these are the authoritative parameter docs.
+- Valid `query` values per tool per vendor are mapped in `mcp_tool_map.json`.
+- Snapshot profile values (`ospf`, `stp`) and risk scoring rules are documented in `metadata/about/guardrails.md`.
+
 ---
 
 ## ✅ `maintenance.json`

@@ -7,7 +7,7 @@ MCP server, on-call watcher, and toolchain are now observable, secure, and corre
 enforcing all safety gates. No new protocols or vendors are added in this release — those
 are planned for v5.0 once this foundation is proven.
 
-**Test count:** 217 unit tests across 9 test files (up from 3 unit tests in v3.0).
+**Test count:** 229 unit tests across 9 test files (up from 3 unit tests in v3.0).
 
 ---
 
@@ -169,7 +169,7 @@ structured risk reasons:
 
 ### Stage 7 — Methodology & Testing
 
-**Unit test suite** (9 test files, 217 tests):
+**Unit test suite** (9 test files, 229 tests):
 
 | File | Coverage | Tests |
 |------|----------|-------|
@@ -195,6 +195,8 @@ hit/miss, timeout. Skip guard via `NO_LAB=1` for CI without a running lab.
 | ST-007 | OSPF | Area 1 NSSA→normal type change → external routes lost (R2C/R6A) |
 | ST-008 | OSPF | Multi-vendor timer mismatch MikroTik↔MikroTik (R18M/R20M) |
 | OC-002 | Multi | Concurrent SLA failures from single link down → deferred queue |
+
+*Note: ST-008 was merged into ST-001 Variant B and OC-002 was merged into OC-001 in `testing/manual_testing.md` during v4.0.2 test reorganization.*
 
 **CLAUDE.md refinements:**
 - Pitfall #12: TLS settings are controlled by env vars only (`VERIFY_TLS`, `ROUTEROS_USE_HTTPS`, `SSH_STRICT_HOST_KEY`). Do not attempt to change them at runtime.
@@ -246,7 +248,7 @@ now includes all 9 unit test files (UT-001 through UT-009) and 4 integration tes
 (IT-001 through IT-004).
 
 **Test documentation:**
-2-3 line docstrings added to all 217 unit test functions across all 9 test files,
+2-3 line docstrings added to all 229 unit test functions across all 9 test files,
 explaining what each test checks and why it matters.
 
 ---
@@ -384,7 +386,7 @@ input/output schemas) is fully backward-compatible.
 5. **Run unit tests** to confirm the installation is clean:
    ```bash
    python3 -m pytest testing/agent-testing/unit/ -v
-   # Expected: 217 passed
+   # Expected: 229 passed
    ```
 
 ---
