@@ -6,16 +6,15 @@
 ## 📖 **Table of Contents**
 - 📜 **aiNOC Project**
   - [🔭 Overview](#-overview)
-  - [🌱 AI Automation 101](#-ai-automation-101)
   - [♻️ Repository Lifecycle](#%EF%B8%8F-repository-lifecycle)
   - [⭐ What's New in v4.0](#-whats-new-in-v40)
-  - [📞 On-Call Mode](#-on-call-mode)
-  - [⚒️ Project Tech Stack](#%EF%B8%8F-project-tech-stack)
+  - [⚒️ Tech Stack](#%EF%B8%8F-tech-stack)
   - [📋 Supported Vendors](#-supported-vendors)
   - [🎓 Troubleshooting Scope](#-troubleshooting-scope)
   - [🛠️ Environment Setup](#%EF%B8%8F-environment-setup)
   - [🔄 Test Network Topology](#-test-network-topology)
-  - [🌱 Starting Fresh](#-starting-fresh)
+  - [📞 On-Call Mode](#-on-call-mode)
+  - [🌱 AI Automation 101](#-ai-automation-101)
   - [⬆️ Planned Upgrades](#%EF%B8%8F-planned-upgrades)
   - [📄 Disclaimer](#-disclaimer)
   - [📜 License](#-license)
@@ -99,33 +98,6 @@ v4.0 is a major **quality, reliability, and security** release - no new protocol
 - [x] 13 manual E2E scenarios (8 standalone, 2 on-call, 3 watcher)
 - [x] Pydantic `Literal` validation on all query parameters
 
-## 📞 On-Call Mode
-**On-Call Mode** was introduced in v3.0 and enhanced in v4.0.
-
-### What it does, in a nutshell?
-- [x] User configures connectivity paths
-  - **Cisco**: IP SLA & tracking
-  - **Arista**: Monitor Connectivity
-  - **MikroTik**: NetWatch
-- [x] User configures **Syslog** and **NTP**
-- [x] User configures **Syslog** server (Vector)
-- [x] User configures **Vector** with correct parser
-- [x] Connectivity path failures are logged to **Syslog**
-- [x] **Vector** listens for and parses multi-vendor logs
-- [x] `sla_paths/paths.json` outlines paths for the agent
-- [x] `oncall_watcher.py` monitors Vector for new logs
-- [x] Once a new log arrives, the agent is invoked
-- [x] Agent gets log details pre-filled in prompt
-- [x] Agent starts troubleshooting procedures
-- [x] Agent creates a new Jira ticket / case
-- [x] Identifies root cause and potential fix
-- [x] Upon user approval, applies and verifies the fix
-- [x] Logs results to Jira ticket and marks completion
-- [x] Agent invocations are logged to `oncall_watcher.log`
-- [x] Skipped events are deferred for later analysis
-
-👇 See [⏰ NTP, Syslog, Vector](#-ntp-syslog-vector) for configs.
-
 ## ⚒️ Project Tech Stack
 Main tools:
 - [x] Claude Code
@@ -187,7 +159,7 @@ Main tools:
   - Syslog, NTP
 
 ## 🛠️ Environment Setup
-**Installation on Ubuntu**:
+**Installation**:
 ```
 git clone https://github.com/pdudotdev/aiNOC/
 cd aiNOC
@@ -218,6 +190,31 @@ Multiple connection types, for diversity:
 - [x] Please find my test lab's config files under the [lab_configs](https://github.com/pdudotdev/aiNOC/tree/main/lab_configs) directory
 - [x] They are the network's fallback configs for `containerlab redeploy -t lab.yml`
 - [x] Default credentials: see **.env** file at [.env.example](.env.example)
+
+## 📞 On-Call Mode
+**On-Call Mode** was introduced in v3.0 and enhanced in v4.0.
+
+### What it does, in a nutshell?
+- [x] User configures connectivity paths
+  - **Cisco**: IP SLA & tracking
+  - **Arista**: Monitor Connectivity
+  - **MikroTik**: NetWatch
+- [x] User configures **Syslog** and **NTP**
+- [x] User configures **Syslog** server (Vector)
+- [x] User configures **Vector** with correct parser
+- [x] Connectivity path failures are logged to **Syslog**
+- [x] **Vector** listens for and parses multi-vendor logs
+- [x] `sla_paths/paths.json` outlines paths for the agent
+- [x] `oncall_watcher.py` monitors Vector for new logs
+- [x] Once a new log arrives, the agent is invoked
+- [x] Agent gets log details pre-filled in prompt
+- [x] Agent starts troubleshooting procedures
+- [x] Agent creates a new Jira ticket / case
+- [x] Identifies root cause and potential fix
+- [x] Upon user approval, applies and verifies the fix
+- [x] Logs results to Jira ticket and marks completion
+- [x] Agent invocations are logged to `oncall_watcher.log`
+- [x] Skipped events are deferred for later analysis
 
 ## 🌱 AI Automation 101
 If you're completely new to Network Automation using AI & MCP, then you may want to [start here](https://www.udemy.com/course/mcp-server/?referralCode=D62613A8194D2D915B55) before moving on.
