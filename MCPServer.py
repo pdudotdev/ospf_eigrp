@@ -17,7 +17,7 @@ from core.logging_config import setup_logging, setup_config_logging
 from transport.pool import close_sessions
 
 setup_logging()
-setup_config_logging(Path(__file__).parent / "config_changes.log")
+setup_config_logging(Path(__file__).parent / "logs" / "config_changes.log")
 log = logging.getLogger("ainoc")
 
 from tools.protocol    import get_ospf, get_eigrp, get_bgp

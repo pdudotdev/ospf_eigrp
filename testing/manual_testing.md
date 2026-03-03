@@ -506,7 +506,7 @@ tail -f /var/log/network.json
 
 Monitor the watcher log in another terminal:
 ```bash
-tail -f /home/mcp/mcp-project/oncall_watcher.log
+tail -f /home/mcp/mcp-project/logs/oncall_watcher.log
 ```
 
 ---
@@ -555,7 +555,7 @@ Two IP SLA paths fail as a result of the misconfiguration:
 {"device":"172.20.20.209","facility":"local7","msg":"BOM%TRACK-6-STATE: 1 ip sla 1 reachability Up -> Down","severity":"info","ts":"2026-02-25T07:26:09.841Z"}
 ```
 
-##### Check oncall_watcher.log
+##### Check logs/oncall_watcher.log
 
 Agent starts working on the first failure (reported by R4C):
 ```
@@ -621,13 +621,13 @@ router ospf 1
 **Reason**: Both setups above break two SLA paths at once. The agent is invoked for the **first failure only**. If a second failure occurs during the investigation of the first, the watcher skips it — this prevents agent storms during outages.
 
 11. After the fix for the first failure is applied and documentation written, type `/exit`
-12. Check second event logged as `SKIPPED (deferred - occurred during active session)` in `oncall_watcher.log`:
+12. Check second event logged as `SKIPPED (deferred - occurred during active session)` in `logs/oncall_watcher.log`:
 ```
 [2026-02-25 07:53:52 UTC] SKIPPED (deferred - occurred during active session) - R9C (172.20.20.209): BOM%TRACK-6-STATE: 1 ip sla 1 reachability Up -> Down
 ```
 13. After first agent session closes, a **second agent session** opens automatically with the deferred review prompt:
 ```
-During the previous On-Call session the following SLA path failures were detected but could not be investigated at the time (logged as SKIPPED in oncall_watcher.log):
+During the previous On-Call session the following SLA path failures were detected but could not be investigated at the time (logged as SKIPPED in logs/oncall_watcher.log):
 
 1. R9C (172.20.20.209): BOM%TRACK-6-STATE: 1 ip sla 1 reachability Up -> Down (at 2026-02-25T07:26:09.841Z)
 
@@ -661,7 +661,7 @@ echo '{"ts":"2026-01-01T00:00:00Z","device":"172.20.20.204","msg":"%TRACK-6-STAT
 Expected: **No agent invocation.** The watcher detects the Up event, logs a recovery entry,
 and resumes monitoring without starting a Claude session.
 
-In `oncall_watcher.log`:
+In `logs/oncall_watcher.log`:
 ```
 SLA RECOVERY: <device-name> (172.20.20.204): %TRACK-6-STATE: 1 ip sla 1 reachability Down -> Up
 ```
@@ -682,7 +682,7 @@ Start the watcher in daemon mode:
 python3 oncall/watcher.py -d
 ```
 
-Expected at startup: `Watcher started in DAEMON mode` in `oncall_watcher.log`.
+Expected at startup: `Watcher started in DAEMON mode` in `logs/oncall_watcher.log`.
 
 Inject an SLA Down event:
 ```bash
@@ -691,11 +691,11 @@ echo '{"ts":"2026-01-01T00:00:00Z","device":"172.20.20.204","msg":"%TRACK-6-STAT
 
 Verify:
 1. A tmux session named `oncall-*` is created: `tmux list-sessions | grep oncall`
-2. `oncall_watcher.log` shows: `Agent invoked in tmux session: oncall-<timestamp>`
+2. `logs/oncall_watcher.log` shows: `Agent invoked in tmux session: oncall-<timestamp>`
 3. Attach to the session: `tmux attach -t oncall-<timestamp>`
 4. Agent session is running with the SLA failure prompt
 5. Type `/exit` in the agent session — tmux session closes
-6. Watcher resumes monitoring: `Agent session ended.` in log and `oncall_watcher.log` shows no dangling lock
+6. Watcher resumes monitoring: `Agent session ended.` in log and `logs/oncall_watcher.log` shows no dangling lock
 
 ---
 

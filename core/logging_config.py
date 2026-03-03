@@ -49,7 +49,7 @@ class JSONFormatter(logging.Formatter):
 
 
 def _make_formatter() -> logging.Formatter:
-    fmt = os.getenv("LOG_FORMAT", "json").lower()
+    fmt = os.getenv("LOG_FORMAT", "text").lower()
     if fmt == "json":
         return JSONFormatter()
     return logging.Formatter("%(asctime)s %(levelname)-8s %(name)s — %(message)s")
@@ -92,9 +92,10 @@ def setup_config_logging(log_file: Path) -> None:
     if any(isinstance(h, RotatingFileHandler) for h in config_log.handlers):
         return
 
+    log_file.parent.mkdir(parents=True, exist_ok=True)
     fh = RotatingFileHandler(log_file, maxBytes=10 * 1024 * 1024, backupCount=3)
     fh.setLevel(logging.DEBUG)
-    fh.setFormatter(_make_formatter())
+    fh.setFormatter(JSONFormatter())
     config_log.addHandler(fh)
 
 
@@ -115,7 +116,8 @@ def setup_watcher_logging(log_file: Path) -> None:
     if any(isinstance(h, RotatingFileHandler) for h in watcher_log.handlers):
         return
 
+    log_file.parent.mkdir(parents=True, exist_ok=True)
     fh = RotatingFileHandler(log_file, maxBytes=10 * 1024 * 1024, backupCount=3)
     fh.setLevel(logging.DEBUG)
-    fh.setFormatter(_make_formatter())
+    fh.setFormatter(JSONFormatter())
     watcher_log.addHandler(fh)

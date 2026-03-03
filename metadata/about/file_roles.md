@@ -242,7 +242,7 @@ Acts as the handoff from passive monitoring to active investigation.
 
 ---
 
-## ✅ `oncall_watcher.log` (root, gitignored)
+## ✅ `logs/oncall_watcher.log` (gitignored)
 
 **Purpose:** Watcher activity log.
 

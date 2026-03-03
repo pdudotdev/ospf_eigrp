@@ -20,6 +20,8 @@ import sys
 import asyncio
 from datetime import datetime, timezone
 from pathlib import Path
+import sys
+sys.path.insert(0, str(Path(__file__).parent.parent))
 
 from core import jira_client
 from core.logging_config import setup_watcher_logging
@@ -30,7 +32,7 @@ LOG_FILE = os.environ.get("NETWORK_LOG_FILE", "/var/log/network.json")
 PROJECT_DIR = Path(__file__).parent.parent
 INVENTORY_FILE = PROJECT_DIR / "inventory" / "NETWORK.json"
 LOCK_FILE = PROJECT_DIR / "oncall.lock"
-WATCHER_LOG = PROJECT_DIR / "oncall_watcher.log"
+WATCHER_LOG = PROJECT_DIR / "logs" / "oncall_watcher.log"
 PENDING_EVENTS_FILE = PROJECT_DIR / "pending_events.json"
 DEFERRED_FILE = PROJECT_DIR / "deferred.json"
 CLAUDE_BIN = "/home/mcp/.local/bin/claude"
@@ -152,7 +154,7 @@ def scan_for_deferred_events(trigger_event, session_start, session_end, device_m
     Each deferred event is logged as SKIPPED in the watcher log immediately.
     Returns a list of enriched event dicts.
     """
-    trigger_key = (trigger_event.get("ts"), trigger_event.get("device")) if trigger_event else None
+    trigger_key = (trigger_event.get("ts"), trigger_event.get("device"), trigger_event.get("msg")) if trigger_event else None
     deferred = []
     seen = set()  # Deduplicate by (device, msg) to avoid noise from repeated SLA polls
     try:
@@ -166,9 +168,9 @@ def scan_for_deferred_events(trigger_event, session_start, session_end, device_m
                 except json.JSONDecodeError:
                     continue
                 event_ts = parse_event_ts(event)
-                if event_ts is None or not (session_start < event_ts <= session_end):
+                if event_ts is None or not (session_start <= event_ts <= session_end):
                     continue
-                if trigger_key and (event.get("ts"), event.get("device")) == trigger_key:
+                if trigger_key and (event.get("ts"), event.get("device"), event.get("msg")) == trigger_key:
                     continue
                 if is_sla_down_event(event.get("msg", "")):
                     device_ip = event.get("device", "?")
@@ -193,7 +195,7 @@ def scan_for_recovery_events(trigger_event, session_start, session_end, device_m
     log so operators can reconstruct the full timeline post-session.
     No behavioral changes — purely an audit trail.
     """
-    trigger_key = (trigger_event.get("ts"), trigger_event.get("device")) if trigger_event else None
+    trigger_key = (trigger_event.get("ts"), trigger_event.get("device"), trigger_event.get("msg")) if trigger_event else None
     seen = set()  # Deduplicate by (device, msg) to avoid noise from repeated SLA polls
     try:
         with open(LOG_FILE) as f:
@@ -206,9 +208,9 @@ def scan_for_recovery_events(trigger_event, session_start, session_end, device_m
                 except json.JSONDecodeError:
                     continue
                 event_ts = parse_event_ts(event)
-                if event_ts is None or not (session_start < event_ts <= session_end):
+                if event_ts is None or not (session_start <= event_ts <= session_end):
                     continue
-                if trigger_key and (event.get("ts"), event.get("device")) == trigger_key:
+                if trigger_key and (event.get("ts"), event.get("device"), event.get("msg")) == trigger_key:
                     continue
                 if is_sla_up_event(event.get("msg", "")):
                     device_ip = event.get("device", "?")
@@ -362,7 +364,7 @@ def invoke_deferred_review(device_map, daemon=False):
     prompt = (
         "Deferred SLA failure review.\n\n"
         "During the previous On-Call session the following SLA path failures were detected\n"
-        "but could not be investigated at the time (logged as SKIPPED in oncall_watcher.log):\n\n"
+        "but could not be investigated at the time (logged as SKIPPED in logs/oncall_watcher.log):\n\n"
         f"{event_list}\n\n"
         "Your only task: present this list to the user exactly as shown above and ask:\n"
         "\"Would you like to investigate any of these?\"\n\n"
