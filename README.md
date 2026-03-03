@@ -7,14 +7,15 @@
 - 📜 **aiNOC Project**
   - [🔭 Overview](#-overview)
   - [♻️ Repository Lifecycle](#%EF%B8%8F-repository-lifecycle)
-  - [🍀 Here's a Demo](#-heres-a-demo)
+  - [🍀 Here's a Quick Demo](#-heres-a-quick-demo)
   - [⭐ What's New in v4.0](#-whats-new-in-v40)
-  - [⚒️ Tech Stack](#%EF%B8%8F-tech-stack)
+  - [⚒️ Current Tech Stack](#%EF%B8%8F-current-tech-stack)
   - [📋 Supported Vendors](#-supported-vendors)
+  - [🖇️ Supported Transports](#-supported-transports)
   - [🎓 Troubleshooting Scope](#-troubleshooting-scope)
-  - [🛠️ Installation](#%EF%B8%8F-installation)
+  - [🛠️ Installation & Usage](#%EF%B8%8F-installation-usage)
   - [🔄 Test Network Topology](#-test-network-topology)
-  - [📞 On-Call Mode](#-on-call-mode)
+  - [📞 aiNOC in On-Call Mode](#ainoc-in-on-call-mode)
   - [⬆️ Planned Upgrades](#%EF%B8%8F-planned-upgrades)
   - [🌱 AI Automation 101](#-ai-automation-101)
   - [📄 Disclaimer](#-disclaimer)
@@ -139,6 +140,14 @@ v4.0 is a major **quality, reliability, and security** release - no new protocol
 | Cisco | IOS/IOS-XE (IOL) |
 | MikroTik | RouterOS |
 
+## 🖇️ Supported Transports
+
+| Vendor | Transport |
+|--------|-----------|
+| Cisco IOS | Scrapli SSH |
+| Arista EOS | Arista eAPI |
+| MikroTik RouterOS | REST API |
+
 ## 🎓 Troubleshooting Scope
 
 | Category | Capabilities |
@@ -187,14 +196,6 @@ sudo systemctl status vector
 **Network diagram**:
 
 ![topology](metadata/topology/TOPOLOGY-v2.0.png)
-
-**Connection types:**
-
-| Vendor | Transport |
-|--------|-----------|
-| Cisco IOS | Scrapli SSH |
-| Arista EOS | Arista eAPI |
-| MikroTik RouterOS | REST API |
 
 **Naming conventions:**
 - [x] **RXY** where:
@@ -250,7 +251,7 @@ You are responsible for defining your own troubleshooting methodologies and cont
 Licensed under the [**GNU GENERAL PUBLIC LICENSE Version 3**](https://github.com/pdudotdev/aiNOC/blob/main/LICENSE).
 
 ## 📧 Professional Collaborations
-If you're interested in customizing and adapting **aiNOC** for your own network, or looking to collaborate long-term, feel free to reach out.
+Interested in customizing and adapting **aiNOC** to your own network, or looking to collaborate long-term?
 - **Email Address**:  
   - Please direct your inquiries to **hello@ainoc.dev**.
 - **LinkedIn**:
