@@ -57,14 +57,17 @@ Operating modes of **aiNOC**:
 
 **Supported models**:
 - [x] Haiku 4.5 (best for costs)
-- [x] Sonnet 4.6 (default)
-- [x] Opus 4.6 (best reasoning)
+- [x] Sonnet 4.6 (best balance)
+- [x] Opus 4.6 (default, best reasoning)
+
+⚠️ **NOTE:** Due to the intermittent nature of troubleshooting, it's worth using an advanced model by default - costs won't become unsustainable even if troubleshooting several issues per day.
 
 **Set your default model**:
 Create `settings.json` under `.claude/`:
 ```
 {
-  "model": "sonnet"
+  "model":"opus",
+  "effortLevel":"medium"
 }
 ```
 

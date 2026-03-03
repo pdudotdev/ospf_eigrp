@@ -9,7 +9,7 @@ async def execute_eapi(device: dict, command: str):
     payload = {
         "jsonrpc": "2.0",
         "method":  "runCmds",
-        "params":  {"version": 1, "cmds": [command]},
+        "params":  {"version": 1, "cmds": ["enable", command]},
         "id":      1,
     }
     session = await get_eapi_session()
