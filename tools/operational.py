@@ -1,4 +1,5 @@
 """Operational tools: get_interfaces, ping, traceroute, run_show."""
+import json
 from core.inventory import devices
 from platforms.platform_map import PLATFORM_MAP
 from transport import execute_command
@@ -111,4 +112,11 @@ async def traceroute(params: TracerouteInput) -> dict:
 
 async def run_show(params: ShowCommand) -> dict:
     """Run a show command against a network device."""
-    return await execute_command(params.device, params.command, ttl=0)
+    command = params.command.strip()
+    try:
+        parsed = json.loads(command)
+        if isinstance(parsed, dict):
+            command = parsed
+    except (json.JSONDecodeError, ValueError):
+        pass
+    return await execute_command(params.device, command, ttl=0)

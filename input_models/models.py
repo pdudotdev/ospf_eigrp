@@ -41,9 +41,10 @@ class EigrpQuery(BaseParamsModel):
 # BGP query - input model
 class BgpQuery(BaseParamsModel):
     device: str
-    query: Literal["summary", "table", "config"] = Field(
-        ..., description="summary | table | config"
+    query: Literal["summary", "table", "config", "neighbors"] = Field(
+        ..., description="summary | table | config | neighbors"
     )
+    neighbor: str | None = Field(None, description="Optional neighbor IP to filter output (neighbors query, IOS/EOS only)")
 
 class RoutingQuery(BaseParamsModel):
     device: str

@@ -202,6 +202,14 @@ def test_bgp_ros():
     assert result, "Expected non-empty BGP result from R18M"
 
 
+def test_bgp_neighbors_ios():
+    """IT-003b-3b: get_bgp neighbors on IOS (R2C) with neighbor IP filter."""
+    result = run(get_bgp(BgpQuery(device="R2C", query="neighbors", neighbor="200.40.40.2")))
+    record("IT-003b: Protocol Tools", "test_bgp_neighbors_ios", "R2C", "SSH", result)
+    assert result, "Expected non-empty BGP neighbors result from R2C"
+    assert "error" not in result, f"get_bgp neighbors failed: {result}"
+
+
 def test_interfaces_ros():
     """IT-003b-4: get_interfaces on RouterOS (R19M)."""
     result = run(get_interfaces(InterfacesQuery(device=ROS2, query="interface_status")))
@@ -246,6 +254,15 @@ def test_run_show_eos():
     result = run(run_show(ShowCommand(device=EOS3, command="show ip arp")))
     record("IT-003b: Protocol Tools", "test_run_show_eos", EOS3, "eAPI", result)
     assert result, "Expected non-empty run_show result from R7A"
+
+
+def test_run_show_routeros():
+    """IT-003b-9b: run_show fallback on RouterOS (R18M) — GET to /rest/interface."""
+    cmd = json.dumps({"method": "GET", "path": "/rest/interface"})
+    result = run(run_show(ShowCommand(device=ROS1, command=cmd)))
+    record("IT-003b: Protocol Tools", "test_run_show_routeros", ROS1, "REST", result)
+    assert result, "Expected non-empty run_show result from R18M"
+    assert "error" not in result, f"run_show RouterOS GET failed: {result}"
 
 
 def test_redistribution_ros():

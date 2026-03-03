@@ -244,8 +244,7 @@ Expected: No `D EX` routes for `172.16.0.0/24` (OSPF Area 2 subnet) or other OSP
 
 #### Agent prompt
 ```
-R4C is missing routes to the 172.16.0.0/24 subnet (Area 2 stub network).
-Routes that should be redistributed from OSPF into EIGRP AS10 are absent on R4C.
+R4C is missing routes to the 172.16.0.0/24 subnet (Area 2 stub network). Please investigate.
 ```
 
 #### Expected agent behavior
@@ -306,7 +305,7 @@ Expected: Path goes through `10.1.1.6` (R7A), not R6A.
 #### Agent prompt
 
 ```
-Why does R8C forward packets from R9C's 192.168.20.2 interface destined for 2.2.2.66 to R7A every time?
+Why are R9C's packets destined for 2.2.2.66 forwarded by R8C to R7A every time?
 ```
 
 #### Expected agent behavior
@@ -355,7 +354,7 @@ Expected: Three separate `O E1 9.9.x.0/24` entries visible instead of a single `
 
 ```
 Why are all routers in the network (e.g. R1A) showing individual routes to R9C's loopbacks.
-Check this and give me the easiest fix.
+Check this and give me some solutions.
 ```
 
 #### Expected agent behavior

@@ -23,9 +23,9 @@
   "get_bgp": {
     "platform_map_section": "bgp",
     "queries": {
-      "ios":      ["summary", "table", "config"],
-      "eos":      ["summary", "table", "config"],
-      "routeros": ["summary", "table", "config"]
+      "ios":      ["summary", "table", "config", "neighbors"],
+      "eos":      ["summary", "table", "config", "neighbors"],
+      "routeros": ["summary", "table", "config", "neighbors"]
     }
   },
 

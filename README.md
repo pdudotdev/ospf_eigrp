@@ -3,6 +3,15 @@
 [![Latest Release](https://img.shields.io/badge/version-4.0.4-blue.svg)](https://github.com/pdudotdev/aiNOC/releases/tag/4.0.4)
 [![Last Commit](https://img.shields.io/github/last-commit/pdudotdev/aiNOC)](https://github.com/pdudotdev/aiNOCcommits/main/)
 
+![Cisco IOS-XE](https://img.shields.io/badge/Cisco-IOS--XE-0176C1)
+![Arista EOS](https://img.shields.io/badge/Arista-EOS-2A64D4)
+![MikroTik RouterOS](https://img.shields.io/badge/MikroTik-RouterOS-2A3042)
+
+![Transports](https://img.shields.io/badge/Transports-555555)
+![SSH](https://img.shields.io/badge/SSH-2E8B57)
+![eAPI](https://img.shields.io/badge/eAPI-D4841A)
+![REST API](https://img.shields.io/badge/REST_API-7B52AB)
+
 ## 📖 **Table of Contents**
 - 📜 **aiNOC Project**
   - [🔭 Overview](#-overview)

@@ -67,6 +67,10 @@ class TestIOS:
         """Summary query must map to the IOS BGP summary show command."""
         assert PLATFORM_MAP["ios"]["bgp"]["summary"] == "show ip bgp summary"
 
+    def test_bgp_neighbors(self):
+        """Neighbors query must map to the IOS BGP neighbors show command."""
+        assert PLATFORM_MAP["ios"]["bgp"]["neighbors"] == "show ip bgp neighbors"
+
     def test_routing_table(self):
         """ip_route query must map to the IOS routing table show command."""
         assert PLATFORM_MAP["ios"]["routing_table"]["ip_route"] == "show ip route"
@@ -114,6 +118,10 @@ class TestEOS:
         """Summary query must map to the EOS BGP summary show command."""
         assert PLATFORM_MAP["eos"]["bgp"]["summary"] == "show ip bgp summary"
 
+    def test_bgp_neighbors(self):
+        """Neighbors query must map to the EOS BGP neighbors show command."""
+        assert PLATFORM_MAP["eos"]["bgp"]["neighbors"] == "show ip bgp neighbors"
+
     def test_routing_table(self):
         """ip_route query must map to the EOS routing table show command."""
         assert PLATFORM_MAP["eos"]["routing_table"]["ip_route"] == "show ip route"
@@ -157,6 +165,12 @@ class TestRouterOS:
         """BGP summary query must be a GET to the RouterOS BGP REST path."""
         entry = PLATFORM_MAP["routeros"]["bgp"]["summary"]
         assert entry["method"] == "GET"
+
+    def test_bgp_neighbors(self):
+        """BGP neighbors query must be a GET to the RouterOS BGP session REST path."""
+        entry = PLATFORM_MAP["routeros"]["bgp"]["neighbors"]
+        assert entry["method"] == "GET"
+        assert "/bgp/" in entry["path"]
 
     def test_routing_table(self):
         """Routing table query must be a GET to a RouterOS route REST path."""

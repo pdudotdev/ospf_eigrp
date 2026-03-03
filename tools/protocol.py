@@ -93,17 +93,21 @@ async def get_bgp(params: BgpQuery) -> dict:
     and configuration during routing issues.
 
     Supported queries:
-    - summary  → Check neighbor state, uptime, and prefixes exchanged
-    - table    → Inspect detailed BGP table and path attributes
-    - config   → Review BGP configuration
+    - summary    → Check neighbor state, uptime, and prefixes exchanged
+    - table      → Inspect detailed BGP table and path attributes
+    - config     → Review BGP configuration
+    - neighbors  → Per-neighbor detail: negotiated timers, capabilities, address families, reset reasons
 
     Notes:
     - Supported queries vary by platform.
     - Cached results may be returned briefly for efficiency.
+    - For "neighbors" on IOS/EOS, provide neighbor=<ip> to scope output to a single peer.
+    - For RouterOS, "neighbors" returns all sessions (neighbor filter not supported via REST).
 
     Recommended usage:
     - Start with "summary" to verify session health.
     - Use "table" when routes are missing or path selection is unexpected.
+    - Use "neighbors" (with neighbor=<ip>) when timers, capabilities, or reset reasons are needed.
 
     Use this tool before falling back to run_show.
     """
@@ -115,5 +119,9 @@ async def get_bgp(params: BgpQuery) -> dict:
         action = PLATFORM_MAP[device["cli_style"]]["bgp"][params.query]
     except KeyError:
         return _error_response(params.device, f"BGP query '{params.query}' not supported on platform {device['cli_style'].upper()}")
+
+    if params.query == "neighbors" and params.neighbor and not isinstance(action, dict):
+        # IOS / EOS: append neighbor IP to CLI command string for scoped output
+        action = f"{action} {params.neighbor}"
 
     return await execute_command(params.device, action)

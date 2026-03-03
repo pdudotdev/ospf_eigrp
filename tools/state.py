@@ -65,11 +65,13 @@ _SNAPSHOT_PROFILES: dict[str, dict[str, list]] = {
             ("running_config", "show running-config"),
             ("bgp_summary",    "show ip bgp summary"),
             ("bgp_table",      "show ip bgp"),
+            ("bgp_neighbors",  "show ip bgp neighbors"),
         ],
         "eos": [
             ("running_config", "show running-config"),
             ("bgp_summary",    "show ip bgp summary"),
             ("bgp_table",      "show ip bgp"),
+            ("bgp_neighbors",  "show ip bgp neighbors"),
         ],
         "routeros": [
             ("bgp_connections", {"method": "GET", "path": "/rest/routing/bgp/connection"}),

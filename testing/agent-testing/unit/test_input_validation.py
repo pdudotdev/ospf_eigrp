@@ -55,8 +55,8 @@ def test_eigrp_query_invalid(q):
 
 # ── BgpQuery ───────────────────────────────────────────────────────────────────
 
-VALID_BGP_QUERIES = ["summary", "table", "config"]
-INVALID_BGP_QUERIES = ["neighbors", "routes", "detail", ""]
+VALID_BGP_QUERIES = ["summary", "table", "config", "neighbors"]
+INVALID_BGP_QUERIES = ["routes", "detail", "peer", ""]
 
 
 @pytest.mark.parametrize("q", VALID_BGP_QUERIES)
@@ -71,6 +71,18 @@ def test_bgp_query_invalid(q):
     """Undocumented BGP query strings must raise ValidationError at construction."""
     with pytest.raises(ValidationError):
         BgpQuery(device="R2C", query=q)
+
+
+def test_bgp_neighbor_field_accepted():
+    """Optional neighbor IP field must be accepted on BgpQuery."""
+    m = BgpQuery(device="R2C", query="neighbors", neighbor="200.40.40.2")
+    assert m.neighbor == "200.40.40.2"
+
+
+def test_bgp_neighbor_field_optional():
+    """neighbor field must default to None when omitted."""
+    m = BgpQuery(device="R2C", query="summary")
+    assert m.neighbor is None
 
 
 # ── RoutingPolicyQuery ─────────────────────────────────────────────────────────

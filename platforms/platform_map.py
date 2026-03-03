@@ -17,7 +17,8 @@ PLATFORM_MAP = {
         "bgp": {
             "summary": "show ip bgp summary",
             "table": "show ip bgp",
-            "config": "show running-config | section bgp"
+            "config": "show running-config | section bgp",
+            "neighbors": "show ip bgp neighbors"
         },
         "routing_table": {
             "ip_route": "show ip route"
@@ -50,7 +51,8 @@ PLATFORM_MAP = {
         "bgp": {
             "summary": "show ip bgp summary",
             "table": "show ip bgp",
-            "config": "show running-config | section bgp"
+            "config": "show running-config | section bgp",
+            "neighbors": "show ip bgp neighbors"
         },
         "routing_table": {
             "ip_route": "show ip route"
@@ -80,7 +82,8 @@ PLATFORM_MAP = {
         "bgp": {
             "summary": {"method": "GET", "path": "/rest/routing/bgp/connection"},
             "table": {"method": "GET", "path": "/rest/routing/route"},
-            "config": {"method": "GET", "path": "/rest/routing/bgp/session"}
+            "config": {"method": "GET", "path": "/rest/routing/bgp/session"},
+            "neighbors": {"method": "GET", "path": "/rest/routing/bgp/session"}
         },
         "routing_table": {
             "ip_route": {"method": "GET", "path": "/rest/ip/route"}
