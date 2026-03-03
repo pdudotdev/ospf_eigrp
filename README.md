@@ -170,7 +170,7 @@ pip install -r requirements.txt
 
 **Step 2**:
 
-The included **CLAUDE.md** and **skills** are templates. **Customize them** with your own troubleshooting methodology, tool descriptions, and operational guidelines.
+The included `CLAUDE.md` and `/skills/*` are templates. **Customize them** with your own troubleshooting methodology, tool descriptions, and operational guidelines.
 
 **Step 3**:
 - Configure IP SLA, Connectivity Monitor, Netwatch etc. paths in your network
@@ -224,13 +224,13 @@ sudo systemctl status vector
 - [x] `sla_paths/paths.json` outlines paths for the agent
 - [x] `oncall/watcher.py` monitors Vector for new logs
 - [x] Once a new log arrives, the agent is invoked
-- [x] Watcher creates a new Jira ticket
+- [x] Watcher creates a new **Jira** ticket
 - [x] Agent gets log details pre-filled in prompt
-- [x] Agent starts troubleshooting procedures
+- [x] Agent starts troubleshooting procedures (`CLAUDE.md`, `/skills`, etc.)
 - [x] Identifies root cause and potential fix
 - [x] Upon user approval, applies and verifies the fix
-- [x] Logs results to Jira ticket and marks completion
-- [x] Actions logged to `oncall/oncall_watcher.log`
+- [x] Logs results to **Jira** ticket and marks completion
+- [x] Actions logged to `oncall/watcher.log`
 - [x] Skipped events are deferred for later analysis
 
 ## ⬆️ Planned Upgrades
@@ -252,7 +252,7 @@ Licensed under the [**GNU GENERAL PUBLIC LICENSE Version 3**](https://github.com
 
 ## 📧 Professional Collaborations
 Interested in customizing and adapting **aiNOC** to your own network, or looking to collaborate long-term?
-- **Email Address**:  
+- **Email**:  
   - Please direct your inquiries to **hello@ainoc.dev**.
 - **LinkedIn**:
   - Send me a DM on [**LinkedIn**](https://www.linkedin.com/in/tmihaicatalin/) and let's talk. 
