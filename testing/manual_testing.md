@@ -7,13 +7,14 @@ Run these after significant codebase changes to confirm correct agent behavior.
 
 ## When to Run What
 
-### Tier 1 — Core Regression (~40 min) | Run after every change
+### Tier 1 — Core Regression (~2 min) | Run after every change
 
 Run automated tests first:
 ```bash
 cd /home/mcp/mcp-project/testing/agent-testing
-./run_tests.sh unit
+./run_tests.sh unit         # run only unit tests
 ./run_tests.sh integration  # requires running lab
+./run_tests.sh all          # run unit and integration
 ```
 
 Then these manual scenarios:
@@ -29,7 +30,7 @@ Then these manual scenarios:
 
 - Lab is up (`sudo clab redeploy -t lab.yml`) for each test
 - All devices reachable (verify with `./run_tests.sh integration`)
-- MCP server running or accessible (check with `claude mcp list`)
+- MCP server running and accessible (check with `claude mcp list`)
 
 ---
 
@@ -64,11 +65,11 @@ tail -f /home/mcp/mcp-project/logs/oncall_watcher.log
 
 **Tests**: Full watcher pipeline, agent investigation, fix verification, deferred queue, Jira documentation
 
-Run the **Primary Setup** for Tier 1 regression and full pipeline validation.
+Run this test manually for Tier 1 regression and full pipeline validation.
 
 ---
 
-#### Primary Setup — OSPF Passive Interface Break (R3C)
+#### OSPF Passive Interface Break (R3C)
 
 **SLA Path**: `R4C_TO_R10C` | **Break device**: R3C | **SLA source**: R4C (172.20.20.204)
 **Implicit**: `R9C_TO_R5C` also breaks — validates deferred queue with two concurrent failures
@@ -167,7 +168,7 @@ router ospf 1
 
 **Purpose**: Validate that concurrent SLA events during an active session are deferred and surfaced in a follow-up review session.
 
-**Reason**: Both setups above break two SLA paths at once. The agent is invoked for the **first failure only**. If a second failure occurs during the investigation of the first, the watcher skips it — this prevents agent storms during outages.
+**Reason**: The setup above breaks at least two SLA paths at once. The agent is invoked for the **first failure only**. If a second failure occurs during the investigation of the first, the watcher skips it — this prevents agent storms during outages.
 
 11. After the fix for the first failure is applied and documentation written, type `/exit`
 12. Check second event logged as `SKIPPED (deferred - occurred during active session)` in `logs/oncall_watcher.log`:
@@ -187,6 +188,8 @@ Would you like to investigate any of these? Reply with a number, 'all', or 'none
 ```
 [Watcher] Deferred review session ended. Resuming monitoring
 ```
+
+---
 
 ---
 
@@ -245,6 +248,8 @@ Verify:
 4. Agent session is running with the SLA failure prompt
 5. Type `/exit` in the agent session — tmux session closes
 6. Watcher resumes monitoring: `Agent session ended.` in log and `logs/oncall_watcher.log` shows no dangling lock
+
+---
 
 ---
 
