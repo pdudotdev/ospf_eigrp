@@ -32,7 +32,7 @@
   - [📧 Professional Collaborations](#-professional-collaborations)
 
 ## 🔭 Overview
-aiNOC is an AI-based **network troubleshooting framework** for multi-vendor, multi-protocol, multi-area/multi-AS, L2/L3 enterprise networks.
+AI-based **network troubleshooting framework** for multi-vendor, multi-protocol, multi-area/multi-AS, L2/L3 enterprise networks.
 
 ▫️ **Key characteristics:**
 - [x] **Multi-vendor support**
