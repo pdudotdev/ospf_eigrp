@@ -13,14 +13,14 @@
 ![REST API](https://img.shields.io/badge/REST_API-7B52AB)
 
 ## 📖 **Table of Contents**
-- 📜 **aiNOC Project**
+- 📜 **aiNOC**
   - [🔭 Overview](#-overview)
   - [♻️ Repository Lifecycle](#️-repository-lifecycle)
   - [🍀 Here's a Quick Demo](#-heres-a-quick-demo)
   - [⭐ What's New in v4.0](#-whats-new-in-v40)
   - [⚒️ Current Tech Stack](#️-current-tech-stack)
   - [📋 Supported Vendors](#-supported-vendors)
-  - [🖇️ Supported Transports](#️-supported-transports)
+  - [🛻 Supported Transports](#️-supported-transports)
   - [🎓 Troubleshooting Scope](#-troubleshooting-scope)
   - [🛠️ Installation & Usage](#️-installation--usage)
   - [🔄 Test Network Topology](#-test-network-topology)
@@ -32,36 +32,34 @@
   - [📧 Professional Collaborations](#-professional-collaborations)
 
 ## 🔭 Overview
-aiNOC is an AI-based **network troubleshooting framework** for multi-vendor, multi-protocol, multi-area/multi-AS, OSI L2-L4 enterprise networks.
+aiNOC is an AI-based **network troubleshooting framework** for multi-vendor, multi-protocol, multi-area/multi-AS, L2/L3 enterprise networks.
 
-**Key characteristics:**
+▫️ **Key characteristics:**
 - [x] **Multi-vendor support**
-- [x] **Multi-protocol, L2-L4**
+- [x] **Multi-protocol, L2/L3**
 - [x] **Multi-area/multi-AS**
 - [x] **SSH/eAPI/REST API**
 - [x] **15 MCP tools, 6 skills**
 - [x] **32 operational guardrails**
 - [x] **Jira integration**
 
-Operating mode of **aiNOC**:
-- [x] **On-Call mode (OC)** *(primary)*
-  - Agent is invoked by SLA path failures, see [**On-Call Mode**](#-on-call-mode)
-  - Ad-hoc troubleshooting via the console is also supported
+▫️ **Operating mode of aiNOC**:
+- [x] See [**aiNOC On-Call**](#-ainoc-in-on-call-mode)
 
-**Important project files**:
+▫️ **Important project files**:
 - [x] See [**file roles**](metadata/about/file_roles.md)
 
-**Agent guardrails list**:
+▫️ **Agent guardrails list**:
 - [x] See [**guardrails**](metadata/about/guardrails.md)
 
-**Supported models**:
+▫️ **Supported models**:
 - [x] Haiku 4.5 (best for costs)
 - [x] Sonnet 4.6 (best balance)
 - [x] Opus 4.6 (default, best reasoning)
 
-⚠️ **NOTE:** Due to the intermittent nature of troubleshooting, it's worth using an advanced model by default - costs won't become unsustainable even if troubleshooting several issues per day.
+⚠️ **NOTE:** Due to the intermittent nature of troubleshooting, it's worth using an advanced model by default. Costs won't become unsustainable even if addressing and fixing several issues per day.
 
-**Set your default model**:<br/>
+▫️ **Set your default model**:<br/>
 Create `settings.json` under `.claude/`:
 ```
 {
@@ -70,13 +68,13 @@ Create `settings.json` under `.claude/`:
 }
 ```
 
-**High-level architecture:**
+▫️ **High-level architecture:**
 
 ![arch](metadata/topology/ARCHv3.png)
 
 ## 🍀 Here's a Quick Demo
-- [x] ▶ See a [**DEMO HERE**](https://www.youtube.com/watch?v=oxSa25R6EgI) for v3.0.
-  - *Next video demo coming with the next major release*
+- [x] See a [**DEMO HERE**](https://www.youtube.com/watch?v=oxSa25R6EgI) of v3.0.
+  - *Next video demo coming soon with v5.0*
 
 ## ♻️ Repository Lifecycle
 **New features** are being added periodically (vendors, protocols, integrations, etc.).
@@ -88,7 +86,7 @@ Create `settings.json` under `.claude/`:
 - [x] **aiNOC v4.5**
 
 ## ⭐ What's New in v4.5
-- [x] See **changelog.md**
+- [x] See [**changelog.md**](changelog.md)
 
 ## ⚒️ Current Tech Stack
 
@@ -116,7 +114,7 @@ Create `settings.json` under `.claude/`:
 | Cisco | IOS/IOS-XE (IOL) |
 | MikroTik | RouterOS |
 
-## 🖇️ Supported Transports
+## 🛻 Supported Transports
 
 | Vendor | Transport |
 |--------|-----------|
@@ -134,7 +132,7 @@ Create `settings.json` under `.claude/`:
 | **Others** | Policy-Based Routing · IP SLA · MikroTik Netwatch · Arista Connectivity Monitor · NAT/PAT on ASBRs · Management APIs · Static routing · Syslog · NTP |
 
 ## 🛠️ Installation & Usage
-**Step 1**:
+▫️ **Step 1**:
 ```
 git clone https://github.com/pdudotdev/aiNOC/
 cd aiNOC
@@ -144,48 +142,57 @@ pip install --upgrade pip
 pip install -r requirements.txt
 ```
 
-**Step 2**:
+▫️ **Step 2**:
 
 The included `CLAUDE.md` and `/skills/*` are templates. **Customize them** with your own troubleshooting methodology, tool descriptions, and operational guidelines.
 
-**Step 3**:
+▫️ **Step 3**:
 - Configure IP SLA, Connectivity Monitor, Netwatch etc. paths in your network
 - Make sure they are being tracked and logged remotely to **Vector** (Syslog)
 - Configure the transforms inside `/etc/vector/vector.yaml` - [**example**](metadata/about/vector.yaml)
 - aiNOC monitors Vector's `/var/log/network.json` file for specific logs and parses them
 
-**Step 4**:
-Run **aiNOC** in **On-Call Mode**, in the terminal or as a **daemon**:
+▫️ **Step 4**:
+Run the **aiNOC** watcher in the terminal or as a **daemon**:
 ```
-python3 oncall_watcher.py      # default: interactive terminal
-python3 oncall_watcher.py -d   # daemon mode, across reboots
+python3 oncall/watcher.py      # default: interactive terminal
+```
+*or:*
+```
+python3 oncall/watcher.py -d   # daemon mode, across reboots
 ```
 
-**Step 5**:
+▫️ **Step 5**:
 Check if **Watcher** and **Vector** are running:
 ```
-sudo systemctl status oncall_watcher.service
 sudo systemctl status vector
+python3 oncall/watcher.py 
+ainoc.watcher — Watcher started. Monitoring /var/log/network.json for IP SLA Down events.
+```
+*or:*
+```
+sudo systemctl status vector
+sudo systemctl status oncall_watcher.service
 ```
 
 ## 🔄 Test Network Topology
-**Network diagram**:
+▫️ **Network diagram**:
 
 ![topology](metadata/topology/TOPOLOGY-v2.0.png)
 
-**Naming conventions:**
+▫️ **Naming conventions:**
 - [x] **RXY** where:
   - **R**: device type (router)
   - **X**: device number id
   - **Y**: vendor (A-Arista, C-Cisco, M-MikroTik, etc.)
 
-**Router configurations:**
+▫️ **Router configurations:**
 - [x] Please find my test lab's config files under the [**lab_configs**](https://github.com/pdudotdev/aiNOC/tree/main/lab_configs) directory
 - [x] They are the network's fallback configs for `containerlab redeploy -t lab.yml`
 - [x] Default credentials: see **.env** file at [**.env.example**](.env.example)
 
-## 📞 aiNOC in On-Call Mode
-**On-Call Mode** is the primary operating mode of aiNOC (introduced in v3.0, enhanced in v4.0 and v4.5).
+## 📞 aiNOC On-Call
+**On-Call Mode** is the new operating mode of aiNOC (introduced in v3.0, enhanced in v4.0 and v4.5).
 
 ### What it does, in a nutshell?
 - [x] User configures connectivity paths
@@ -213,7 +220,7 @@ sudo systemctl status vector
 Expected in version v5.0:
 - [ ] Fresh, enterprise-focused topology
 - [ ] New vendors (Juniper, Aruba, SONiC)
-- [ ] New protocols (VRRP/HSRP, STP/MSTP)
+- [ ] New protocols and services
 - [ ] Performance-based SLAs
 - [ ] NetBox integration
 
