@@ -25,5 +25,4 @@ oncall.lock
 CLAUDE.md
 skills/*/SKILL.md
 
-# lab_configs/ IS committed intentionally as fallback topology backup for containerlab redeploy.
 # WARNING: In real production environments, NEVER commit device configs containing credentials.

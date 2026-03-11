@@ -12,25 +12,35 @@ All notable changes to this project are documented in this file.
 - 9-device Cisco IOS/IOS-XE topology (2 platforms: cisco_iol, cisco_c8000v)
 - OSPF Area 0 + Area 1 stub, BGP dual-ISP (AS1010↔AS4040/AS5050), BGP AS2020 at X1C
 - 5 SLA paths: OSPF cost-based primary/backup ABR selection (A1C/A2C via C1C/C2C)
+- Full redundancy across the Access, Collapsed Core, Edge-to-ISP layers
 
 ### 🔌 Transports
-- **NETCONF removed**: 3-tier reduced to 2-tier; `ncclient` and `xmltodict` dependencies removed
 - **2-tier for c8000v**: RESTCONF (primary, httpx/JSON) → SSH (fallback, Scrapli/CLI)
 - **SSH-only for IOL**: A1C, A2C, IAN, IBN
 - `ActionChain` class in `platform_map.py` for ordered transport fallback
 - Config push: all devices use SSH CLI
 
 ### 🏗️ Architecture
-- `PLATFORM_MAP` with 2 sections: `ios`, `ios_restconf`
-- `transport/restconf.py` — httpx AsyncClient for RESTCONF reads; RESTCONF now has dedicated BGP/OSPF trim functions to reduce token cost
+- Clear separation between **Interactive** and **Service** modes
+- `PLATFORM_MAP` with 2 distinct sections: `ios`, `ios_restconf`
+- `transport/restconf.py` — httpx AsyncClient for RESTCONF reads; 
+- RESTCONF now has dedicated BGP/OSPF trim functions to reduce token cost
 - Transport dispatcher with ActionChain fallback iteration + `_transport_used` tag
-- **Cache removed**: 5s LRU cache eliminated — TTL was shorter than LLM inference latency; no invalidation after `push_config`
-- All VRF routing removed: named VRF caused IOS OSPF superbackbone bug; all devices now run in default VRF
+
+### 🔧 Fixes
+- Deferred-event scanner deduplicates by `(device, msg)` — SLA oscillation (Down→Up→Down) no longer triggers false deferred sessions
+- Jira client: module-level globals replaced with `_config()` helper that reads env vars at call time (fixes stale-config under systemd)
+- `oncall-watcher.service`: EnvironmentFile commented out — systemd doesn't strip inline comments from `.env`, corrupting values that python-dotenv handles correctly
+
+### 📡 Transport Visibility
+- Result dict includes `_command` field (actual CLI command or RESTCONF URL) right after `device` for inline visibility in Claude Code
+- Debug logging added to SSH and RESTCONF executors
 
 ### 🧪 Testing
-- 301 unit + watcher-events tests (up from 244)
-- 14 unit test files, covering: transport dispatch, RESTCONF/SSH executors, config push, tool layer, Jira tools
+- 416 unit + watcher-events tests (up from 244)
+- 16 unit test files, covering: transport dispatch, RESTCONF/SSH executors, config push, tool layer, Jira tools
 - New integration tests: full MCP tool coverage, transport layer, platform coverage
+- New test: deferred excludes trigger device's repeated SLA oscillation events
 
 ---
 

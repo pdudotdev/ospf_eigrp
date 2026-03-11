@@ -1,0 +1,50 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(python3:*)",
+      "Bash(python:*)",
+      "Bash(PYTHONPATH=/home/mcp/aiNOC /home/mcp/aiNOC/mcp/bin/pytest:*)",
+      "Bash(/home/mcp/aiNOC/mcp/bin/python:*)",
+      "Bash(/home/mcp/aiNOC/mcp/bin/pip install:*)",
+      "Bash(mcp/bin/pip install:*)",
+      "Bash(grep:*)",
+      "Read(//home/mcp/**)",
+      "WebSearch",
+      "WebFetch(domain:github.com)",
+      "mcp__mcp_automation__get_ospf",
+      "mcp__mcp_automation__get_bgp",
+      "mcp__mcp_automation__get_interfaces",
+      "mcp__mcp_automation__traceroute",
+      "mcp__mcp_automation__assess_risk",
+      "mcp__mcp_automation__push_config",
+      "mcp__mcp_automation__get_routing",
+      "mcp__mcp_automation__ping",
+      "mcp__mcp_automation__jira_add_comment",
+      "mcp__mcp_automation__jira_resolve_issue"
+    ],
+    "deny": [
+      "Read(.env)",
+      "Read(.env.local)",
+      "Read(.env.production)",
+      "Read(.env.staging)",
+      "Read(.env.test)",
+      "Read(**/.env)",
+      "Read(**/.env.local)",
+      "Read(**/.env.production)",
+      "Bash(cat .env)",
+      "Bash(cat .env.local)",
+      "Bash(cat .env.production)",
+      "Bash(ssh *)",
+      "Bash(sshpass *)",
+      "Bash(rm -rf *)",
+      "Bash(less .env*)",
+      "Bash(head .env*)",
+      "Bash(tail .env*)",
+      "Bash(more .env*)",
+      "Bash(env)",
+      "Bash(printenv *)",
+      "Bash(git push --force*)",
+      "Bash(git reset --hard*)"
+    ]
+  }
+}

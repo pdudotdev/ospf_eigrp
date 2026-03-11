@@ -3,16 +3,16 @@
 **aiNOC:**<br/>
 [![Latest Release](https://img.shields.io/badge/version-5.0.0-blue.svg)](https://github.com/pdudotdev/aiNOC/releases/tag/5.0.0) [![Last Commit](https://img.shields.io/github/last-commit/pdudotdev/aiNOC)](https://github.com/pdudotdev/aiNOCcommits/main/)
 
-**Core Vendors:**<br/>
+**Core version vendors:**<br/>
 ![Cisco IOS-XE](https://img.shields.io/badge/Cisco-IOS--XE-0176C1)
 
-**Management:**<br/>
+**Core version management:**<br/>
 ![RESTCONF](https://img.shields.io/badge/RESTCONF-primary-2E8B57) ![CLI](https://img.shields.io/badge/CLI-fallback-A90000)
 
-**Extendable To:**<br/>
+**On-request extensions:**<br/>
 ![Arista EOS](https://img.shields.io/badge/Arista-EOS-2A64D4) ![Juniper JunOS](https://img.shields.io/badge/Juniper-JunOS-009A44) ![MikroTik RouterOS](https://img.shields.io/badge/MikroTik-RouterOS-2A3042) ![Aruba AOS-CX](https://img.shields.io/badge/Aruba-AOS--CX-FF6600) ![SONiC](https://img.shields.io/badge/SONiC-FRR-9B9BD5) ![VyOS](https://img.shields.io/badge/VyOS-VyOS-5B9BD5)
 
-**Extendable To:**<br/>
+**On-request extensions:**<br/>
 ![NETCONF](https://img.shields.io/badge/NETCONF-D4841A) ![REST](https://img.shields.io/badge/REST-7B52AB) ![gNMI](https://img.shields.io/badge/gNMI-2259B6) ![eAPI](https://img.shields.io/badge/eAPI-092991)
 
 ## 📖 **Table of Contents**
@@ -41,15 +41,26 @@ AI-based **network troubleshooting framework** for multi-vendor, multi-protocol,
 - [x] **Multi-vendor support**
 - [x] **Multi-protocol, L2/L3**
 - [x] **Multi-area/multi-AS**
-- [x] **CLI/RESTCONF (core)**
+- [x] **CLI/RESTCONF (Core)**
 - [x] **NETCONF/REST/gNMI/eAPI (extensions)**
 - [x] **14 MCP tools, 4 skills**
 - [x] **33 operational guardrails**
+- [x] **Human in the loop**
 - [x] **Jira integration**
+
+▫️ **Core vs. On-Request**:
+- [x] **Core**: 
+  - Easy to integrate in Cisco IOS/IOS-XE environments
+  - CLI + RESTCONF transports, OSPF/BGP troubleshooting
+  - Jira integration, On-Call watcher (both modes)
+- [x] **On-Request**: 
+  - Custom vendor modules (Arista, Juniper, MikroTik, etc.)
+  - Custom vendor transports (REST, NETCONF, gNMI, eAPI) 
+  - Built and adapted per client's network environment
 
 ▫️ **Operating modes of aiNOC**:
 - [x] **Interactive Mode** (current terminal)
-- [x] **Service Mode** (systemd service)
+- [x] **Service Mode** (**systemd** service)
 - [x] See [**aiNOC Operating Modes**](#-ainoc-operating-modes)
 
 ▫️ **Important project files**:
@@ -82,7 +93,7 @@ Create `settings.json` under `.claude/`:
 - [x] *Demo video for v5.0 coming soon*
 
 ## ♻️ Repository Lifecycle
-**New features** are being added periodically (vendors, protocols, integrations, etc.).
+**New features** are being added periodically (protocols, integrations, optimizations).
 
 **Stay up-to-date**:
 - [x] **Watch** and **Star** this repository
@@ -107,7 +118,6 @@ Create `settings.json` under `.claude/`:
 | Jira API | ✓ |
 | Vector | ✓ |
 | Ubuntu | ✓ |
-| VMware | ✓ |
 
 ## 📋 Supported Vendors
 
@@ -143,7 +153,7 @@ Create `settings.json` under `.claude/`:
 | **Route-maps, prefix lists** |
 | **NAT/PAT, access lists** |
 
-| aiNOC Custom |
+| aiNOC On-Request Extenstions |
 |----------|
 | **EIGRP** |
 | **HSRP** | 
@@ -165,11 +175,13 @@ pip install -r requirements.txt
 ▫️ **Step 2**:
 The included `CLAUDE.md` and `skills/*` are templates. **Customize them** with your own troubleshooting methodology, tool descriptions, and operational guidelines.
 
+**NOTE**: There is no one-size-fits-all `CLAUDE.md` or `SKILL.md` that works in any network environment. These should be customized for each specific topology, vendor combination, and architecture.
+
 ▫️ **Step 3**:
-- Configure IP SLA, Connectivity Monitor, Netwatch etc. paths in your network
+- Configure IP SLA (or Connectivity Monitor, Netwatch etc.) paths in your network
 - Make sure they are being tracked and logged remotely to **Vector** (Syslog)
 - Configure the transforms inside `/etc/vector/vector.yaml` - [**example**](metadata/about/vector.yaml)
-- aiNOC monitors Vector's `/var/log/network.json` file for specific logs and parses them
+- aiNOC monitors Vector's `/var/log/network.json` file for specific logs and parses them per-vendor
 
 ▫️ **Step 4**:
 Run the **aiNOC** watcher — two modes:
@@ -260,4 +272,4 @@ Interested in customizing and adapting **aiNOC** to your own network, or looking
 - **Email**:  
   - Please direct your inquiries to **hello@ainoc.dev**.
 - **LinkedIn**:
-  - Send me a DM on [**LinkedIn**](https://www.linkedin.com/in/tmihaicatalin/) and let's talk. 
+  - Let's discuss via [**LinkedIn**](https://www.linkedin.com/in/tmihaicatalin/).
