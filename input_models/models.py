@@ -196,7 +196,6 @@ class ShowCommand(BaseParamsModel):
 
         Accepted forms:
           - CLI string starting with 'show ' (IOS asyncssh / Scrapli SSH)
-          - NETCONF JSON: {"filter": "..."} or {"get": "..."}
           - RESTCONF JSON: {"url": "...", "method": "GET"}
         """
         stripped = v.strip()
@@ -210,11 +209,8 @@ class ShowCommand(BaseParamsModel):
                             f"run_show RESTCONF action must use method=GET. Got: {stripped[:80]!r}"
                         )
                     return v
-                # NETCONF dict: must have filter or get key (all read-only)
-                if "filter" in parsed or "get" in parsed:
-                    return v
                 raise ValueError(
-                    f"run_show JSON action must have 'url', 'filter', or 'get' key. Got: {stripped[:80]!r}"
+                    f"run_show JSON action must have 'url' key. Got: {stripped[:80]!r}"
                 )
         except json.JSONDecodeError:
             pass
@@ -231,7 +227,6 @@ class ConfigCommand(BaseParamsModel):
     """Send configuration commands to one or more devices."""
     devices: list[str] = Field(..., description="Device names from inventory (e.g. ['E1C','E2C'])")
     commands: list[str] = Field(..., description="Configuration commands to apply")
-    on_call: bool = Field(False, description="If true, bypass the maintenance window check (use in On-Call mode when fixes must go through regardless of time)")
 
 # Empty placeholder - input model
 class EmptyInput(BaseParamsModel):

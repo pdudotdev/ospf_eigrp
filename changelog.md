@@ -4,6 +4,32 @@ All notable changes to this project are documented in this file.
 
 ---
 
+## [v5.1.0]
+
+### 🗑️ Removed
+- **Maintenance window feature** removed entirely — aiNOC runs fully in on-call context (interactive or service mode), so time-gated change control was functionally inert
+  - Deleted `policy/MAINTENANCE.json`
+  - Deleted `tools/state.check_maintenance_window()` and `pytz` dependency
+  - Removed `on_call` parameter from `ConfigCommand` model and `push_config()`
+  - Unregistered `check_maintenance_window` MCP tool (13 tools now)
+  - Deleted `testing/agent-testing/unit/test_maintenance_window.py` (UT-007)
+  - 415 → 401 unit tests
+
+### 🧹 Cleanup
+- Deleted `metadata/transports/transports.txt` (orphaned reference note)
+- Deleted empty `vendors/` directory placeholder
+- Deleted `transport/pool.py` (no-op stub — `async def close_sessions(): pass`); simplified `MCPServer.py` lifespan to none
+- Removed NETCONF legacy acceptance branch from `ShowCommand.must_be_read_only` (`{"filter":...}` / `{"get":...}`) — NETCONF was removed in v5.0; these forms are now rejected like any other unknown JSON key
+- Removed dead constants `_OSPF_OPER_KEY` / `_BGP_OPER_KEY` from `tools/protocol.py` — leftover YANG path strings from before platform_map.py owned URL building
+- Deleted `testing/agent-testing/cookie.txt` (libcurl artifact) and stale `.pyc` bytecache files
+- Added 3 missing MCP tool allow rules to `.claude/settings.local.json` / `.claude/settings.local.example.json`: `get_routing_policies`, `run_show`, `get_intent`
+- Updated `skills/redistribution/SKILL.md` device names to current topology (D1C/R3C/R8C/B1C/B2C → E1C/C1C/C2C/A1C/A2C)
+- Fixed stale label in `test_mcp_tools.py`: `test_push_config_ios_netconf` → `test_push_config_ios_restconf`
+- Rewrote `metadata/about/scalability.md` — comprehensive contributor guide for adding protocols/vendors, synchronized with current implementation
+- Added scalability guide link to `README.md`; fixed pitfall count in `file_roles.md` (15→14); added IT-005 to test tables
+
+---
+
 ## [v5.0.0]
 
 > Cisco-only architecture with 2-tier transport (RESTCONF→SSH). 9 devices, all Cisco IOS/IOS-XE. Other vendors available as customizable modules per client need.

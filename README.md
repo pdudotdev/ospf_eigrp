@@ -69,6 +69,9 @@ AI-based **network troubleshooting framework** for multi-vendor, multi-protocol,
 ▫️ **Agent guardrails list**:
 - [x] See [**guardrails**](metadata/about/guardrails.md)
 
+▫️ **Adding new protocols or vendors**:
+- [x] See [**scalability guide**](metadata/about/scalability.md)
+
 ▫️ **Supported models**:
 - [x] Haiku 4.5 (best for costs)
 - [x] Sonnet 4.6 (best balance)
@@ -233,10 +236,10 @@ aiNOC runs as an **On-Call watcher** that monitors Vector's `/var/log/network.js
 
 ### How It Works
 
-1. Network devices track connectivity paths (Cisco IP SLA — extensible to Arista Connectivity Monitor, Juniper RPM probes, MikroTik Netwatch via module builds)
+1. Network devices track connectivity paths (Cisco IP SLA — extensible to Arista Connectivity Monitor, Juniper RPM probes, MikroTik Netwatch etc. via module builds)
 2. Failures are logged to Syslog → **Vector** parses and writes to `/var/log/network.json`
 3. **`oncall/watcher.py`** detects the failure, opens a Jira ticket, and invokes a Claude agent session
-4. Agent follows structured troubleshooting (`CLAUDE.md` + `/skills` + MCP tools) → identifies root cause → proposes fix
+4. Agent follows structured troubleshooting: `CLAUDE.md` + `/skills` + MCP tools → identifies root cause → proposes fix
 5. Only upon **operator approval**, the agent applies and verifies the fix
 6. Results are logged to **Jira** and the watcher resumes monitoring
 
@@ -256,6 +259,7 @@ Only one agent session runs at a time. Concurrent SLA failures during an active 
 ## ⬆️ Planned Upgrades
 - [ ] New protocols and services
 - [ ] Performance-based SLAs
+- [ ] Discord/Slack support
 - [ ] Digital twin feature
 
 ## 🌱 AI Automation 101

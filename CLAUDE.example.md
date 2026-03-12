@@ -23,7 +23,7 @@ Tools are implemented in `tools/*.py` and registered in `MCPServer.py`.
 - **Protocol-specific tools**: `get_ospf`, `get_bgp`
 - **Routing-specific tools**: `get_routing`, `get_routing_policies`
 - **Operational tools**: `ping`, `traceroute`, `get_interfaces`, `run_show`
-- **Configuration tools**: `push_config`, `check_maintenance_window`, `assess_risk`
+- **Configuration tools**: `push_config`, `assess_risk`
 - **State tools**: `get_intent`
 - **Case management tools**: `jira_add_comment`, `jira_resolve_issue`
 
@@ -107,8 +107,7 @@ Maps `cli_style` to vendor-agnostic commands via `platforms/platform_map.py`. Al
 
 ## Policy & Operational State
 
-- **`policy/MAINTENANCE.json`**: Maintenance windows. Never edit directly.
-- `push_config` enforces the window — blocked outside allowed hours unless `on_call=True`.
+- **`sla_paths/paths.json`**: SLA monitoring paths (IP SLA Path definitions used in network troubleshooting).
 
 ---
 
@@ -116,7 +115,7 @@ Maps `cli_style` to vendor-agnostic commands via `platforms/platform_map.py`. Al
 
 1. Using `run_show` when a protocol tool covers the query — always check `platforms/mcp_tool_map.json` first.
 2. Trusting `INTENT.json` as actual device state — always verify with `get_<protocol>(device, "config")`.
-3. Modifying `MAINTENANCE.json` or other policy files directly.
+3. Modifying `inventory/NETWORK.json`, `intent/INTENT.json`, or other policy/inventory files directly.
 4. Confusing `cli_style` with `platform` field in NETWORK.json.
 5. Using Bash SSH to connect to devices — all interactions must go through MCP tools.
 

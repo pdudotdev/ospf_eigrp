@@ -19,11 +19,6 @@ A structured overview of the architectural protections that prevent unsafe autom
 - Agent must handle denial gracefully
 - Skips blocked step without failure or escalation
 
-## ✅ Maintenance Window Enforcement
-- `push_config` checks `MAINTENANCE.json`
-- Blocks out-of-window changes automatically
-- File is read-only (agent cannot bypass or modify)
-
 ---
 
 # ⚡ Agent Storms & Duplicate Invocations
@@ -174,7 +169,6 @@ Prevents premature deep-dives.
 ## ✅ Read-Only Policy Files
 The following cannot be modified by the agent:
 
-- `MAINTENANCE.json`
 - `inventory/NETWORK.json`
 - `intent/INTENT.json`
 
@@ -243,11 +237,6 @@ Prevents:
 - All `vrf` fields: validated as alphanumeric + underscore/dash, max 32 chars — rejects newline injection in VRF substitution
 - Jira `issue_key`: validated as `^[A-Z][A-Z0-9]+-\d+$` — prevents URL path traversal in Jira REST calls
 - Implemented in `input_models/models.py` at the Pydantic model layer
-
-## ✅ Maintenance Window Fail-Closed (v5.0)
-- If `MAINTENANCE.json` is missing or deleted, `check_maintenance_window` returns `allowed: False`
-- Previously failed open (allowed all changes when policy file was absent)
-- Implemented in `tools/state.py`
 
 ## ✅ TLS/SSL Configuration (Env-Var Only, Pitfall #12)
 - Controlled by: `RESTCONF_VERIFY_TLS`, `SSH_STRICT_HOST_KEY`

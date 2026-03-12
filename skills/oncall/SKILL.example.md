@@ -87,8 +87,6 @@ Include proposed remediation steps.
 
 Never call `push_config` without explicit user confirmation.
 
-When applying the fix, pass `on_call=True` to `push_config` — this bypasses the maintenance window so fixes apply at any hour.
-
 After applying:
 1. Verify the fix with the same tool that identified the problem.
 2. Confirm the SLA path has recovered (check `/var/log/network.json` for Up event).

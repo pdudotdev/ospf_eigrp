@@ -23,13 +23,12 @@ Run this checklist after any significant change to `MCPServer.py`, `oncall/watch
 | `test_sla_patterns.py` | SLA_DOWN_RE and SLA_UP_RE regex matching (Cisco IOS format) |
 | `test_input_validation.py` | Literal enum rejection, ShowCommand read-only enforcement (CLI/RESTCONF) |
 | `test_command_validation.py` | FORBIDDEN CLI list, rollback advisory |
-| `test_maintenance_window.py` | check_maintenance_window inside/outside window; push_config blocked outside; on_call bypass |
 | `test_risk_assessment.py` | Risk scoring: role/SLA-path/keyword/device-count escalation; no-shutdown exclusion |
 | `test_syslog_sanitize.py` | sanitize_syslog_msg: non-printable stripping, truncation at 500 chars |
 | `test_transport_dispatch.py` | ActionChain 2-tier fallback (RESTCONF→SSH), _transport_used tag, asyncssh routing |
 | `test_restconf_unit.py` | RESTCONF executor: HTTP 200/4xx/5xx/timeout, URL construction |
 | `test_ssh_unit.py` | SSH executor: Scrapli send_command, Genie parse fallback, push_ssh |
-| `test_config_push.py` | push_config: maintenance window guardrail, on_call bypass, forbidden commands, rollback |
+| `test_config_push.py` | push_config: forbidden commands, rollback advisory, mixed cli_style guard |
 | `test_tool_layer.py` | Tool dispatch: get_ospf/bgp/routing/interfaces, ping/traceroute always CLI, run_show guard |
 | `test_jira_tools.py` | jira_add_comment / jira_resolve_issue: success, exception handling, unconfigured skip |
 

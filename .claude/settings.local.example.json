@@ -19,6 +19,9 @@
       "mcp__mcp_automation__push_config",
       "mcp__mcp_automation__get_routing",
       "mcp__mcp_automation__ping",
+      "mcp__mcp_automation__get_routing_policies",
+      "mcp__mcp_automation__run_show",
+      "mcp__mcp_automation__get_intent",
       "mcp__mcp_automation__jira_add_comment",
       "mcp__mcp_automation__jira_resolve_issue"
     ],

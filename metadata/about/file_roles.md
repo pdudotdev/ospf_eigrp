@@ -99,22 +99,6 @@ Prevents unnecessary fallback commands.
 
 ---
 
-## ✅ `maintenance.json`
-
-**Purpose:** Change control policy (read-only).
-
-Defines approved configuration windows:
-
-- Monday–Friday  
-- 05:00–20:00 UTC
-
-Outside these hours:
-- Config pushes are blocked automatically.
-
-Prevents accidental changes during critical business hours.
-
----
-
 ## ✅ `skills/` (folder)
 
 **Purpose:** Troubleshooting playbooks.
@@ -162,10 +146,10 @@ Contains:
 
 - 6-principle troubleshooting methodology
 - On-Call workflow (primary mode)
-- Complete MCP tool list (14 tools)
+- Complete MCP tool list (13 tools)
 - Lessons curation process
 - Case management workflow
-- 15 common pitfalls to avoid
+- 14 common pitfalls to avoid
 
 Everything the agent needs to operate lives here.
 
@@ -203,7 +187,7 @@ tools/
     routing.py        — get_routing, get_routing_policies
     operational.py    — get_interfaces, ping, traceroute, run_show
     config.py         — push_config, validate_commands, FORBIDDEN
-    state.py          — get_intent, check_maintenance_window, assess_risk
+    state.py          — get_intent, assess_risk
     jira_tools.py     — jira_add_comment, jira_resolve_issue
 core/inventory.py     — device inventory loader (NETWORK.json)
 core/settings.py      — credentials and transport configuration

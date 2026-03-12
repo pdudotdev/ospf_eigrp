@@ -196,20 +196,6 @@ def test_show_command_invalid_cli(cmd):
         ShowCommand(device="A1C", command=cmd)
 
 
-# ── ConfigCommand on_call field ───────────────────────────────────────────────
-
-def test_config_command_on_call_defaults_false():
-    """on_call must default to False — maintenance window check applies by default."""
-    m = ConfigCommand(devices=["E1C"], commands=["ip ospf hello-interval 10"])
-    assert m.on_call is False
-
-
-def test_config_command_on_call_true():
-    """on_call=True must be accepted and stored by ConfigCommand."""
-    m = ConfigCommand(devices=["E1C"], commands=["ip ospf hello-interval 10"], on_call=True)
-    assert m.on_call is True
-
-
 # ── BaseParamsModel.parse_string_input ─────────────────────────────────────────
 
 def test_parse_string_input_valid_json():
@@ -254,31 +240,17 @@ def test_parse_string_input_nested_json():
     assert len(m.commands) == 1
 
 
-# ── ShowCommand NETCONF restriction ───────────────────────────────────────────
+# ── ShowCommand JSON restriction ──────────────────────────────────────────────
 
 def test_show_command_netconf_rpc_rejected():
-    """NETCONF JSON with 'rpc' key must be rejected — rpc form removed (JunOS gone)."""
+    """JSON with 'rpc' key must be rejected — NETCONF removed."""
     action = json.dumps({"rpc": "get-ospf-neighbor-information"})
     with pytest.raises(ValidationError):
         ShowCommand(device="E1C", command=action)
 
 
-def test_show_command_netconf_filter_allowed():
-    """NETCONF JSON with 'filter' key must be accepted by ShowCommand."""
-    action = json.dumps({"filter": "<native><router><router-ospf/></router></native>"})
-    m = ShowCommand(device="E1C", command=action)
-    assert m.command == action
-
-
-def test_show_command_netconf_get_allowed():
-    """NETCONF JSON with 'get' key must be accepted by ShowCommand (operational data query)."""
-    action = json.dumps({"get": '<ospf-oper-data xmlns="http://cisco.com/ns/yang/Cisco-IOS-XE-ospf-oper"/>'})
-    m = ShowCommand(device="E1C", command=action)
-    assert m.command == action
-
-
 def test_show_command_netconf_unknown_key_rejected():
-    """NETCONF JSON dict without rpc/filter/get/url key must be rejected by ShowCommand."""
+    """JSON dict without 'url' key must be rejected by ShowCommand."""
     action = json.dumps({"edit-config": "<config>...</config>"})
     with pytest.raises(ValidationError):
         ShowCommand(device="E1C", command=action)

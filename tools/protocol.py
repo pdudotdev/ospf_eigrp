@@ -7,9 +7,6 @@ from transport import execute_command
 from input_models.models import OspfQuery, BgpQuery
 from tools import _error_response
 
-_OSPF_OPER_KEY = "Cisco-IOS-XE-ospf-oper:ospf-oper-data"
-_BGP_OPER_KEY  = "Cisco-IOS-XE-bgp-oper:bgp-state-data"
-
 # Per-path noise in bgp-path-entry: always empty/zero/disabled in this topology.
 # Agent needs: nexthop, metric, local-pref, weight, as-path, origin,
 #              path-status, path-id, path-origin.
