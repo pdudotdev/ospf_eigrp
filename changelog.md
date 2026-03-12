@@ -28,6 +28,14 @@ All notable changes to this project are documented in this file.
 - Rewrote `metadata/about/scalability.md` — comprehensive contributor guide for adding protocols/vendors, synchronized with current implementation
 - Added scalability guide link to `README.md`; fixed pitfall count in `file_roles.md` (15→14); added IT-005 to test tables
 
+### 📚 Skills & Agent Guidance Quality Audit
+- **BGP skill** (`skills/bgp/SKILL.md`): Added OpenConfirm state (RFC 4271 §8); fixed Active/Connect state descriptions; reordered Session Checklist (AS numbers before timers — more fundamental); added "Session Established but Zero Prefixes" section (address-family activation); added "Session Flapping / Reset Reasons" table; updated iBGP/RR section scope note (current topology is eBGP-only); added community handling omission note; fixed RR cluster-id explanation (RFC 4456 §8 accuracy); documented `clear ip bgp` FORBIDDEN limitation in Verification Checklist
+- **OSPF skill** (`skills/ospf/SKILL.md`): Added LOADING state to neighbor table; added P2MP timers (Hello 30s/Dead 120s); added NSSA Totally Stubby area type; added ABR route summarization (`area range`) section; added distribute-list filtering section (LSA-present/route-absent symptom); enhanced INIT state description (asymmetric link cause); added RFC 3101 §2.3 inline reference
+- **Routing skill** (`skills/routing/SKILL.md`): Removed misleading "ios only" annotations; added distribute-list cross-reference to OSPF skill; added BGP `maximum-paths` default note (defaults to 1 — no ECMP without explicit config); cleaned up Query Reference table (removed redundant Platform support column)
+- **On-Call skill** (`skills/oncall/SKILL.md`): Added Terminology section defining primary vs deferred review session (anchors `pending_events.json` concept); clarified Step 2 ECMP precondition; added `lessons.md` read reminder before Step 0
+- **CLAUDE.md**: Added Pitfall #15 (`clear` commands FORBIDDEN); added redistribution showcase entry to Skills Library table
+- **`metadata/about/file_roles.md`**: Removed stale `pool.py` reference; updated pitfall count (14→15)
+
 ---
 
 ## [v5.0.0]

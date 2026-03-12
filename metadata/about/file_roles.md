@@ -149,7 +149,7 @@ Contains:
 - Complete MCP tool list (13 tools)
 - Lessons curation process
 - Case management workflow
-- 14 common pitfalls to avoid
+- 15 common pitfalls to avoid
 
 Everything the agent needs to operate lives here.
 
@@ -181,7 +181,6 @@ transport/
     __init__.py       — transport dispatcher (execute_command)
     ssh.py            — Scrapli SSH (Cisco IOS-XE asyncssh: A1C, A2C, IAN, IBN)
     restconf.py       — httpx RESTCONF (Cisco c8000v primary transport)
-    pool.py           — session pool stub (no-op)
 tools/
     protocol.py       — get_ospf, get_bgp
     routing.py        — get_routing, get_routing_policies
