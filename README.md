@@ -18,18 +18,17 @@
 ## 📖 **Table of Contents**
 - 📜 **aiNOC**
   - [🔭 Overview](#-overview)
-  - [♻️ Repository Lifecycle](#️-repository-lifecycle)
   - [🍀 Here's a Quick Demo](#-heres-a-quick-demo)
-  - [⭐ What's New in v5.0](#-whats-new-in-v50)
+  - [⭐ What's New in v5.3](#-whats-new-in-v53)
   - [⚒️ Current Tech Stack](#️-current-tech-stack)
   - [📋 Supported Vendors](#-supported-vendors)
   - [🚛 Supported Transports](#️-supported-transports)
   - [🎓 Troubleshooting Scope](#-troubleshooting-scope)
   - [🛠️ Installation & Usage](#️-installation--usage)
   - [🔄 Test Network Topology](#-test-network-topology)
-  - [📞 aiNOC Operating Modes](#-ainoc-operating-modes)
+  - [📞 aiNOC Service Mode](#-ainoc-service-mode)
   - [⬆️ Planned Upgrades](#️-planned-upgrades)
-  - [🌱 AI Automation 101](#-ai-automation-101)
+  - [♻️ Repository Lifecycle](#️-repository-lifecycle)
   - [📄 Disclaimer](#-disclaimer)
   - [📜 License](#-license)
   - [📧 Collaborations](#-collaborations)
@@ -45,9 +44,9 @@ AI-based **network troubleshooting framework** for multi-vendor, multi-protocol,
 - [x] **NETCONF/REST/gNMI/eAPI (extensions)**
 - [x] **15 MCP tools, 4 skills**
 - [x] **33 operational guardrails**
-- [x] **Human in the loop**
+- [x] **Human in the loop logic**
+- [x] **Discord integration**
 - [x] **Jira integration**
-- [x] **Discord remote approval**
 
 ▫️ **Core vs. On-Request**:
 - [x] **Core**: 
@@ -59,9 +58,8 @@ AI-based **network troubleshooting framework** for multi-vendor, multi-protocol,
   - Custom vendor transports (REST, NETCONF, gNMI, eAPI) 
   - Built and adapted per client's network environment
 
-▫️ **Operating modes of aiNOC**:
-- [x] **Dev/Test** — run watcher directly in terminal
-- [x] **Production** — systemd service, survives reboots
+▫️ **Operating mode of aiNOC starting with v5.0**:
+- [x] **Service** — systemd service, survives reboots
 - [x] See [**aiNOC Operating Modes**](#-ainoc-operating-modes)
 
 ▫️ **Important project files**:
@@ -75,7 +73,7 @@ AI-based **network troubleshooting framework** for multi-vendor, multi-protocol,
 
 ▫️ **Supported models**:
 - [x] Haiku 4.5 (best for costs)
-- [x] Sonnet 4.6 (best balance)
+- [x] **Sonnet 4.6 (best balance)**
 - [x] Opus 4.6 (default, best reasoning)
 
 ⚠️ **NOTE:** Due to the intermittent nature of troubleshooting, it's worth using an advanced model by default. Costs won't become unsustainable even if addressing and fixing several issues per day.
@@ -95,15 +93,6 @@ Create `settings.json` under `.claude/`:
 
 ## 🍀 Here's a Quick Demo
 - [x] *Demo video for v5.0 coming soon*
-
-## ♻️ Repository Lifecycle
-**New features** are being added periodically (protocols, integrations, optimizations).
-
-**Stay up-to-date**:
-- [x] **Watch** and **Star** this repository
-
-**Current version**:
-- [x] **aiNOC v5.3**
 
 ## ⭐ What's New in v5.3
 - [x] See [**changelog.md**](changelog.md)
@@ -189,15 +178,9 @@ The included `CLAUDE.md` and `skills/*` are templates. **Customize them** with y
 - aiNOC monitors Vector's `/var/log/network.json` file for specific logs and parses them per-vendor
 
 ▫️ **Step 4**:
-Run the **aiNOC** watcher — two modes. In both cases Claude is invoked non-interactively via **tmux + print mode** (`-p`). The operator interacts via **Discord** (approval/rejection embeds) — not the terminal.
+Run the **aiNOC** watcher service. Claude is invoked non-interactively via **tmux + print mode** (`-p`). The human operator interacts via **Discord** (approval/rejection embeds) — not the terminal.
 
-🖥️ **Dev/Test** — watcher runs in the foreground of your terminal:
-```
-sudo apt install tmux
-python3 oncall/watcher.py
-```
-
-♻️ **Production** — install once as a systemd service, runs permanently, survives reboots:
+🦾 **Service Mode** — install once as a systemd service, runs permanently, survives reboots:
 ```bash
 sudo apt install tmux
 sudo cp oncall/oncall-watcher.service /etc/systemd/system/
@@ -207,18 +190,11 @@ sudo systemctl enable --now oncall-watcher.service
 Manage with:
 `systemctl start|stop|restart|status oncall-watcher`
 
-Session output is always saved to `logs/session-oncall-<timestamp>.md`.
+Full agent session output is always saved to `logs/session-oncall-<timestamp>.md` for traceability and human audit.
 
 ▫️ **Step 5**:
-Check if **Watcher** and **Vector** are running:
+Check if the **service** and **Vector** are running:
 ```
-# Dev/test
-sudo systemctl status vector
-python3 oncall/watcher.py
-# ainoc.watcher — Watcher started. Monitoring /var/log/network.json for IP SLA Down events.
-```
-```
-# Production (systemd service)
 sudo systemctl status vector
 sudo systemctl status oncall-watcher.service
 ```
@@ -233,27 +209,26 @@ sudo systemctl status oncall-watcher.service
 - [x] They are the network's fallback configs for `containerlab redeploy -t AINOC-TOPOLOGY.yml`
 - [x] Default credentials: see **.env** file at [**.env.example**](.env.example)
 
-## 📞 aiNOC Operating Modes
+## 📞 aiNOC Service Mode
 
-aiNOC runs as an **On-Call watcher** that monitors Vector's `/var/log/network.json` for SLA path failures and automatically invokes a Claude agent to diagnose the issue and propose a fix.
+aiNOC runs as an **on-call watcher (service)** that monitors Vector's `/var/log/network.json` for SLA path failures and automatically invokes a Claude agent to diagnose the issue and propose a fix.
 
 ### How It Works
 
 1. Network devices track connectivity paths (Cisco IP SLA — extensible to Arista Connectivity Monitor, Juniper RPM probes, MikroTik Netwatch etc. via module builds)
 2. Failures are logged to Syslog → **Vector** parses and writes to `/var/log/network.json`
-3. **`oncall/watcher.py`** detects the failure, opens a Jira ticket, and invokes a Claude agent session
-4. Agent follows structured troubleshooting: `CLAUDE.md` + `/skills` + MCP tools → identifies root cause → proposes fix
-5. Only upon **operator approval**, the agent applies and verifies the fix
-6. Results are logged to **Jira** and the watcher resumes monitoring
+3. **`oncall/watcher.py`** detects the failure, opens a **Jira** ticket, and invokes a Claude agent session
+4. Agent follows structured troubleshooting: `CLAUDE.md` + `/skills` + `MCP tools` → identifies root cause → proposes fix
+5. Only upon **human operator approval** via Discord, the agent applies and verifies the fix
+6. Results are logged to **Jira** and **Discord**, and the watcher resumes monitoring
 
 ### Deployment
 
-The watcher always runs in service mode — Claude is invoked non-interactively via tmux + print mode (`-p`), auto-exits when done, and the watcher resumes immediately. No interactive CLI required.
+The watcher always runs in Service Mode — Claude is invoked non-interactively via tmux + print mode (`-p`), auto-exits when done, and the watcher resumes immediately. No interactive CLI or custom prompts required.
 
 | Command | Description |
 |---------|-------------|
-| `python3 oncall/watcher.py` | Run directly (dev/test) |
-| `systemctl start oncall-watcher` | Run as systemd service (production) |
+| `systemctl start oncall-watcher` | Run as systemd service |
 
 The operator interacts exclusively via **Discord** (approval/rejection embeds). Full session output saved to `logs/session-oncall-<timestamp>.md`.
 
@@ -267,16 +242,22 @@ Only one agent session runs at a time. Concurrent SLA failures during an active 
 - [ ] New protocols and services
 - [ ] Performance-based SLAs
 - [ ] Slack support
-- [ ] Digital twin feature
 
-## 🌱 AI Automation 101
-If you're completely new to Network Automation using AI & MCP, then you may want to [**start here**](https://www.udemy.com/course/mcp-server/?referralCode=D62613A8194D2D915B55).
+## ♻️ Repository Lifecycle
+**New features** are being added periodically (protocols, integrations, optimizations).
+
+**Stay up-to-date**:
+- [x] **Watch** and **Star** this repository
+
+**Current version**:
+- [x] **aiNOC v5.3**
 
 ## 📄 Disclaimer
 You are responsible for defining your own troubleshooting methodologies and context files, as well as building your own test environment and meeting the necessary conditions (e.g., RAM/vCPU, router OS images, Claude subscription/API key, etc.).
 
 ## 📜 License
-Licensed under the [**GNU GENERAL PUBLIC LICENSE Version 3**](https://github.com/pdudotdev/aiNOC/blob/main/LICENSE).
+Licensed under the [**Business Source License 1.1**](https://github.com/pdudotdev/aiNOC/blob/main/LICENSE).
+The source code is available for research, educational, and non-commercial use. Commercial use, SaaS deployment, enterprise automation, or resale of this software is prohibited without explicit written permission from the author.
 
 ## 📧 Collaborations
 Interested in collaborating?

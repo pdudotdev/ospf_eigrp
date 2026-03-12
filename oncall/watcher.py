@@ -1,3 +1,7 @@
+# aiNOC - AI Network Troubleshooting Framework
+# Copyright (c) 2026 Mihai Catalin Teodosiu
+# Licensed under the Business Source License 1.1
+
 #!/usr/bin/env python3
 """
 aiNOC On-Call Watcher

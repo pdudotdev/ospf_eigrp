@@ -1,3 +1,7 @@
+# aiNOC - AI Network Troubleshooting Framework
+# Copyright (c) 2026 Mihai Catalin Teodosiu
+# Licensed under the Business Source License 1.1
+
 """
 aiNOC MCP Server — tool registration entry point.
 
