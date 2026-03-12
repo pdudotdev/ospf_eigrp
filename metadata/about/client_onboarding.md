@@ -63,7 +63,30 @@ Typical engagement timeline: **6–7 weeks** (Phase 1 to Phase 5).
    | NETCONF (Junos) | 830 | SSH |
    | REST API (MikroTik) | 443 | HTTPS |
 
-6. **Secrets & credentials setup**
+6. **AAA (TACACS+/RADIUS) compatibility**
+
+   aiNOC authenticates via SSH and RESTCONF using the credentials in `.env`. If the client uses AAA for device access, the following must be in place before testing:
+
+   - **Privilege level**: the AAA server must assign `privilege-level 15` to the aiNOC user (`priv-lvl=15` in TACACS+ or `Cisco-AVPair = "shell:priv-lvl=15"` in RADIUS). The agent assumes privilege 15 on login — it never sends `enable` and has no `auth_secondary` configured.
+
+   - **Command authorization**: if `aaa authorization commands 15` is enabled, the AAA server must permit at minimum:
+     - `show *` — used by all protocol and operational tools
+     - `show running-config` — frequently called by platform_map queries; must not be blocked
+     - `configure terminal` and all IOS remediation commands the agent may issue
+     - `ping` and `traceroute` — used by operational tools
+     If per-command authorization is too granular to whitelist easily, disable it for the aiNOC service account using `aaa authorization commands 15 default none` or a device-group exception.
+
+   - **Method list fallback**: include `local` as a fallback in all AAA method lists (authentication, authorization, accounting). This allows the agent to connect if the TACACS+/RADIUS server becomes unreachable during an incident — the exact moment reliable device access matters most.
+     ```
+     aaa authentication login default group tacacs+ local
+     aaa authorization exec default group tacacs+ local if-authenticated
+     ```
+
+   - **Accounting**: aiNOC's actions are logged under whatever username is configured in `.env`. Consider using a dedicated service account (`ainoc`) to make audit trails unambiguous and to apply a tailored AAA policy independently of human NOC accounts.
+
+   - **RESTCONF / HTTP auth**: RESTCONF uses HTTP Basic auth with the same credentials. If the AAA server handles RESTCONF authorization separately (via HTTP privilege checking or a local override), verify that `aaa authorization exec` applies to the RESTCONF session as well.
+
+7. **Secrets & credentials setup**
    - **Without Vault**: Create `.env` from `.env.example`. Set `ROUTER_USERNAME` / `ROUTER_PASSWORD`. For multi-vendor environments, per-platform credentials can be added (see `core/settings.py`).
    - **With HashiCorp Vault**: Provide Vault address, auth method (AppRole recommended), secret engine path, and secret schema. `core/settings.py` will be extended to call `get_credentials(device)` at tool execution time instead of reading globals at import.
 

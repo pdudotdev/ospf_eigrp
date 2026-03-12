@@ -194,6 +194,8 @@ The bot posts the following messages to your channel:
 | Approval acknowledgment | (plain text reply) | Posted inline when operator reacts — confirms receipt immediately |
 | Fix outcome | Green/Orange/Red | `post_approval_outcome()` — posted after fix + verification; includes Jira ticket reference |
 | Deferred failures | 🟠 Orange | `post_deferred_list()` — informational embed posted after session ends if concurrent failures were deferred |
+| Session complete (transient) | 🟢 Green | `post_session_complete()` — posted by the watcher when the agent exits normally without proposing a fix (issue self-recovered / transient); not posted when the approval flow already provided Discord closure |
+| Session error | 🔴 Red | `post_session_error()` — posted by the watcher if the agent session ends abnormally: timeout (agent exceeded `AGENT_TIMEOUT_MINUTES`), crash (non-zero exit code), or unexpected watcher exception |
 
 ---
 

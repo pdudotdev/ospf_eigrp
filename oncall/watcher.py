@@ -228,25 +228,39 @@ def scan_for_recovery_events(trigger_event, session_start, session_end, device_m
         _wlog.warning("Could not scan for recovery events: %s", e)
 
 
-def _wait_for_tmux_process_exit(session_name: str, timeout_minutes: int = 30) -> None:
+def _wait_for_tmux_process_exit(session_name: str, timeout_minutes: int = 30) -> tuple:
     """Block until the process inside the tmux session has exited or the timeout fires.
 
-    Uses pane_dead format flag instead of has-session so that remain-on-exit
-    sessions (which keep the tmux session alive) still unblock the watcher
-    as soon as Claude finishes. Returns immediately if the session is gone.
+    Uses pane_dead + pane_dead_status format flags so that remain-on-exit
+    sessions still unblock the watcher as soon as Claude finishes, and the
+    exit code is captured for error detection.
 
-    If the Claude process is still running after timeout_minutes, the tmux
-    session is force-killed to prevent the watcher from blocking indefinitely.
+    Returns:
+        (exit_code, timed_out):
+        - (0, False)    — normal exit
+        - (N, False)    — crash (non-zero exit code)
+        - (None, False) — session gone before pane status was available
+        - (None, True)  — timeout; session was force-killed
     """
     deadline = time.monotonic() + timeout_minutes * 60
     while time.monotonic() < deadline:
         result = subprocess.run(
-            ["tmux", "list-panes", "-t", session_name, "-F", "#{pane_dead}"],
+            ["tmux", "list-panes", "-t", session_name, "-F", "#{pane_dead},#{pane_dead_status}"],
             capture_output=True, text=True,
         )
-        # Session gone or pane is dead (process exited) — either way, done
-        if result.returncode != 0 or "1" in result.stdout:
-            return
+        if result.returncode != 0:
+            # Session is gone (killed externally or never started)
+            return (None, False)
+        output = result.stdout.strip()
+        if output:
+            parts = output.split(",", 1)
+            if parts[0].strip() == "1":
+                # Pane is dead — parse exit code
+                try:
+                    exit_code = int(parts[1].strip()) if len(parts) > 1 else None
+                except ValueError:
+                    exit_code = None
+                return (exit_code, False)
         time.sleep(2)
     # Timeout — force-kill the hung session so the watcher can recover
     _wlog.warning(
@@ -254,6 +268,17 @@ def _wait_for_tmux_process_exit(session_name: str, timeout_minutes: int = 30) ->
         session_name, timeout_minutes,
     )
     subprocess.run(["tmux", "kill-session", "-t", session_name], capture_output=True)
+    return (None, True)
+
+
+def _read_log_tail(path: Path, lines: int = 10) -> str | None:
+    """Return the last N lines of a file as a string. Returns None on any error."""
+    try:
+        text = path.read_text(errors="replace")
+        tail = text.splitlines()[-lines:]
+        return "\n".join(tail) if tail else None
+    except Exception:
+        return None
 
 
 _ANSI_RE = re.compile(
@@ -275,6 +300,10 @@ def _clean_session_log(path: Path) -> None:
         # Pass 2: strip remaining non-printable chars (bare BEL, NUL, partial sequences)
         # Keep: \t (0x09), \n (0x0a), \r (0x0d), and printable ASCII 0x20-0x7e
         cleaned = re.sub(r"[^\x09\x0a\x0d\x20-\x7e]", "", cleaned)
+        # Pass 3: strip orphaned CSI parameter remnants — lines of only digits and semicolons
+        # (e.g., "9;4;0;0;" left when ESC was stripped by Pass 2 but printable params survived)
+        cleaned = re.sub(r"\n[0-9;]+$", "", cleaned)      # trailing line
+        cleaned = re.sub(r"\n[0-9;]+\n", "\n", cleaned)   # interior lines
         if cleaned != raw:
             path.write_text(cleaned)
             _wlog.debug("Session log cleaned: %s", path.name)
@@ -429,6 +458,10 @@ def invoke_claude(event, device_map):
 
     session_log = LOGS_DIR / f"session-{session_name}.md"
 
+    exit_code: int | None = None
+    timed_out: bool = False
+    watcher_exc: Exception | None = None
+
     try:
         subprocess.run(
             ["tmux", "new-session", "-d", "-s", session_name, CLAUDE_BIN, "-p", prompt],
@@ -448,7 +481,10 @@ def invoke_claude(event, device_map):
         notify_operator(session_name)
         # Poll until Claude's process exits (not until the session is destroyed)
         agent_timeout = int(os.getenv("AGENT_TIMEOUT_MINUTES", "30"))
-        _wait_for_tmux_process_exit(session_name, timeout_minutes=agent_timeout)
+        exit_code, timed_out = _wait_for_tmux_process_exit(session_name, timeout_minutes=agent_timeout)
+    except Exception as exc:
+        watcher_exc = exc
+        _wlog.exception("Unexpected exception in invoke_claude: %s", exc)
     finally:
         session_end = datetime.now(timezone.utc)
         cleanup_lock()
@@ -457,6 +493,64 @@ def invoke_claude(event, device_map):
         # Kill the dead tmux session — session log preserves all output
         subprocess.run(["tmux", "kill-session", "-t", session_name], capture_output=True)
         _wlog.info("Agent session ended.")
+
+    # Post Discord error notification for abnormal session outcomes
+    if discord_approval.is_configured():
+        try:
+            if timed_out:
+                _wlog.warning("Session %s timed out — posting error notification to Discord", session_name)
+                asyncio.run(discord_approval.post_session_error(
+                    device_name=device_name,
+                    device_ip=device_ip,
+                    issue_key=issue_key,
+                    session_name=session_name,
+                    error_type="timeout",
+                ))
+            elif watcher_exc is not None:
+                _wlog.warning("Watcher exception — posting error notification to Discord")
+                asyncio.run(discord_approval.post_session_error(
+                    device_name=device_name,
+                    device_ip=device_ip,
+                    issue_key=issue_key,
+                    session_name=session_name,
+                    error_type="watcher_error",
+                    log_tail=str(watcher_exc),
+                ))
+            elif exit_code is not None and exit_code != 0:
+                _wlog.warning("Agent exited with code %d — posting error notification to Discord", exit_code)
+                log_tail = _read_log_tail(session_log)
+                asyncio.run(discord_approval.post_session_error(
+                    device_name=device_name,
+                    device_ip=device_ip,
+                    issue_key=issue_key,
+                    session_name=session_name,
+                    error_type="crash",
+                    exit_code=exit_code,
+                    log_tail=log_tail,
+                ))
+        except Exception as discord_exc:
+            _wlog.warning("Failed to post session error to Discord: %s", discord_exc)
+        else:
+            # Normal exit — post green "transient" embed if no approval was requested this session.
+            # Sessions that went through the approval flow already have Discord closure via outcome embeds.
+            approval_file = PROJECT_DIR / "data" / "pending_approval.json"
+            approval_was_requested = False
+            if approval_file.exists():
+                try:
+                    mtime = datetime.fromtimestamp(approval_file.stat().st_mtime, tz=timezone.utc)
+                    approval_was_requested = mtime >= session_start
+                except Exception:
+                    pass
+            if not approval_was_requested and discord_approval.is_configured():
+                try:
+                    asyncio.run(discord_approval.post_session_complete(
+                        device_name=device_name,
+                        device_ip=device_ip,
+                        issue_key=issue_key,
+                        session_name=session_name,
+                    ))
+                except Exception as discord_exc:
+                    _wlog.warning("Failed to post session complete to Discord: %s", discord_exc)
 
     # Scan for Down failures that arrived during the session
     deferred = scan_for_deferred_events(event, session_start, session_end, device_map)
@@ -468,6 +562,10 @@ def invoke_claude(event, device_map):
 
     # Log any recovery events that arrived during the session (observability only — no behavioral effect)
     scan_for_recovery_events(event, session_start, session_end, device_map)
+
+    # Re-raise watcher exception after notifications and deferred scan complete
+    if watcher_exc is not None:
+        raise watcher_exc
 
 
 def tail_follow(filepath, drain):

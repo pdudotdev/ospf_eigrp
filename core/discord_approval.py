@@ -330,6 +330,111 @@ async def post_investigation_started(
         log.warning("Failed to post investigation-started to Discord: %s", exc)
 
 
+async def post_session_complete(
+    device_name: str,
+    device_ip: str,
+    issue_key: str | None = None,
+    session_name: str | None = None,
+) -> None:
+    """Post a green embed when the agent session exits normally without proposing a fix (transient/self-recovered)."""
+    if not is_configured():
+        return
+
+    ticket_line = f"Jira ticket: **{issue_key}**" if issue_key else "No Jira ticket"
+
+    embed = {
+        "title": f"✅ Session Complete — {device_name}",
+        "description": (
+            "Issue appears to be transient — recovered without intervention. No fix needed.\n\n"
+            f"{ticket_line}"
+        ),
+        "color": 0x00B300,  # green
+        "fields": [
+            {"name": "📡 Device", "value": f"{device_name} ({device_ip})", "inline": True},
+        ],
+        "footer": {"text": f"Session: {session_name}" if session_name else "Session ended"},
+        "timestamp": datetime.now(timezone.utc).isoformat(),
+    }
+
+    try:
+        async with aiohttp.ClientSession() as http:
+            async with http.post(
+                f"{DISCORD_API}/channels/{_channel()}/messages",
+                headers=_json_headers(),
+                json={"embeds": [embed]},
+            ) as resp:
+                if resp.status not in (200, 201):
+                    body = await resp.text()
+                    log.warning("Discord session-complete post failed (%s): %s", resp.status, body[:200])
+                    return
+        log.info("Session complete (transient) notification posted to Discord")
+    except Exception as exc:
+        log.warning("Failed to post session complete to Discord: %s", exc)
+
+
+async def post_session_error(
+    device_name: str,
+    device_ip: str,
+    issue_key: str | None = None,
+    session_name: str | None = None,
+    error_type: str = "unknown",  # "timeout" | "crash" | "watcher_error" | "unknown"
+    exit_code: int | None = None,
+    log_tail: str | None = None,
+) -> None:
+    """Post a red error embed when the agent session ends abnormally (timeout, crash, watcher error)."""
+    if not is_configured():
+        return
+
+    error_labels = {
+        "timeout": "⏱ Session Timeout",
+        "crash": "💥 Agent Crash",
+        "watcher_error": "⚠️ Watcher Error",
+        "unknown": "❓ Unknown Error",
+    }
+    error_label = error_labels.get(error_type, error_type.upper())
+    ticket_line = f"Jira ticket: **{issue_key}**" if issue_key else "No Jira ticket"
+
+    fields: list[dict] = [
+        {"name": "📡 Device", "value": f"{device_name} ({device_ip})", "inline": True},
+        {"name": "🔴 Error Type", "value": error_label, "inline": True},
+    ]
+    if exit_code is not None:
+        fields.append({"name": "Exit Code", "value": str(exit_code), "inline": True})
+    if log_tail:
+        fields.append({
+            "name": "📋 Session Log (last lines)",
+            "value": _truncate(f"```\n{log_tail}\n```", 1000),
+            "inline": False,
+        })
+
+    embed = {
+        "title": f"⚠️ Agent Session Error — {device_name}",
+        "description": (
+            f"{ticket_line}\n\n"
+            "The agent session ended abnormally. Manual investigation may be required."
+        ),
+        "color": 0xFF0000,  # red
+        "fields": fields,
+        "footer": {"text": f"Session: {session_name}" if session_name else "Session ended"},
+        "timestamp": datetime.now(timezone.utc).isoformat(),
+    }
+
+    try:
+        async with aiohttp.ClientSession() as http:
+            async with http.post(
+                f"{DISCORD_API}/channels/{_channel()}/messages",
+                headers=_json_headers(),
+                json={"embeds": [embed]},
+            ) as resp:
+                if resp.status not in (200, 201):
+                    body = await resp.text()
+                    log.warning("Discord session-error post failed (%s): %s", resp.status, body[:200])
+                    return
+        log.info("Session error notification posted to Discord (error_type=%s)", error_type)
+    except Exception as exc:
+        log.warning("Failed to post session error to Discord: %s", exc)
+
+
 async def post_outcome(
     original_message_id: str,
     decision: str,
