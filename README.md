@@ -47,6 +47,7 @@ AI-based **network troubleshooting framework** for multi-vendor, multi-protocol,
 - [x] **33 operational guardrails**
 - [x] **Human in the loop**
 - [x] **Jira integration**
+- [x] **Discord remote approval**
 
 ▫️ **Core vs. On-Request**:
 - [x] **Core**: 
@@ -59,8 +60,8 @@ AI-based **network troubleshooting framework** for multi-vendor, multi-protocol,
   - Built and adapted per client's network environment
 
 ▫️ **Operating modes of aiNOC**:
-- [x] **Interactive Mode** (current terminal)
-- [x] **Service Mode** (**systemd** service)
+- [x] **Dev/Test** — run watcher directly in terminal
+- [x] **Production** — systemd service, survives reboots
 - [x] See [**aiNOC Operating Modes**](#-ainoc-operating-modes)
 
 ▫️ **Important project files**:
@@ -102,9 +103,9 @@ Create `settings.json` under `.claude/`:
 - [x] **Watch** and **Star** this repository
 
 **Current version**:
-- [x] **aiNOC v5.2**
+- [x] **aiNOC v5.3**
 
-## ⭐ What's New in v5.2
+## ⭐ What's New in v5.3
 - [x] See [**changelog.md**](changelog.md)
 
 ## ⚒️ Core Tech Stack
@@ -119,6 +120,7 @@ Create `settings.json` under `.claude/`:
 | Genie | ✓ |
 | RESTCONF | ✓ |
 | Jira API | ✓ |
+| Discord API | ✓ |
 | Vector | ✓ |
 | Ubuntu | ✓ |
 
@@ -187,35 +189,36 @@ The included `CLAUDE.md` and `skills/*` are templates. **Customize them** with y
 - aiNOC monitors Vector's `/var/log/network.json` file for specific logs and parses them per-vendor
 
 ▫️ **Step 4**:
-Run the **aiNOC** watcher — two modes:
+Run the **aiNOC** watcher — two modes. In both cases Claude is invoked non-interactively via **tmux + print mode** (`-p`). The operator interacts via **Discord** (approval/rejection embeds) — not the terminal.
 
-⌨️ **Interactive** (dev/testing): runs in your current terminal, agent sessions open inline.
+🖥️ **Dev/Test** — watcher runs in the foreground of your terminal:
 ```
+sudo apt install tmux
 python3 oncall/watcher.py
 ```
 
-♻️ **Service** (production): install once, runs permanently, survives reboots. Each agent session
-spawns in a **tmux** window. Session output is saved to `logs/session-oncall-<timestamp>.md`.
+♻️ **Production** — install once as a systemd service, runs permanently, survives reboots:
 ```bash
 sudo apt install tmux
 sudo cp oncall/oncall-watcher.service /etc/systemd/system/
 sudo systemctl daemon-reload
 sudo systemctl enable --now oncall-watcher.service
 ```
-Manage with: 
+Manage with:
 `systemctl start|stop|restart|status oncall-watcher`
+
+Session output is always saved to `logs/session-oncall-<timestamp>.md`.
 
 ▫️ **Step 5**:
 Check if **Watcher** and **Vector** are running:
 ```
-# Interactive mode
+# Dev/test
 sudo systemctl status vector
 python3 oncall/watcher.py
 # ainoc.watcher — Watcher started. Monitoring /var/log/network.json for IP SLA Down events.
 ```
-*or (if installed as a systemd service):*
 ```
-# Service mode
+# Production (systemd service)
 sudo systemctl status vector
 sudo systemctl status oncall-watcher.service
 ```
