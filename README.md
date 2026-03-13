@@ -20,10 +20,10 @@
 ![VyOS](https://img.shields.io/badge/VyOS-VyOS-6F42C1)
 
 **Current integrations:**<br/>
-![Jira](https://img.shields.io/badge/Jira-integration-D4A017)
-![NetBox](https://img.shields.io/badge/NetBox-integration-D4A017)
-![HashiCorp Vault](https://img.shields.io/badge/Vault-integration-D4A017)
-![Discord](https://img.shields.io/badge/Discord-integration-D4A017)
+![Jira](https://img.shields.io/badge/Jira-supported-D42200)
+![NetBox](https://img.shields.io/badge/NetBox-supported-D42200)
+![HashiCorp Vault](https://img.shields.io/badge/Vault-supported-D42200)
+![Discord](https://img.shields.io/badge/Discord-supported-D42200)
 
 **Testing statistics:**<br/>
 ![MTTR](https://img.shields.io/badge/MTTR-9%3A21%20min-006400)
