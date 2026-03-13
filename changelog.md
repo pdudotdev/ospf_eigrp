@@ -4,6 +4,39 @@ All notable changes to this project are documented in this file.
 
 ---
 
+## [v5.4.0]
+
+### 🔐 HashiCorp Vault Integration
+- New `core/vault.py` — thin Vault KV v2 client with `get_secret(path, key, fallback_env)`: reads secrets from Vault, caches per-path, falls back to `os.getenv()` when Vault is not configured or unreachable
+- Vault paths: `ainoc/router` (username, password), `ainoc/jira` (api_token), `ainoc/discord` (bot_token)
+- Consumers updated to use `get_secret()`:
+  - `core/settings.py` — router credentials
+  - `core/jira_client.py` — Jira API token
+  - `core/discord_approval.py` — Discord bot token
+- New env vars: `VAULT_ADDR`, `VAULT_TOKEN` (both optional — Vault is fully optional)
+- New dependency: `hvac>=2.3,<3.0`
+- Setup guide: `metadata/vault/vault_setup.md`
+
+### 🌐 NetBox Device Inventory
+- New `core/netbox.py` — NetBox device inventory loader via pynetbox: maps NetBox devices to the same `{host, platform, transport, cli_style, location}` schema as `NETWORK.json`
+- `core/inventory.py` rewritten — tries NetBox first, falls back to `NETWORK.json` when NetBox is not configured, unreachable, or returns no valid devices
+- NetBox custom fields on Device model: `transport` (asyncssh/restconf), `cli_style` (ios)
+- New `metadata/netbox/populate_netbox.py` — idempotent pynetbox script that creates all prerequisite objects (custom fields, manufacturer, device types, platform, roles, sites) and 9 devices with management interfaces and IPs
+- New dependency: `pynetbox>=7.4,<8.0`
+- Setup guide: `metadata/netbox/netbox_setup.md`
+
+### 📊 Source Logging
+- `core/vault.py`: INFO log on first Vault read per path; DEBUG log when Vault not configured
+- `core/netbox.py`: INFO log with device count on successful load
+- `core/inventory.py`: INFO log showing which source loaded the inventory (NetBox vs NETWORK.json)
+
+### 🧪 Testing
+- **UT-019** (`test_vault.py`): 9 tests — env var fallback, Vault reads with mock hvac, caching, error fallback
+- **UT-020** (`test_netbox.py`): 9 tests — None on missing config, pynetbox exceptions, schema mapping, CIDR stripping, field validation
+- 444 → 462 total tests passing
+
+---
+
 ## [v5.3.1]
 
 ### 🐛 Bug Fixes / Off-Path Detection

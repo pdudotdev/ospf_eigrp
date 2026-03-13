@@ -17,6 +17,8 @@ from datetime import datetime, timezone, timedelta
 
 import aiohttp
 
+from core.vault import get_secret
+
 log = logging.getLogger("ainoc.discord")
 
 DISCORD_API = "https://discord.com/api/v10"
@@ -37,11 +39,13 @@ OUTCOME_COLORS = {
 
 def is_configured() -> bool:
     """Return True if both DISCORD_BOT_TOKEN and DISCORD_CHANNEL_ID are set."""
-    return bool(os.getenv("DISCORD_BOT_TOKEN") and os.getenv("DISCORD_CHANNEL_ID"))
+    token = get_secret("ainoc/discord", "bot_token", fallback_env="DISCORD_BOT_TOKEN")
+    return bool(token and os.getenv("DISCORD_CHANNEL_ID"))
 
 
 def _auth_headers() -> dict:
-    return {"Authorization": f"Bot {os.getenv('DISCORD_BOT_TOKEN')}"}
+    token = get_secret("ainoc/discord", "bot_token", fallback_env="DISCORD_BOT_TOKEN")
+    return {"Authorization": f"Bot {token}"}
 
 
 def _json_headers() -> dict:

@@ -1,7 +1,7 @@
 # ✨ aiNOC
 
 **aiNOC:**<br/>
-[![Latest Release](https://img.shields.io/badge/version-5.3.0-blue.svg)](https://github.com/pdudotdev/aiNOC/releases/tag/5.3.0) [![Last Commit](https://img.shields.io/github/last-commit/pdudotdev/aiNOC)](https://github.com/pdudotdev/aiNOCcommits/main/)
+[![Latest Release](https://img.shields.io/badge/version-5.4.0-blue.svg)](https://github.com/pdudotdev/aiNOC/releases/tag/5.4.0) [![Last Commit](https://img.shields.io/github/last-commit/pdudotdev/aiNOC)](https://github.com/pdudotdev/aiNOCcommits/main/)
 
 **Core version vendors:**<br/>
 ![Cisco IOS-XE](https://img.shields.io/badge/Cisco-IOS--XE-0176C1)
@@ -19,7 +19,7 @@
 - 📜 **aiNOC**
   - [🔭 Overview](#-overview)
   - [🍀 Here's a Quick Demo](#-heres-a-quick-demo)
-  - [⭐ What's New in v5.3](#-whats-new-in-v53)
+  - [⭐ What's New in v5.4](#-whats-new-in-v54)
   - [⚒️ Current Tech Stack](#️-current-tech-stack)
   - [📋 Supported Vendors](#-supported-vendors)
   - [🚛 Supported Transports](#️-supported-transports)
@@ -47,6 +47,8 @@ AI-based **network troubleshooting framework** for multi-vendor, multi-protocol,
 - [x] **Human in the loop logic**
 - [x] **Discord integration**
 - [x] **Jira integration**
+- [x] **HashiCorp Vault (secrets)**
+- [x] **NetBox (inventory)**
 
 ▫️ **Core vs. On-Request features**:
 - [x] **Core**: 
@@ -88,12 +90,12 @@ Create `settings.json` under `.claude/`:
 
 ▫️ **High-level architecture:**
 
-![arch](metadata/topology/ARCHv3.png)
+![arch](metadata/topology/ARCHv5.png)
 
 ## 🍀 Here's a Quick Demo
 - [x] *Demo video for v5.0 coming soon*
 
-## ⭐ What's New in v5.3
+## ⭐ What's New in v5.4
 - [x] See [**changelog.md**](changelog.md)
 
 ## ⚒️ Core Tech Stack
@@ -102,15 +104,17 @@ Create `settings.json` under `.claude/`:
 |------|---|
 | Claude Code | ✓ |
 | MCP (FastMCP) | ✓ |
-| ContainerLab | ✓ |
 | Python | ✓ |
 | Scrapli | ✓ |
 | Genie | ✓ |
 | RESTCONF | ✓ |
 | Jira API | ✓ |
 | Discord API | ✓ |
+| HashiCorp Vault | ✓ |
+| NetBox | ✓ |
 | Vector | ✓ |
 | Ubuntu | ✓ |
+| ContainerLab | ✓ |
 
 ## 📋 Supported Vendors
 
@@ -238,7 +242,7 @@ Only one agent session runs at a time. Concurrent SLA failures during an active 
 - [x] **Watch** and **Star** this repository
 
 **Current version**:
-- [x] **aiNOC v5.3**
+- [x] **aiNOC v5.4**
 
 ## 📄 Disclaimer
 You are responsible for defining your own troubleshooting methodologies and context files, as well as building your own test environment and meeting the necessary conditions (e.g., RAM/vCPU, router OS images, Claude subscription/API key, etc.).

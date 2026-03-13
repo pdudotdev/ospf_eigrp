@@ -7,8 +7,10 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-USERNAME = os.getenv("ROUTER_USERNAME")
-PASSWORD = os.getenv("ROUTER_PASSWORD")
+from core.vault import get_secret
+
+USERNAME = get_secret("ainoc/router", "username", fallback_env="ROUTER_USERNAME")
+PASSWORD = get_secret("ainoc/router", "password", fallback_env="ROUTER_PASSWORD")
 
 if not USERNAME or not PASSWORD:
     raise RuntimeError("ROUTER_USERNAME and ROUTER_PASSWORD must be set in .env")

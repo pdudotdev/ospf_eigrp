@@ -17,6 +17,8 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
+from core.vault import get_secret
+
 log = logging.getLogger(__name__)
 
 # Timeout for all Jira API calls — shorter than device timeout since Jira is cloud-hosted.
@@ -28,7 +30,7 @@ def _config() -> dict:
     return {
         "base_url":    os.getenv("JIRA_BASE_URL", "").rstrip("/"),
         "email":       os.getenv("JIRA_EMAIL", ""),
-        "api_token":   os.getenv("JIRA_API_TOKEN", ""),
+        "api_token":   get_secret("ainoc/jira", "api_token", fallback_env="JIRA_API_TOKEN") or "",
         "project_key": os.getenv("JIRA_PROJECT_KEY", ""),
         "issue_type":  os.getenv("JIRA_ISSUE_TYPE", "[System] Incident"),
     }
