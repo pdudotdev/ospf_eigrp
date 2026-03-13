@@ -1,4 +1,4 @@
-"""UT-019 — Watcher Discord notification exclusivity and crash cooldown.
+"""UT-021 — Watcher Discord notification exclusivity and crash cooldown.
 
 Tests for oncall/watcher.py: _post_discord_session_notification() and _last_crash_ts cooldown.
 No real Discord connectivity, tmux, or Jira required.

@@ -33,7 +33,7 @@ All notable changes to this project are documented in this file.
 ### 🧪 Testing
 - **UT-019** (`test_vault.py`): 9 tests — env var fallback, Vault reads with mock hvac, caching, error fallback
 - **UT-020** (`test_netbox.py`): 9 tests — None on missing config, pynetbox exceptions, schema mapping, CIDR stripping, field validation
-- 444 → 462 total tests passing
+- 454 → 472 total tests passing (includes test_watcher_discord_notifications.py now registered as UT-021)
 
 ---
 
@@ -83,7 +83,7 @@ All notable changes to this project are documented in this file.
 ### 🧪 Testing
 - UT-017 (`test_approval.py`): SKIPPED status assertion added; `post()` method added to MockSessions for ack message tests; `post_approval_outcome` tests updated for Jira `issue_key` param.
 - UT-018 (`test_config_approval_gate.py`): SKIPPED added to bad-status parametrize list.
-- UT-019 (`test_watcher_discord_notifications.py`): 10 tests covering Discord notification exclusivity (crash/timeout/watcher-exc → error only; normal exit → complete only; approval-requested → neither) and crash cooldown behaviour (timestamp set on crash, skips within window, clears after expiry, not set on normal exit).
+- UT-021 (`test_watcher_discord_notifications.py`): 10 tests covering Discord notification exclusivity (crash/timeout/watcher-exc → error only; normal exit → complete only; approval-requested → neither) and crash cooldown behaviour (timestamp set on crash, skips within window, clears after expiry, not set on normal exit).
 - Integration tests (`test_mcp_tools.py`): all 8 push_config tests now call `_approve_devices()` before each push.
 - 443 → 452 total tests passing.
 

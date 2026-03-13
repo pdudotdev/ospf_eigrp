@@ -149,7 +149,7 @@ Contains:
 - Complete MCP tool list (15 tools)
 - Lessons curation process
 - Case management workflow
-- 17 common pitfalls to avoid
+- 7 common pitfalls to avoid
 
 Everything the agent needs to operate lives here.
 
@@ -189,8 +189,10 @@ tools/
     state.py          — get_intent, assess_risk
     jira_tools.py     — jira_add_comment, jira_resolve_issue
     approval.py       — request_approval, post_approval_outcome (MCP tools)
-core/inventory.py         — device inventory loader (NETWORK.json)
+core/inventory.py         — device inventory loader (NetBox-first, falls back to NETWORK.json)
 core/settings.py          — credentials and transport configuration
+core/vault.py             — HashiCorp Vault KV v2 client; get_secret() with env var fallback
+core/netbox.py            — NetBox device inventory loader via pynetbox
 core/logging_config.py    — JSONFormatter, ainoc.* logger hierarchy
 core/jira_client.py       — async Jira REST v3 client
 core/discord_approval.py  — Discord API: post_approval_request, poll_for_reaction, post_outcome, post_investigation_started, post_deferred_list
@@ -241,10 +243,9 @@ Useful for:
 
 **Purpose:** Per-session agent output log.
 
-Each On-Call session's full CLI output is streamed here via `tmux pipe-pane`. Captures everything the agent printed — investigation steps, tool results, findings table, summary.
+Each On-Call session's full output is captured here via `--output-format json` stdout redirect. Contains the full agent result text plus `total_cost_usd`, `num_turns`, and `usage` metadata.
 
-Use for post-incident review when you weren't watching live:
+Use for post-incident review:
 ```
-tmux attach -t oncall-<timestamp>    # live observation (if session still open)
-cat logs/session-oncall-<timestamp>.md   # post-incident review
+cat logs/session-oncall-<timestamp>.md
 ```

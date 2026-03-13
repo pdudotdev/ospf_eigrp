@@ -46,7 +46,7 @@ AI-based **network troubleshooting framework** for multi-vendor, multi-protocol,
 - [x] **CLI/RESTCONF (Core)**
 - [x] **NETCONF/REST/gNMI/eAPI (extensions)**
 - [x] **15 MCP tools, 4 skills**
-- [x] **33 operational guardrails**
+- [x] **12 operational guardrails**
 - [x] **Human in the loop logic**
 - [x] **Discord integration**
 - [x] **Jira integration**

@@ -77,6 +77,7 @@ case "${MODE}" in
         run_pytest "UT-018 Config Approval Gate" "${TEST_PREFIX}/unit/test_config_approval_gate.py"
         run_pytest "UT-019 Vault"               "${TEST_PREFIX}/unit/test_vault.py"
         run_pytest "UT-020 NetBox"              "${TEST_PREFIX}/unit/test_netbox.py"
+        run_pytest "UT-021 Watcher Discord"     "${TEST_PREFIX}/unit/test_watcher_discord_notifications.py"
         ;;
 
     integration)
@@ -105,6 +106,7 @@ case "${MODE}" in
         run_pytest "UT-018 Config Approval Gate" "${TEST_PREFIX}/unit/test_config_approval_gate.py"
         run_pytest "UT-019 Vault"               "${TEST_PREFIX}/unit/test_vault.py"
         run_pytest "UT-020 NetBox"              "${TEST_PREFIX}/unit/test_netbox.py"
+        run_pytest "UT-021 Watcher Discord"     "${TEST_PREFIX}/unit/test_watcher_discord_notifications.py"
         run_pytest "IT-001 MCP Connectivity"    "${TEST_PREFIX}/integration/test_mcp_connectivity.py"
         run_pytest "IT-002 Watcher Events"      "${TEST_PREFIX}/integration/test_watcher_events.py"
         run_pytest "IT-003 MCP Tools"           "${TEST_PREFIX}/integration/test_mcp_tools.py"
