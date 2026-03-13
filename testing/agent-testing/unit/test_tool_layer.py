@@ -78,6 +78,10 @@ def test_get_ospf_asyncssh_uses_cli_string():
     assert isinstance(action_used, str), "asyncssh device must use plain CLI string"
     assert not isinstance(action_used, ActionChain)
     assert "show ip ospf neighbor" in action_used
+    # Verify result forwarding: tool must not discard or mangle the transport result
+    assert "error" not in result
+    assert result["device"] == "A1C"
+    assert result["raw"] == "output"
 
 
 def test_get_ospf_restconf_uses_actionchain():
@@ -86,6 +90,9 @@ def test_get_ospf_restconf_uses_actionchain():
 
     action_used = mock_exec.call_args[0][1]
     assert isinstance(action_used, ActionChain), "restconf device must use ActionChain"
+    assert "error" not in result
+    assert result["device"] == "E1C"
+    assert result["raw"] == "output"
 
 
 def test_get_ospf_unknown_device_returns_error():
@@ -102,6 +109,8 @@ def test_get_ospf_vrf_param_flows_through():
     # For asyncssh + ios: ospf has no VRF variant, so the plain string is returned unchanged
     action_used = mock_exec.call_args[0][1]
     assert isinstance(action_used, str)
+    assert "error" not in result
+    assert result["raw"] == "output"
 
 
 # ── get_bgp ───────────────────────────────────────────────────────────────────
@@ -112,11 +121,14 @@ def test_get_bgp_asyncssh_uses_cli_string():
     mock_result = {**MOCK_RESULT, "device": "A1C"}
     with patch("tools.protocol.devices", {"A1C": ASYNCSSH_DEV}), \
          patch("tools.protocol.execute_command", new=AsyncMock(return_value=mock_result)) as mock_exec:
-        run(get_bgp(params))
+        result = run(get_bgp(params))
 
     action_used = mock_exec.call_args[0][1]
     assert isinstance(action_used, str)
     assert "show ip bgp" in action_used
+    assert "error" not in result
+    assert result["device"] == "A1C"
+    assert result["raw"] == "output"
 
 
 def test_get_bgp_restconf_uses_actionchain():
@@ -125,10 +137,13 @@ def test_get_bgp_restconf_uses_actionchain():
     mock_result = {**MOCK_RESULT, "device": "E1C"}
     with patch("tools.protocol.devices", {"E1C": RESTCONF_DEV}), \
          patch("tools.protocol.execute_command", new=AsyncMock(return_value=mock_result)) as mock_exec:
-        run(get_bgp(params))
+        result = run(get_bgp(params))
 
     action_used = mock_exec.call_args[0][1]
     assert isinstance(action_used, ActionChain)
+    assert "error" not in result
+    assert result["device"] == "E1C"
+    assert result["raw"] == "output"
 
 
 def test_get_bgp_neighbor_filter_appended_for_asyncssh():
@@ -137,10 +152,12 @@ def test_get_bgp_neighbor_filter_appended_for_asyncssh():
     mock_result = {**MOCK_RESULT, "device": "A1C"}
     with patch("tools.protocol.devices", {"A1C": ASYNCSSH_DEV}), \
          patch("tools.protocol.execute_command", new=AsyncMock(return_value=mock_result)) as mock_exec:
-        run(get_bgp(params))
+        result = run(get_bgp(params))
 
     action_used = mock_exec.call_args[0][1]
     assert "10.0.0.1" in action_used, "neighbor IP must be appended to CLI string for asyncssh"
+    assert "error" not in result
+    assert result["raw"] == "output"
 
 
 # ── get_routing ───────────────────────────────────────────────────────────────
@@ -151,12 +168,15 @@ def test_get_routing_no_prefix_uses_full_table_command():
     mock_result = {**MOCK_RESULT, "device": "A1C"}
     with patch("tools.routing.devices", {"A1C": ASYNCSSH_DEV}), \
          patch("tools.routing.execute_command", new=AsyncMock(return_value=mock_result)) as mock_exec:
-        run(get_routing(params))
+        result = run(get_routing(params))
 
     action_used = mock_exec.call_args[0][1]
     assert isinstance(action_used, str)
     assert "show ip route" in action_used
     assert "10." not in action_used  # no prefix appended
+    assert "error" not in result
+    assert result["device"] == "A1C"
+    assert result["raw"] == "output"
 
 
 def test_get_routing_with_prefix_appends_to_cli():
@@ -165,10 +185,12 @@ def test_get_routing_with_prefix_appends_to_cli():
     mock_result = {**MOCK_RESULT, "device": "A1C"}
     with patch("tools.routing.devices", {"A1C": ASYNCSSH_DEV}), \
          patch("tools.routing.execute_command", new=AsyncMock(return_value=mock_result)) as mock_exec:
-        run(get_routing(params))
+        result = run(get_routing(params))
 
     action_used = mock_exec.call_args[0][1]
     assert "10.0.0.26" in action_used, "prefix must be appended to CLI command"
+    assert "error" not in result
+    assert result["raw"] == "output"
 
 
 # ── get_interfaces ────────────────────────────────────────────────────────────
@@ -179,11 +201,14 @@ def test_get_interfaces_asyncssh_uses_cli_string():
     mock_result = {**MOCK_RESULT, "device": "A1C"}
     with patch("tools.operational.devices", {"A1C": ASYNCSSH_DEV}), \
          patch("tools.operational.execute_command", new=AsyncMock(return_value=mock_result)) as mock_exec:
-        run(get_interfaces(params))
+        result = run(get_interfaces(params))
 
     action_used = mock_exec.call_args[0][1]
     assert isinstance(action_used, str)
     assert "show ip interface brief" in action_used
+    assert "error" not in result
+    assert result["device"] == "A1C"
+    assert result["raw"] == "output"
 
 
 # ── ping / traceroute: always CLI strings ─────────────────────────────────────
@@ -194,13 +219,16 @@ def test_ping_restconf_device_uses_cli_string():
     mock_result = {**MOCK_RESULT, "device": "E1C"}
     with patch("tools.operational.devices", {"E1C": RESTCONF_DEV}), \
          patch("tools.operational.execute_command", new=AsyncMock(return_value=mock_result)) as mock_exec:
-        run(ping(params))
+        result = run(ping(params))
 
     action_used = mock_exec.call_args[0][1]
     assert isinstance(action_used, str), "ping must use CLI string even on restconf device"
     assert not isinstance(action_used, ActionChain)
     assert "ping" in action_used
     assert "10.0.0.26" in action_used
+    assert "error" not in result
+    assert result["device"] == "E1C"
+    assert result["raw"] == "output"
 
 
 def test_traceroute_restconf_device_uses_cli_string():
@@ -209,13 +237,16 @@ def test_traceroute_restconf_device_uses_cli_string():
     mock_result = {**MOCK_RESULT, "device": "E1C"}
     with patch("tools.operational.devices", {"E1C": RESTCONF_DEV}), \
          patch("tools.operational.execute_command", new=AsyncMock(return_value=mock_result)) as mock_exec:
-        run(traceroute(params))
+        result = run(traceroute(params))
 
     action_used = mock_exec.call_args[0][1]
     assert isinstance(action_used, str), "traceroute must use CLI string even on restconf device"
     assert not isinstance(action_used, ActionChain)
     assert "traceroute" in action_used
     assert "10.0.0.26" in action_used
+    assert "error" not in result
+    assert result["device"] == "E1C"
+    assert result["raw"] == "output"
 
 
 # ── run_show ──────────────────────────────────────────────────────────────────

@@ -6,6 +6,8 @@ No real device connectivity required.
 Validates:
 - Successful show command returns (raw_output, parsed_output) tuple
 - Connection refused raises after exhausting retries
+- Retry: first attempt fails, second succeeds → returns success (no exception)
+- Retry: all attempts fail → raises last exception
 - Genie parse failure falls back to None parsed_output (raw text still returned)
 - push_ssh success returns (dev_name, result_dict)
 """
@@ -113,3 +115,36 @@ def test_push_ssh_success_returns_dev_name_and_result():
     assert isinstance(result, dict), "push_ssh must return a result dict as second element"
     assert "transport_used" in result
     assert result["transport_used"] == "asyncssh"
+
+
+# ── Retry logic ────────────────────────────────────────────────────────────────
+
+def test_ssh_retry_succeeds_on_second_attempt():
+    """execute_ssh must retry after a transient failure and return success on the second attempt."""
+    genie_data = {"ospf": {"neighbors": {}}}
+    success_cm, _ = _mock_scrapli(RAW_OUTPUT, genie_result=genie_data)
+    fail_cm = MagicMock()
+    fail_cm.__aenter__ = AsyncMock(side_effect=ConnectionRefusedError("transient"))
+    fail_cm.__aexit__ = AsyncMock(return_value=None)
+
+    # First call to AsyncScrapli → fail; second call → success
+    with patch("transport.ssh.AsyncScrapli", side_effect=[fail_cm, success_cm]), \
+         patch("transport.ssh.SSH_RETRIES", 1), \
+         patch("transport.ssh.SSH_RETRY_DELAY", 0):  # no actual sleep in tests
+        raw, parsed = run(execute_ssh(DEVICE, "show ip ospf neighbor"))
+
+    assert raw == RAW_OUTPUT
+    assert parsed == genie_data
+
+
+def test_ssh_retry_exhausted_raises_last_exception():
+    """When all retry attempts fail, execute_ssh must raise the last exception."""
+    fail_cm = MagicMock()
+    fail_cm.__aenter__ = AsyncMock(side_effect=TimeoutError("SSH timeout"))
+    fail_cm.__aexit__ = AsyncMock(return_value=None)
+
+    with patch("transport.ssh.AsyncScrapli", return_value=fail_cm), \
+         patch("transport.ssh.SSH_RETRIES", 2), \
+         patch("transport.ssh.SSH_RETRY_DELAY", 0):
+        with pytest.raises(TimeoutError, match="SSH timeout"):
+            run(execute_ssh(DEVICE, "show ip ospf neighbor"))

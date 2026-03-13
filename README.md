@@ -22,11 +22,11 @@
 **Current integrations:**<br/>
 ![Jira](https://img.shields.io/badge/Jira-supported-2f2fac)
 ![NetBox](https://img.shields.io/badge/NetBox-supported-2f2fac)
-![HashiCorp Vault](https://img.shields.io/badge/Vault-supported-2f2fac)
 ![Discord](https://img.shields.io/badge/Discord-supported-2f2fac)
+![HashiCorp Vault](https://img.shields.io/badge/HashiCorp%20Vault-supported-2f2fac)
 
 **Testing statistics:**<br/>
-![MTTR](https://img.shields.io/badge/MTTR-9%3A21%20min-1bb919)
+![MTTR](https://img.shields.io/badge/MTTR-8%20minutes-1bb919)
 ![Average Cost per Session](https://img.shields.io/badge/Average%20Cost%2FSession-%241.86-1bb919)
 
 ## 📖 **Table of Contents**

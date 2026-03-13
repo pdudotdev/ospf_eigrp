@@ -6,9 +6,11 @@ No real device connectivity required.
 Validates:
 - Successful GET returns parsed JSON dict
 - HTTP 4xx/5xx returns error dict with status code
+- HTTP 204 No Content returns empty dict (not error)
 - Timeout exception returns graceful error dict
 - Non-JSON 200 response returns error dict
 - URL is built correctly from action dict
+- httpx not available returns error dict (not ImportError)
 """
 import asyncio
 import sys
@@ -128,3 +130,24 @@ def test_restconf_url_construction():
     assert ACTION["url"] in url_used, "URL must include action URL path"
     assert _RESTCONF_BASE in url_used, "URL must include RESTCONF base path"
     assert url_used.startswith("https://"), "URL must use HTTPS"
+
+
+def test_restconf_get_http_204_returns_empty_dict():
+    """HTTP 204 No Content must return an empty dict — feature not configured, not an error."""
+    mock_cm, _ = _mock_httpx_client(204)
+
+    with patch("transport.restconf.httpx.AsyncClient", return_value=mock_cm):
+        result = run(execute_restconf(DEVICE, ACTION))
+
+    assert result == {}, "HTTP 204 must return empty dict, not an error"
+    assert "error" not in result
+
+
+def test_restconf_httpx_not_available_returns_error():
+    """When httpx is not installed (_HTTPX_AVAILABLE=False), execute_restconf returns error dict."""
+    import transport.restconf as rc_mod
+    with patch.object(rc_mod, "_HTTPX_AVAILABLE", False):
+        result = run(execute_restconf(DEVICE, ACTION))
+
+    assert "error" in result
+    assert "httpx" in result["error"].lower()

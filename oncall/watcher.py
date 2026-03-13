@@ -147,8 +147,32 @@ def parse_event_ts(event):
         return None
     try:
         return datetime.fromisoformat(ts_str.replace("Z", "+00:00"))
-    except ValueError:
+    except (ValueError, AttributeError):
         return None
+
+
+def check_crash_cooldown(device_label: str, msg: str) -> bool:
+    """Check if an event should be suppressed due to the crash cooldown window.
+
+    Returns True if the event should be skipped (still within cooldown window).
+    Returns False if the event may proceed (no recent crash or window expired).
+    Side effect: clears _last_crash_ts when the cooldown window has expired.
+    """
+    global _last_crash_ts
+    if _last_crash_ts is None:
+        return False
+    cooldown_min = int(os.getenv("CRASH_COOLDOWN_MINUTES", "5"))
+    elapsed = (datetime.now(timezone.utc) - _last_crash_ts).total_seconds()
+    if elapsed < cooldown_min * 60:
+        remaining = (cooldown_min * 60 - elapsed) / 60
+        _wlog.warning(
+            "SKIPPED (crash cooldown, %.1f min remaining) - %s: %s",
+            remaining, device_label, msg,
+        )
+        return True
+    # Cooldown window expired — clear the timestamp and proceed
+    _last_crash_ts = None
+    return False
 
 
 def scan_for_deferred_events(trigger_event, session_start, session_end, device_map,
@@ -751,7 +775,6 @@ def parse_args():
 
 def main():
     """Main watcher loop."""
-    global _last_crash_ts
     setup_watcher_logging(WATCHER_LOG)
 
     from core.jira_client import _is_configured as jira_configured
@@ -802,20 +825,9 @@ def main():
             continue
 
         # Crash cooldown: suppress new sessions for a window after a crash
-        if _last_crash_ts is not None:
-            cooldown_min = int(os.getenv("CRASH_COOLDOWN_MINUTES", "5"))
-            elapsed = (datetime.now(timezone.utc) - _last_crash_ts).total_seconds()
-            if elapsed < cooldown_min * 60:
-                remaining = (cooldown_min * 60 - elapsed) / 60
-                _wlog.warning(
-                    "SKIPPED (crash cooldown, %.1f min remaining) - %s: %s",
-                    remaining,
-                    event.get("device", event.get("source_ip", "?")),
-                    msg,
-                )
-                continue
-            # Cooldown window expired — clear the timestamp and proceed
-            _last_crash_ts = None
+        device_label = event.get("device", event.get("source_ip", "?"))
+        if check_crash_cooldown(device_label, msg):
+            continue
 
         # Clean up stale lock if present
         if is_lock_stale():

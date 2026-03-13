@@ -35,6 +35,8 @@ import pytest
 PROJECT_ROOT = Path(__file__).parent.parent.parent.parent
 sys.path.insert(0, str(PROJECT_ROOT))
 
+from pydantic import ValidationError
+
 from core.discord_approval import (
     _table_to_bullets,
     is_configured,
@@ -681,7 +683,7 @@ def test_approval_input_issue_key_optional():
 
 
 def test_approval_input_invalid_issue_key():
-    with pytest.raises(Exception):
+    with pytest.raises(ValidationError):
         ApprovalInput(
             issue_key="not-valid",
             summary="Test",
@@ -693,7 +695,7 @@ def test_approval_input_invalid_issue_key():
 
 
 def test_approval_input_invalid_risk_level():
-    with pytest.raises(Exception):
+    with pytest.raises(ValidationError):
         ApprovalInput(
             summary="Test",
             findings="f",

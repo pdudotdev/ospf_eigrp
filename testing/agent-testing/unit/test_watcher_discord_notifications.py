@@ -28,7 +28,7 @@ PROJECT_ROOT = Path(__file__).parent.parent.parent.parent
 sys.path.insert(0, str(PROJECT_ROOT))
 
 import oncall.watcher as watcher
-from oncall.watcher import _post_discord_session_notification
+from oncall.watcher import _post_discord_session_notification, check_crash_cooldown
 
 
 # ---------------------------------------------------------------------------
@@ -235,70 +235,33 @@ class TestCrashCooldown:
         """Clean up after each test."""
         watcher._last_crash_ts = None
 
-    def test_crash_sets_cooldown_timestamp(self, tmp_path, monkeypatch):
-        """invoke_claude sets _last_crash_ts when agent exits with non-zero code."""
-        monkeypatch.setenv("DISCORD_BOT_TOKEN", "tok")
-        monkeypatch.setenv("DISCORD_CHANNEL_ID", "ch")
-        session_log = _make_session_log(tmp_path)
-
-        before = datetime.now(timezone.utc)
-
-        with (
-            patch("oncall.watcher.discord_approval.is_configured", return_value=True),
-            patch("oncall.watcher.discord_approval.post_session_error", AsyncMock()),
-            patch("oncall.watcher.discord_approval.post_session_complete", AsyncMock()),
-        ):
-            _call_notify(exit_code=1, session_log=session_log)
-
-        # _last_crash_ts is NOT set by _post_discord_session_notification itself —
-        # it is set by invoke_claude after the notification call. So we simulate
-        # that assignment directly here (matching the invoke_claude code path):
-        watcher._last_crash_ts = datetime.now(timezone.utc)
-
-        after = datetime.now(timezone.utc)
-        assert watcher._last_crash_ts is not None
-        assert before <= watcher._last_crash_ts <= after
+    def test_crash_cooldown_timestamp_not_tested_here(self):
+        """NOTE: _last_crash_ts is set by invoke_claude() (watcher.py:678-680) after a
+        non-zero agent exit — not by _post_discord_session_notification. invoke_claude
+        depends on tmux and subprocess, so it cannot be unit-tested here. The cooldown
+        BEHAVIOR (skip / expire) is exercised by the two tests below via check_crash_cooldown,
+        which is the function main() delegates to."""
+        pass  # No ghost-pass assertion — this is a documented coverage note.
 
     def test_cooldown_skips_event_within_window(self, monkeypatch, caplog):
-        """Event arriving within the cooldown window is skipped with a warning log."""
+        """Event arriving within the cooldown window: check_crash_cooldown returns True."""
         # Simulate crash 1 minute ago; cooldown is 5 minutes
         watcher._last_crash_ts = datetime.now(timezone.utc) - timedelta(minutes=1)
         monkeypatch.setenv("CRASH_COOLDOWN_MINUTES", "5")
 
-        # Run the cooldown check logic inline (mirrors the main() loop snippet)
-        skipped = False
-        if watcher._last_crash_ts is not None:
-            import os
-            cooldown_min = int(os.getenv("CRASH_COOLDOWN_MINUTES", "5"))
-            elapsed = (datetime.now(timezone.utc) - watcher._last_crash_ts).total_seconds()
-            if elapsed < cooldown_min * 60:
-                remaining = (cooldown_min * 60 - elapsed) / 60
-                watcher._wlog.warning(
-                    "SKIPPED (crash cooldown, %.1f min remaining) - %s: %s",
-                    remaining, "A1C", "SLA Down",
-                )
-                skipped = True
+        skipped = check_crash_cooldown("A1C", "SLA Down")
 
         assert skipped, "Event should have been skipped by the cooldown guard"
         # _last_crash_ts should still be set (not cleared yet — cooldown hasn't expired)
         assert watcher._last_crash_ts is not None
 
     def test_cooldown_expires_and_clears_timestamp(self, monkeypatch, caplog):
-        """Event arriving after the cooldown window clears _last_crash_ts and is NOT skipped."""
+        """Event arriving after the cooldown window: check_crash_cooldown returns False and clears ts."""
         # Simulate crash 6 minutes ago; cooldown is 5 minutes → expired
         watcher._last_crash_ts = datetime.now(timezone.utc) - timedelta(minutes=6)
         monkeypatch.setenv("CRASH_COOLDOWN_MINUTES", "5")
 
-        import os
-        skipped = False
-        if watcher._last_crash_ts is not None:
-            cooldown_min = int(os.getenv("CRASH_COOLDOWN_MINUTES", "5"))
-            elapsed = (datetime.now(timezone.utc) - watcher._last_crash_ts).total_seconds()
-            if elapsed < cooldown_min * 60:
-                skipped = True
-            else:
-                # Cooldown expired — clear it and proceed
-                watcher._last_crash_ts = None
+        skipped = check_crash_cooldown("A1C", "SLA Down")
 
         assert not skipped, "Event should NOT be skipped after cooldown expires"
         assert watcher._last_crash_ts is None, "_last_crash_ts should be cleared after expiry"

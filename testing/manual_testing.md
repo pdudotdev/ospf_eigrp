@@ -235,22 +235,7 @@ sudo systemctl restart oncall-watcher.service
 sudo journalctl -u oncall-watcher -f
 ```
 
-#### C) Deferred documentation
-
-Run the OC-001 break scenario (passive-interface on A1C) to generate concurrent SLA failures.
-Verify:
-1. First failure → agent in `oncall-<ts>` tmux session, auto-exits when done
-2. Second failure → logged as `SKIPPED (deferred)` in watcher log
-3. After first session → watcher logs `Documenting N deferred failure(s) to Jira/Discord` then `Resuming monitoring.`
-4. No second tmux session spawned — deferred failures documented via Jira comment + Discord embed only
-
-#### D) SSH retry transparency
-
-If a transient SSH hiccup occurs during an on-call session, verify in `logs/oncall_watcher.log`:
-```
-SSH attempt 1/3 failed for <device_ip>: ... — retrying in 2s
-```
-The agent should recover automatically without reporting an error to the user.
+> **Note**: Deferred documentation is verified as part of OC-001 steps 11-13. SSH retry logic is covered by automated tests (UT-013).
 
 ---
 

@@ -11,6 +11,11 @@ Validates:
 - asyncssh device → plain SSH, no ActionChain
 - _transport_used tag set correctly in result
 - ActionChain construction via get_action()
+- ActionChain + transport override → only matching tier runs
+- asyncssh device + dict action → error (RESTCONF not supported on SSH-only)
+- restconf device + dict action with url → direct RESTCONF dispatch
+- Unknown device → error dict
+- Exception during transport → error dict with exception message
 """
 
 import asyncio
@@ -186,3 +191,72 @@ def test_restconf_plain_string_routes_to_ssh():
 
     ssh_mock.assert_called_once()
     rc_mock.assert_not_called()
+
+
+# ── Additional branch coverage ─────────────────────────────────────────────────
+
+def test_transport_override_filters_to_ssh_tier_only():
+    """ActionChain + transport='ssh' override must skip the RESTCONF tier."""
+    with _patch_devices("E1C", RESTCONF_DEVICE), \
+         patch("transport.execute_restconf", new=AsyncMock()) as rc_mock, \
+         patch("transport.execute_ssh",      new=AsyncMock(return_value=SUCCESS_SSH)) as ssh_mock:
+
+        result = run(execute_command("E1C", TEST_CHAIN, transport="ssh"))
+
+    rc_mock.assert_not_called()
+    ssh_mock.assert_called_once()
+    assert result.get("_transport_used") == "ssh"
+
+
+def test_transport_override_no_matching_tier_returns_error():
+    """ActionChain + transport='netconf' (non-existent tier) must return an error."""
+    with _patch_devices("E1C", RESTCONF_DEVICE):
+        result = run(execute_command("E1C", TEST_CHAIN, transport="netconf"))
+
+    assert "error" in result
+    assert "netconf" in result["error"].lower() or "not available" in result["error"].lower()
+
+
+def test_asyncssh_device_with_dict_action_returns_error():
+    """Passing a RESTCONF dict action to an asyncssh-only device must return an error."""
+    dict_action = {"url": "Cisco-IOS-XE-ospf-oper:ospf-oper-data", "method": "GET"}
+    with _patch_devices("A1C", SSH_DEVICE):
+        result = run(execute_command("A1C", dict_action))
+
+    assert "error" in result
+    assert "RESTCONF" in result["error"] or "ssh" in result["error"].lower() or "CLI" in result["error"]
+
+
+def test_restconf_device_with_direct_url_dict_routes_to_restconf():
+    """A plain dict with a 'url' key on a restconf device routes directly to RESTCONF."""
+    dict_action = {"url": "Cisco-IOS-XE-ospf-oper:ospf-oper-data", "method": "GET"}
+    with _patch_devices("E1C", RESTCONF_DEVICE), \
+         patch("transport.execute_restconf", new=AsyncMock(return_value=SUCCESS_RC)) as rc_mock, \
+         patch("transport.execute_ssh",      new=AsyncMock()) as ssh_mock:
+
+        result = run(execute_command("E1C", dict_action))
+
+    rc_mock.assert_called_once()
+    ssh_mock.assert_not_called()
+    assert result.get("_transport_used") == "restconf"
+    assert "error" not in result
+
+
+def test_unknown_device_returns_error():
+    """execute_command with an unknown device name must return an error dict immediately."""
+    with patch("transport.devices", {}):
+        result = run(execute_command("UNKNOWN", "show ip route"))
+
+    assert "error" in result
+    assert "Unknown device" in result["error"]
+
+
+def test_exception_during_transport_returns_error_dict():
+    """An unexpected exception during transport must be caught and returned as error dict."""
+    with _patch_devices("A1C", SSH_DEVICE), \
+         patch("transport.execute_ssh", new=AsyncMock(side_effect=RuntimeError("SSH broke"))):
+
+        result = run(execute_command("A1C", SSH_ACTION))
+
+    assert "error" in result
+    assert "SSH broke" in result["error"]

@@ -50,6 +50,13 @@ chmod +x run_tests.sh
 | UT-016 | unit/test_jira_tools.py | Jira tools: add_comment/resolve_issue success/error/no-key paths |
 | UT-017 | unit/test_approval.py | Discord approval: request_approval (configured/not), poll results, expiry, env timeout override, post_approval_outcome |
 | UT-018 | unit/test_config_approval_gate.py | push_config approval gate: no record, bad status (incl. SKIPPED), replay, device mismatch, success, EXECUTED marking |
+| UT-019 | unit/test_vault.py | Vault KV v2 client: env fallback, reads with mock hvac, caching, error fallback |
+| UT-020 | unit/test_netbox.py | NetBox inventory loader: missing config, pynetbox exceptions, schema mapping, CIDR stripping, field validation |
+| UT-021 | unit/test_watcher_discord_notifications.py | Watcher Discord notification helpers |
+| UT-022 | unit/test_inventory.py | Inventory loader: NetBox-first fallback to NETWORK.json |
+| UT-023 | unit/test_jira_client.py | Jira client: create/comment/resolve/transition/error handling |
+| UT-024 | unit/test_logging_config.py | Logging configuration and setup |
+| UT-025 | unit/test_watcher_helpers.py | Watcher helper functions and notify_operator |
 
 ### Integration Tests (read-only, real devices)
 | ID | File | Description |
