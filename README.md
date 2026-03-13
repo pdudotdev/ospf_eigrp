@@ -48,17 +48,17 @@ AI-based **network troubleshooting framework** for multi-vendor, multi-protocol,
 - [x] **Discord integration**
 - [x] **Jira integration**
 
-▫️ **Core vs. On-Request**:
+▫️ **Core vs. On-Request features**:
 - [x] **Core**: 
   - Easy to integrate in Cisco IOS/IOS-XE environments
   - CLI + RESTCONF transports, OSPF/BGP troubleshooting
-  - Jira integration, On-Call watcher (both modes)
+  - Service Mode, Jira integration, Discord integration
 - [x] **On-Request**: 
   - Custom vendor modules (Arista, Juniper, MikroTik, etc.)
   - Custom vendor transports (REST, NETCONF, gNMI, eAPI) 
   - Built and adapted per client's network environment
 
-▫️ **Operating mode of aiNOC starting with v5.0**:
+▫️ **aiNOC operating mode in v5.0+**:
 - [x] See [**aiNOC Service Mode**](#-ainoc-service-mode)
 
 ▫️ **Important project files**:
@@ -209,7 +209,7 @@ sudo systemctl status oncall-watcher.service
 
 ## 📞 aiNOC Service Mode
 
-aiNOC runs as an **on-call watcher (service)** that monitors Vector's `/var/log/network.json` for SLA path failures and automatically invokes a Claude agent to diagnose the issue and propose a fix.
+aiNOC runs as an **on-call watcher** that monitors Vector's `/var/log/network.json` for SLA path failures and automatically invokes a Claude agent to diagnose the issue and propose a fix.
 
 ### How It Works
 
@@ -220,7 +220,7 @@ aiNOC runs as an **on-call watcher (service)** that monitors Vector's `/var/log/
 5. Only upon **human operator approval** via Discord, the agent applies and verifies the fix
 6. Results are logged to **Jira** and **Discord**, and the watcher resumes monitoring
 
-See [Installation & Usage](#️-installation--usage) for setup instructions.
+See [**Installation & Usage**](#️-installation--usage) for instructions.
 
 ### Storm Prevention
 
