@@ -1,22 +1,33 @@
 # ✨ aiNOC
 
 **aiNOC:**<br/>
-[![Latest Release](https://img.shields.io/badge/version-5.4.0-blue.svg)](https://github.com/pdudotdev/aiNOC/releases/tag/5.4.0) [![Last Commit](https://img.shields.io/github/last-commit/pdudotdev/aiNOC)](https://github.com/pdudotdev/aiNOCcommits/main/)
+[![Version](https://img.shields.io/badge/version-5.4.0-1F6FEB)](https://github.com/pdudotdev/aiNOC/releases/tag/5.4.0)
+[![Last Commit](https://img.shields.io/github/last-commit/pdudotdev/aiNOC?color=1F6FEB)](https://github.com/pdudotdev/aiNOC/commits/main/)
 
 **Core version vendors:**<br/>
-![Cisco IOS-XE](https://img.shields.io/badge/Cisco-IOS--XE-0176C1)
+![Cisco IOS-XE](https://img.shields.io/badge/Cisco-IOS--XE-0A4DA2)
 
 **Core version management:**<br/>
-![RESTCONF](https://img.shields.io/badge/RESTCONF-primary-2E8B57) ![CLI](https://img.shields.io/badge/CLI-fallback-A90000)
+![RESTCONF](https://img.shields.io/badge/RESTCONF-primary-2E8B57)
+![CLI](https://img.shields.io/badge/CLI-fallback-2E8B57)
 
 **On-request extensions:**<br/>
-![Arista EOS](https://img.shields.io/badge/Arista-EOS-2A64D4) ![Juniper JunOS](https://img.shields.io/badge/Juniper-JunOS-009A44) ![MikroTik RouterOS](https://img.shields.io/badge/MikroTik-RouterOS-2A3042) ![Aruba AOS-CX](https://img.shields.io/badge/Aruba-AOS--CX-FF6600) ![SONiC](https://img.shields.io/badge/SONiC-FRR-9B9BD5) ![VyOS](https://img.shields.io/badge/VyOS-VyOS-5B9BD5)
+![Arista EOS](https://img.shields.io/badge/Arista-EOS-6F42C1)
+![Juniper JunOS](https://img.shields.io/badge/Juniper-JunOS-6F42C1)
+![MikroTik RouterOS](https://img.shields.io/badge/MikroTik-RouterOS-6F42C1)
+![Aruba AOS-CX](https://img.shields.io/badge/Aruba-AOS--CX-6F42C1)
+![SONiC](https://img.shields.io/badge/SONiC-FRR-6F42C1)
+![VyOS](https://img.shields.io/badge/VyOS-VyOS-6F42C1)
 
 **Current integrations:**<br/>
-![Jira](https://img.shields.io/badge/Jira-D4991B) ![NetBox](https://img.shields.io/badge/NetBox-725299) ![HashiCorp Vault](https://img.shields.io/badge/Vault-275226) ![Discord](https://img.shields.io/badge/Discord-493391)
+![Jira](https://img.shields.io/badge/Jira-integration-D4A017)
+![NetBox](https://img.shields.io/badge/NetBox-integration-D4A017)
+![HashiCorp Vault](https://img.shields.io/badge/Vault-integration-D4A017)
+![Discord](https://img.shields.io/badge/Discord-integration-D4A017)
 
 **Testing statistics:**<br/>
-![MTTR](https://img.shields.io/badge/MTTR-9%3A21%20min-orange) ![Average Cost per Session](https://img.shields.io/badge/Average%20Cost%2FSession-%241.86-006400)
+![MTTR](https://img.shields.io/badge/MTTR-9%3A21%20min-orange)
+![Average Cost per Session](https://img.shields.io/badge/Average%20Cost%2FSession-%241.86-006400)
 
 ## 📖 **Table of Contents**
 - 📜 **aiNOC**
