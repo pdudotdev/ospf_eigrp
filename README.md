@@ -5,7 +5,7 @@
 [![Last Commit](https://img.shields.io/github/last-commit/pdudotdev/aiNOC?color=1F6FEB)](https://github.com/pdudotdev/aiNOC/commits/main/)
 
 **Core version vendors:**<br/>
-![Cisco IOS-XE](https://img.shields.io/badge/Cisco-IOS--XE-red)
+![Cisco IOS-XE](https://img.shields.io/badge/Cisco-IOS--XE-b91919)
 
 **Core version management:**<br/>
 ![RESTCONF](https://img.shields.io/badge/RESTCONF-primary-orange)
@@ -20,14 +20,14 @@
 ![VyOS](https://img.shields.io/badge/VyOS-VyOS-6F42C1)
 
 **Current integrations:**<br/>
-![Jira](https://img.shields.io/badge/Jira-supported-D42200)
-![NetBox](https://img.shields.io/badge/NetBox-supported-D42200)
-![HashiCorp Vault](https://img.shields.io/badge/Vault-supported-D42200)
-![Discord](https://img.shields.io/badge/Discord-supported-D42200)
+![Jira](https://img.shields.io/badge/Jira-supported-2f2fac)
+![NetBox](https://img.shields.io/badge/NetBox-supported-2f2fac)
+![HashiCorp Vault](https://img.shields.io/badge/Vault-supported-2f2fac)
+![Discord](https://img.shields.io/badge/Discord-supported-2f2fac)
 
 **Testing statistics:**<br/>
-![MTTR](https://img.shields.io/badge/MTTR-9%3A21%20min-006400)
-![Average Cost per Session](https://img.shields.io/badge/Average%20Cost%2FSession-%241.86-006400)
+![MTTR](https://img.shields.io/badge/MTTR-9%3A21%20min-1bb919)
+![Average Cost per Session](https://img.shields.io/badge/Average%20Cost%2FSession-%241.86-1bb919)
 
 ## 📖 **Table of Contents**
 - 📜 **aiNOC**
