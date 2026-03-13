@@ -5,11 +5,11 @@
 [![Last Commit](https://img.shields.io/github/last-commit/pdudotdev/aiNOC?color=1F6FEB)](https://github.com/pdudotdev/aiNOC/commits/main/)
 
 **Core version vendors:**<br/>
-![Cisco IOS-XE](https://img.shields.io/badge/Cisco-IOS--XE-0A4DA2)
+![Cisco IOS-XE](https://img.shields.io/badge/Cisco-IOS--XE-red)
 
 **Core version management:**<br/>
-![RESTCONF](https://img.shields.io/badge/RESTCONF-primary-2E8B57)
-![CLI](https://img.shields.io/badge/CLI-fallback-2E8B57)
+![RESTCONF](https://img.shields.io/badge/RESTCONF-primary-orange)
+![CLI](https://img.shields.io/badge/CLI-fallback-orange)
 
 **On-request extensions:**<br/>
 ![Arista EOS](https://img.shields.io/badge/Arista-EOS-6F42C1)
