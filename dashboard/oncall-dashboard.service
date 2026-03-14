@@ -1,0 +1,29 @@
+[Unit]
+Description=aiNOC Dashboard WebSocket Bridge
+Documentation=file:/home/mcp/aiNOC/README.md
+After=network.target
+Wants=oncall-watcher.service
+
+[Service]
+Type=simple
+User=mcp
+WorkingDirectory=/home/mcp/aiNOC
+ExecStart=/home/mcp/aiNOC/mcp/bin/python3 /home/mcp/aiNOC/dashboard/ws_bridge.py
+Restart=on-failure
+RestartSec=5
+
+# Hardening — mirrors oncall-watcher.service
+ProtectSystem=strict
+ReadWritePaths=/home/mcp/aiNOC /tmp
+ProtectHome=false
+
+# Logging — integrates with journalctl -u oncall-dashboard
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=ainoc-dashboard
+
+# Environment — .env loaded by Python's load_dotenv() at runtime.
+# Override ports via DASHBOARD_WS_PORT / DASHBOARD_HTTP_PORT if needed.
+
+[Install]
+WantedBy=multi-user.target

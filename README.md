@@ -1,7 +1,7 @@
 # ✨ aiNOC
 
 **aiNOC:**<br/>
-[![Version](https://img.shields.io/badge/version-5.4.0-1F6FEB)](https://github.com/pdudotdev/aiNOC/releases/tag/5.4.0)
+[![Version](https://img.shields.io/badge/version-5.5.0-1F6FEB)](https://github.com/pdudotdev/aiNOC/releases/tag/5.5.0)
 [![Last Commit](https://img.shields.io/github/last-commit/pdudotdev/aiNOC?color=1F6FEB)](https://github.com/pdudotdev/aiNOC/commits/main/)
 
 **Core version vendors:**<br/>
@@ -29,11 +29,14 @@
 ![MTTR](https://img.shields.io/badge/MTTR-8%20minutes-1bb919)
 ![Average Cost per Session](https://img.shields.io/badge/Average%20Cost%2FSession-%241.86-1bb919)
 
+**aiNOC Dashboard:**<br/>
+![Dash](https://img.shields.io/badge/Port-5555-d4285f)
+
 ## 📖 **Table of Contents**
 - 📜 **aiNOC**
   - [🔭 Overview](#-overview)
   - [🍀 Here's a Quick Demo](#-heres-a-quick-demo)
-  - [⭐ What's New in v5.4](#-whats-new-in-v54)
+  - [⭐ What's New in v5.5](#-whats-new-in-v55)
   - [⚒️ Current Tech Stack](#️-current-tech-stack)
   - [📋 Supported Vendors](#-supported-vendors)
   - [🚛 Supported Transports](#️-supported-transports)
@@ -109,7 +112,7 @@ Create `settings.json` under `.claude/`:
 ## 🍀 Here's a Quick Demo
 - [x] *Demo video for v5.0 coming soon*
 
-## ⭐ What's New in v5.4
+## ⭐ What's New in v5.5
 - [x] See [**changelog.md**](changelog.md)
 
 ## ⚒️ Core Tech Stack
@@ -256,7 +259,7 @@ Only one agent session runs at a time. Concurrent SLA failures during an active 
 - [x] **Watch** and **Star** this repository
 
 **Current version**:
-- [x] **aiNOC v5.4**
+- [x] **aiNOC v5.5**
 
 ## 📄 Disclaimer
 You are responsible for defining your own troubleshooting methodologies and context files, as well as building your own test environment and meeting the necessary conditions (e.g., RAM/vCPU, router OS images, Claude subscription/API key, etc.).

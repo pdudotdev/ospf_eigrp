@@ -4,6 +4,49 @@ All notable changes to this project are documented in this file.
 
 ---
 
+## [v5.5.0]
+
+> Real-time agent observability dashboard, session stop mechanism, SSH timeout optimizations.
+
+### 📊 Real-Time Agent Dashboard
+- New `dashboard/ws_bridge.py` — always-on WebSocket bridge: tail-follows the watcher's NDJSON session file (stream-json format), parses events, and broadcasts to browser clients. Serves HTTP + WebSocket on a single port (`DASHBOARD_PORT` env var, default 5555) using websockets 16.0's `process_request` callback — no separate HTTP server needed
+- New `dashboard/index.html` — single-file browser UI (dark NOC theme): two panels — AGENT REASONING (markdown-rendered, streamed incrementally) and TOOL CALLS (collapsible timeline with tool name, inputs, and output). Auto-scroll with lock toggle, session header with live elapsed timer and cost display, idle overlay between sessions
+- New `dashboard/oncall-dashboard.service` — systemd unit (independent of `oncall-watcher.service`; communication is filesystem-only via `data/dashboard_state.json` + session NDJSON files)
+- Late-joining browser clients receive a full replay buffer (up to 200 events) on connect — no missed events
+- WebSocket event types surfaced: `init`, `session_start`, `session_idle`, `reasoning`, `tool_start`, `tool_input_complete`, `tool_result`, `session_end`
+- Tool input JSON streamed incrementally (`input_json_delta` chunks) and accumulated per content-block index before display
+- Remote access: SSH tunnel (`ssh -L 5555:localhost:5555`) or direct LAN
+
+### 🚨 Session Stop Mechanism
+- Sentinel file pattern (`data/stop_session`): any actor creates it → watcher detects within 2s → kills agent tmux session and posts Discord error notification
+- Dashboard "■ STOP" button (red, visible only during active sessions): sends `{"action": "stop"}` via WebSocket → bridge writes sentinel → watcher acts within 2s
+- CLI stop: `touch /home/mcp/aiNOC/data/stop_session` during an active session — same effect
+- Stale sentinel cleared automatically at session start so it never blocks the next session
+
+### 🔄 Watcher Stream-JSON Migration
+- Switched `--output-format json` → `stream-json --verbose --include-partial-messages` with `stdbuf -oL` (forces line-buffered stdout to file; prevents block-buffering delay that would stall the dashboard)
+- `--verbose` is required — without it, no `stream_event` objects are emitted
+- New `_write_dashboard_state()` helper — writes `data/dashboard_state.json` at session start (with `session_name`, `session_file`, `state: "active"`) and session end (`state: "idle"`)
+- Cost parsing updated: reverse-scans NDJSON lines for `{"type": "result", "total_cost_usd": ...}` (was a single JSON object)
+- `DASHBOARD_RETAIN_LOGS=1` env var — when set, session NDJSON files are kept after session end for post-mortem review (default: deleted)
+
+### ⚡ SSH Timeout Optimization
+- `SSH_TIMEOUT_TRANSPORT`: 30 → 15s — SSH handshake; devices respond in <5s or are unreachable
+- `SSH_TIMEOUT_OPS_LONG`: 60 → 45s — traceroute; IOS XE completes in ~30s
+- `SSH_RETRIES`: 2 → 1 — 2 total attempts instead of 3
+- Worst-case per MCP call: 3 × 30s + 2 × 2s = **94s** → 2 × 15s + 1 × 2s = **32s**
+- Per-command `timeout_ops` moved from Scrapli connection constructor (`_connection_params`) to `send_command(command, timeout_ops=timeout_ops)` — connection setup always uses `SSH_TIMEOUT_OPS` (30s); only the traceroute command execution uses the longer 45s timeout where it is actually needed
+
+### 🧪 Testing
+- **UT-026** (`testing/agent-testing/unit/test_ws_bridge.py`): 39 tests — `_strip_tool_prefix`, NDJSON parsing (malformed/empty input, result line, text_delta, full tool_use lifecycle via content_block_start/delta/stop, tool_result, incomplete partial JSON), event buffer ring behavior, session state broadcast
+- Watcher stop-sentinel detection and dashboard state file tests added to existing watcher test files
+- 472 → 577 total tests passing
+
+### 📦 Dependencies
+- New: `websockets>=16.0,<17.0`
+
+---
+
 ## [v5.4.0]
 
 ### 🔐 HashiCorp Vault Integration

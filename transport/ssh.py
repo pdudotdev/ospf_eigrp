@@ -12,7 +12,7 @@ from core.settings import (
 log = logging.getLogger("ainoc.transport.ssh")
 
 
-def _connection_params(device: dict, timeout_ops: int | None = None) -> dict:
+def _connection_params(device: dict) -> dict:
     return {
         "host":              device["host"],
         "platform":          device["platform"],
@@ -21,7 +21,7 @@ def _connection_params(device: dict, timeout_ops: int | None = None) -> dict:
         "auth_password":     PASSWORD,
         "auth_strict_key":   SSH_STRICT_KEY,
         "timeout_transport": SSH_TIMEOUT_TRANSPORT,
-        "timeout_ops":       timeout_ops or SSH_TIMEOUT_OPS,
+        "timeout_ops":       SSH_TIMEOUT_OPS,
     }
 
 
@@ -36,9 +36,9 @@ async def execute_ssh(device: dict, command: str, timeout_ops: int | None = None
     last_exc = None
     for attempt in range(1 + SSH_RETRIES):
         try:
-            async with AsyncScrapli(**_connection_params(device, timeout_ops=timeout_ops)) as conn:
+            async with AsyncScrapli(**_connection_params(device)) as conn:
                 log.debug("SSH → %s: %s", device["host"], command)
-                response = await conn.send_command(command)
+                response = await conn.send_command(command, timeout_ops=timeout_ops)
                 raw_output = response.result
                 parsed_output = None
                 if device.get("cli_style") == "ios":

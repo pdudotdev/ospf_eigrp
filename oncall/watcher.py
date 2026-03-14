@@ -41,6 +41,7 @@ LOCK_FILE = PROJECT_DIR / "oncall" / "oncall.lock"
 WATCHER_LOG = PROJECT_DIR / "logs" / "oncall_watcher.log"
 LOGS_DIR = PROJECT_DIR / "logs"
 CLAUDE_BIN = "/home/mcp/.local/bin/claude"
+STOP_FILE = PROJECT_DIR / "data" / "stop_session"  # sentinel: operator-requested session abort
 
 # Module-level logger — handlers are configured by setup_watcher_logging() in main()
 _wlog = logging.getLogger("ainoc.watcher")
@@ -304,6 +305,15 @@ def _wait_for_tmux_process_exit(
                     exit_code = None
                 return (exit_code, False)
 
+        # Check for operator stop signal (dashboard button or CLI: touch data/stop_session)
+        if STOP_FILE.exists():
+            _wlog.warning(
+                "Operator stop signal detected — killing agent session %s", session_name,
+            )
+            STOP_FILE.unlink(missing_ok=True)
+            subprocess.run(["tmux", "kill-session", "-t", session_name], capture_output=True)
+            return (None, True)  # same handling as timeout: posts error notification, logs to Jira
+
         # Post progress updates at 60s and 120s while the agent is still running
         if device_name and discord_approval.is_configured():
             elapsed_s = time.monotonic() - start
@@ -339,6 +349,24 @@ def _read_log_tail(path: Path, lines: int = 10) -> str | None:
     except Exception:
         return None
 
+
+
+DASHBOARD_STATE_FILE = PROJECT_DIR / "data" / "dashboard_state.json"
+
+
+def _write_dashboard_state(state: dict) -> None:
+    """Write session lifecycle state for the dashboard WebSocket bridge.
+
+    The bridge (dashboard/ws_bridge.py) tail-follows the session NDJSON file
+    and broadcasts events to connected browsers. This state file tells it which
+    session file to watch and when the session starts/ends.
+    Best-effort: failures are logged at DEBUG and never interrupt the watcher.
+    """
+    try:
+        DASHBOARD_STATE_FILE.parent.mkdir(exist_ok=True)
+        DASHBOARD_STATE_FILE.write_text(json.dumps(state))
+    except Exception as e:
+        _wlog.debug("Could not write dashboard state: %s", e)
 
 
 def notify_operator(session_name: str):
@@ -586,6 +614,9 @@ def invoke_claude(event, device_map):
     except Exception:
         _wlog.debug("Discord investigation-started notification failed (non-blocking)")
 
+    # Clear any stale stop signal from a previous session before starting
+    STOP_FILE.unlink(missing_ok=True)
+
     # Write lock file with this process's PID
     LOCK_FILE.write_text(str(os.getpid()))
     _wlog.info("Agent invoked for event on %s: %s", device_name, event.get("msg", ""))
@@ -608,12 +639,24 @@ def invoke_claude(event, device_map):
     watcher_exc: Exception | None = None
     session_cost: float | None = None
 
+    _write_dashboard_state({
+        "state": "active",
+        "session_name": session_name,
+        "device_name": device_name,
+        "device_ip": device_ip,
+        "issue_key": issue_key,
+        "started_at": session_start.isoformat(),
+        "session_file": str(session_json),
+    })
+
     try:
-        # Run Claude in print mode with JSON output — stdout goes to a temp file.
-        # --output-format json wraps the response in a JSON envelope with cost/usage metadata.
-        # The temp file is deleted after cost is parsed; no session-oncall md files are kept.
+        # Run Claude in print mode with stream-json output — each event is a NDJSON line.
+        # stdbuf -oL forces line buffering so the dashboard bridge can tail-follow in real-time.
+        # --verbose + --include-partial-messages are required to emit streaming tool call events.
+        # The file is read for cost parsing after session ends, then deleted.
         cmd = (
-            f"{shlex.quote(CLAUDE_BIN)} -p --output-format json "
+            f"stdbuf -oL {shlex.quote(CLAUDE_BIN)} -p "
+            f"--output-format stream-json --verbose --include-partial-messages "
             f"{shlex.quote(prompt)} > {shlex.quote(str(session_json))}"
         )
         subprocess.run(
@@ -636,6 +679,7 @@ def invoke_claude(event, device_map):
         session_end = datetime.now(timezone.utc)
         cleanup_lock()
         subprocess.run(["tmux", "kill-session", "-t", session_name], capture_output=True)
+        _write_dashboard_state({"state": "idle"})
 
         # Log session end with duration and exit classification
         duration = session_end - session_start
@@ -648,11 +692,19 @@ def invoke_claude(event, device_map):
             exit_label = f"crash (code {exit_code})"
         _wlog.info("Agent session ended. Duration: %s, exit: %s", dur_str, exit_label)
 
-        # Parse session cost from JSON output temp file (kept until after Discord notification)
+        # Parse session cost from stream-json NDJSON output file.
+        # Cost is in the final "result" line; scan from the end to find it quickly.
         try:
             if session_json.exists():
-                session_data = json.loads(session_json.read_text())
-                session_cost = session_data.get("total_cost_usd")
+                lines = session_json.read_text().strip().splitlines()
+                for line in reversed(lines):
+                    try:
+                        ev = json.loads(line)
+                        if ev.get("type") == "result":
+                            session_cost = ev.get("total_cost_usd")
+                            break
+                    except json.JSONDecodeError:
+                        continue
                 if session_cost is not None:
                     _wlog.info("Session cost: $%.4f", session_cost)
         except Exception:
@@ -674,8 +726,12 @@ def invoke_claude(event, device_map):
         session_duration=dur_str,
     )
 
-    # Delete the temp JSON output file now that Discord notification is done
-    session_json.unlink(missing_ok=True)
+    # Delete the NDJSON session file now that Discord notification is done.
+    # Set DASHBOARD_RETAIN_LOGS=1 to keep it for post-mortem analysis.
+    if os.getenv("DASHBOARD_RETAIN_LOGS", "").lower() in ("1", "true", "yes"):
+        _wlog.info("Session log retained: %s", session_json)
+    else:
+        session_json.unlink(missing_ok=True)
 
     # Log approval outcome to watcher log (best-effort audit trail)
     approval_file = PROJECT_DIR / "data" / "pending_approval.json"

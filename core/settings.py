@@ -23,10 +23,10 @@ RESTCONF_PORT       = int(os.getenv("RESTCONF_PORT", "443"))
 RESTCONF_VERIFY_TLS = os.getenv("RESTCONF_VERIFY_TLS", "false").lower() == "true"
 
 # Scrapli SSH timeout (seconds) applied to all SSH connections.
-SSH_TIMEOUT_TRANSPORT = 30
-SSH_TIMEOUT_OPS       = 30
-SSH_TIMEOUT_OPS_LONG  = 60   # For long-running commands (traceroute)
+SSH_TIMEOUT_TRANSPORT = 15   # SSH handshake; devices respond in <5s or are unreachable
+SSH_TIMEOUT_OPS       = 30   # Command execution — kept high for slow commands
+SSH_TIMEOUT_OPS_LONG  = 45   # For long-running commands (traceroute); IOS finishes in ~30s
 
 # SSH retry settings — applied to transient connection failures only.
-SSH_RETRIES     = 2   # Max retry attempts after initial failure (3 total)
+SSH_RETRIES     = 1   # One retry after initial failure (2 total); reduces worst-case per-call from 94s → 32s
 SSH_RETRY_DELAY = 2   # Seconds between retries

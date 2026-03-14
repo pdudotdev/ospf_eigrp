@@ -223,6 +223,29 @@ Acts as the handoff from passive monitoring to active investigation.
 
 ---
 
+## ✅ `dashboard/`
+
+**Purpose:** Real-time agent observability dashboard.
+
+An always-on companion service that streams live agent activity to a browser UI:
+
+```
+dashboard/
+    ws_bridge.py            — WebSocket bridge + HTTP server (single port 5555)
+    index.html              — Browser UI (dark NOC theme, real-time reasoning + tool calls)
+    oncall-dashboard.service — systemd unit (independent of oncall-watcher.service)
+```
+
+`ws_bridge.py` tail-follows the watcher's stream-json NDJSON session file, parses events (`reasoning`, `tool_start`, `tool_input_complete`, `tool_result`), and broadcasts them to connected browser clients. Serves `index.html` over HTTP on the same port.
+
+Communication with the watcher is filesystem-only:
+- `data/dashboard_state.json` — session lifecycle (active/idle)
+- `logs/.session-oncall-*.tmp` — NDJSON event stream (deleted after session unless `DASHBOARD_RETAIN_LOGS=1`)
+
+Also handles the session **Stop** mechanism: browser "■ STOP" button sends `{"action": "stop"}` via WebSocket → bridge writes `data/stop_session` sentinel → watcher kills the agent tmux session within 2 seconds.
+
+---
+
 ## ✅ `logs/oncall_watcher.log` (gitignored)
 
 **Purpose:** Watcher activity log.
@@ -239,13 +262,13 @@ Useful for:
 
 ---
 
-## ✅ `logs/session-oncall-<timestamp>.md` (gitignored)
+## ✅ `logs/.session-oncall-<timestamp>.tmp` (gitignored)
 
-**Purpose:** Per-session agent output log.
+**Purpose:** Per-session agent NDJSON event stream.
 
-Each On-Call session's full output is captured here via `--output-format json` stdout redirect. Contains the full agent result text plus `total_cost_usd`, `num_turns`, and `usage` metadata.
+Each On-Call session's NDJSON stream is captured here via `--output-format stream-json --verbose` stdout redirect. Contains all `stream_event` objects (reasoning, tool calls) plus a final `{"type": "result", "total_cost_usd": ...}` line. Deleted after session ends unless `DASHBOARD_RETAIN_LOGS=1` is set.
 
 Use for post-incident review:
 ```
-cat logs/session-oncall-<timestamp>.md
+cat logs/.session-oncall-<timestamp>.tmp | python3 -c "import sys,json; [print(json.dumps(json.loads(l), indent=2)) for l in sys.stdin if l.strip()]"
 ```
