@@ -53,7 +53,7 @@ def test_safe_cli_command_passes(cmd):
     """Legitimate configuration commands must pass validate_commands() without error.
     Confirms that the FORBIDDEN set does not over-block valid operational commands.
     """
-    validate_commands([cmd])  # must not raise
+    assert validate_commands([cmd]) is None  # returns None on success; raises ValueError on forbidden
 
 
 # ── Mixed batch: one forbidden stops the whole batch ──────────────────────────
@@ -159,6 +159,19 @@ NEW_SAFE_CASES = [
 @pytest.mark.parametrize("cmd", NEW_SAFE_CASES)
 def test_new_safe_commands_pass(cmd):
     """Commands that resemble blocked patterns but are operationally valid must pass."""
-    validate_commands([cmd])  # must not raise
+    assert validate_commands([cmd]) is None  # returns None on success; raises ValueError on forbidden
+
+
+# ── Security edge case: trailing-space precision ─────────────────────────────
+
+def test_username_without_trailing_space_is_allowed():
+    """'username' alone (no trailing space) must PASS validation.
+
+    The FORBIDDEN entry is 'username ' (with trailing space) to avoid
+    false-blocking commands that legitimately contain 'username' as a substring
+    (e.g. interface descriptions). Only 'username <args>' — which always has the
+    space — is blocked.
+    """
+    assert validate_commands(["username"]) is None
 
 

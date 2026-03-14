@@ -341,8 +341,8 @@ def test_recovery_events_captured(tmp_path, monkeypatch):
     monkeypatch.setattr("oncall.watcher.LOG_FILE", str(log_file))
 
     device_map = {"172.20.20.205": "A1C", "172.20.20.206": "A2C"}
-    # scan_for_recovery_events only logs, doesn't return a list — just verify no crash
-    scan_for_recovery_events(trigger_event, session_start, session_end, device_map)
+    # scan_for_recovery_events is void (logs only) — verify no crash on valid input
+    assert scan_for_recovery_events(trigger_event, session_start, session_end, device_map) is None
 
 
 def test_recovery_empty_log_no_crash(tmp_path, monkeypatch):
@@ -356,4 +356,5 @@ def test_recovery_empty_log_no_crash(tmp_path, monkeypatch):
     session_start = datetime(2026, 3, 1, 9, 0, 0, tzinfo=timezone.utc)
     session_end = datetime(2026, 3, 1, 9, 30, 0, tzinfo=timezone.utc)
     trigger = {"ts": "2026-03-01T09:00:00Z", "device": "172.20.20.205", "msg": "x"}
-    scan_for_recovery_events(trigger, session_start, session_end, {})  # Should not raise
+    # scan_for_recovery_events is void (logs only) — verify no crash on empty log
+    assert scan_for_recovery_events(trigger, session_start, session_end, {}) is None

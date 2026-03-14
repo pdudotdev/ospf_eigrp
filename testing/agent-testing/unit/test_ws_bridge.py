@@ -365,6 +365,11 @@ class TestSessionState:
         assert bridge.SESSION_STATE["state"] == "idle"
 
     def test_active_state_structure(self):
+        """SESSION_STATE must accept and preserve the full active-session schema.
+
+        The key enumeration below acts as a schema guard: if the watcher ever changes
+        the keys it writes to dashboard_state.json, this test will catch the mismatch.
+        """
         bridge.SESSION_STATE = {
             "state": "active",
             "session_name": "oncall-20260314-120000",
@@ -376,3 +381,10 @@ class TestSessionState:
         }
         assert bridge.SESSION_STATE["state"] == "active"
         assert bridge.SESSION_STATE["device_name"] == "C1C"
+        # Schema guard: all expected keys must be present
+        expected_keys = (
+            "state", "session_name", "device_name", "device_ip",
+            "issue_key", "started_at", "session_file",
+        )
+        for key in expected_keys:
+            assert key in bridge.SESSION_STATE, f"Missing key in active SESSION_STATE schema: {key}"

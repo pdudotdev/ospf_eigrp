@@ -23,6 +23,11 @@ Validates:
 - ApprovalInput validates issue_key format
 - ApprovalInput rejects invalid issue_key
 - ApprovalInput issue_key is optional (None accepted)
+- _truncate returns text unchanged within limit; truncates with marker when over limit
+- post_investigation_started skips when not configured; posts blue embed (0x3498DB)
+- post_session_complete skips when not configured; transient vs approval_used description
+- post_session_error skips when not configured; posts red embed (0xFF0000)
+- post_progress_update skips when not configured; posts plain text content field
 """
 import asyncio
 import json
@@ -39,10 +44,15 @@ from pydantic import ValidationError
 
 from core.discord_approval import (
     _table_to_bullets,
+    _truncate,
     is_configured,
     post_approval_request,
     poll_for_reaction,
     post_outcome,
+    post_investigation_started,
+    post_session_complete,
+    post_session_error,
+    post_progress_update,
 )
 from input_models.models import ApprovalInput, ApprovalOutcomeInput
 from tools.approval import request_approval, post_approval_outcome
@@ -714,3 +724,172 @@ def test_approval_input_default_timeout():
         risk_level="high",
     )
     assert p.timeout_minutes == 10
+
+
+# ── _truncate ─────────────────────────────────────────────────────────────────
+
+class TestTruncate:
+    def test_short_text_returned_unchanged(self):
+        """Text within the limit must be returned exactly as-is."""
+        assert _truncate("hello world", 100) == "hello world"
+
+    def test_text_at_exact_limit_returned_unchanged(self):
+        """Text exactly at the limit must not be truncated."""
+        text = "x" * 1000
+        assert _truncate(text, 1000) == text
+
+    def test_text_over_limit_is_truncated(self):
+        """Text exceeding the limit must be truncated with a marker."""
+        text = "a" * 2000
+        result = _truncate(text, 1000)
+        assert len(result) <= 1000
+        assert "truncated" in result
+
+
+# ── Discord notification functions ────────────────────────────────────────────
+
+
+class TestPostInvestigationStarted:
+    def test_skips_when_not_configured(self, monkeypatch):
+        """post_investigation_started must return immediately when Discord is not configured."""
+        monkeypatch.delenv("DISCORD_BOT_TOKEN", raising=False)
+        monkeypatch.delenv("DISCORD_CHANNEL_ID", raising=False)
+        # Should not raise — just returns silently
+        run(post_investigation_started("C1C", "172.20.20.207", "SLA Down", "2026-03-14T12:00:00Z"))
+
+    def test_posts_blue_embed(self, monkeypatch):
+        """post_investigation_started must post a blue embed (color 0x3498DB)."""
+        monkeypatch.setenv("DISCORD_BOT_TOKEN", "tok")
+        monkeypatch.setenv("DISCORD_CHANNEL_ID", "chan")
+        posted = []
+        post_resp = _make_mock_response(200, json_data={"id": "m1"})
+
+        class MockSession:
+            async def __aenter__(self): return self
+            async def __aexit__(self, *a): pass
+            def post(self, url, **kwargs):
+                posted.append(kwargs.get("json", {}))
+                return post_resp
+
+        with patch("core.discord_approval.aiohttp.ClientSession", return_value=MockSession()):
+            run(post_investigation_started(
+                "C1C", "172.20.20.207", "SLA Down", "2026-03-14",
+                issue_key="NOC-1", session_name="oncall-test",
+            ))
+
+        assert len(posted) == 1
+        embed = posted[0]["embeds"][0]
+        assert embed["color"] == 0x3498DB, "investigation-started embed must be blue"
+        assert "C1C" in embed["title"]
+
+
+class TestPostSessionComplete:
+    def test_skips_when_not_configured(self, monkeypatch):
+        """post_session_complete must return immediately when Discord is not configured."""
+        monkeypatch.delenv("DISCORD_BOT_TOKEN", raising=False)
+        monkeypatch.delenv("DISCORD_CHANNEL_ID", raising=False)
+        run(post_session_complete("C1C", "172.20.20.207"))
+
+    def test_transient_description_when_approval_not_used(self, monkeypatch):
+        """approval_used=False must produce a 'transient' description."""
+        monkeypatch.setenv("DISCORD_BOT_TOKEN", "tok")
+        monkeypatch.setenv("DISCORD_CHANNEL_ID", "chan")
+        posted = []
+        post_resp = _make_mock_response(200, json_data={"id": "m2"})
+
+        class MockSession:
+            async def __aenter__(self): return self
+            async def __aexit__(self, *a): pass
+            def post(self, url, **kwargs):
+                posted.append(kwargs.get("json", {}))
+                return post_resp
+
+        with patch("core.discord_approval.aiohttp.ClientSession", return_value=MockSession()):
+            run(post_session_complete("C1C", "172.20.20.207", approval_used=False))
+
+        embed = posted[0]["embeds"][0]
+        assert embed["color"] == 0x00B300, "session-complete embed must be green"
+        assert "transient" in embed["description"].lower()
+
+    def test_approval_used_description(self, monkeypatch):
+        """approval_used=True must produce 'approval outcome' description."""
+        monkeypatch.setenv("DISCORD_BOT_TOKEN", "tok")
+        monkeypatch.setenv("DISCORD_CHANNEL_ID", "chan")
+        posted = []
+        post_resp = _make_mock_response(200, json_data={"id": "m3"})
+
+        class MockSession:
+            async def __aenter__(self): return self
+            async def __aexit__(self, *a): pass
+            def post(self, url, **kwargs):
+                posted.append(kwargs.get("json", {}))
+                return post_resp
+
+        with patch("core.discord_approval.aiohttp.ClientSession", return_value=MockSession()):
+            run(post_session_complete("C1C", "172.20.20.207", approval_used=True))
+
+        embed = posted[0]["embeds"][0]
+        assert "approval outcome" in embed["description"].lower()
+
+
+class TestPostSessionError:
+    def test_skips_when_not_configured(self, monkeypatch):
+        """post_session_error must return immediately when Discord is not configured."""
+        monkeypatch.delenv("DISCORD_BOT_TOKEN", raising=False)
+        monkeypatch.delenv("DISCORD_CHANNEL_ID", raising=False)
+        run(post_session_error("C1C", "172.20.20.207"))
+
+    def test_posts_red_embed(self, monkeypatch):
+        """post_session_error must post a red embed (color 0xFF0000)."""
+        monkeypatch.setenv("DISCORD_BOT_TOKEN", "tok")
+        monkeypatch.setenv("DISCORD_CHANNEL_ID", "chan")
+        posted = []
+        post_resp = _make_mock_response(200, json_data={"id": "m4"})
+
+        class MockSession:
+            async def __aenter__(self): return self
+            async def __aexit__(self, *a): pass
+            def post(self, url, **kwargs):
+                posted.append(kwargs.get("json", {}))
+                return post_resp
+
+        with patch("core.discord_approval.aiohttp.ClientSession", return_value=MockSession()):
+            run(post_session_error(
+                "C1C", "172.20.20.207", error_type="crash", exit_code=1,
+                issue_key="NOC-42",
+            ))
+
+        embed = posted[0]["embeds"][0]
+        assert embed["color"] == 0xFF0000, "session-error embed must be red"
+        # exit_code field must be present in embed fields
+        field_names = [f["name"] for f in embed.get("fields", [])]
+        assert any("exit" in n.lower() for n in field_names), "Exit Code field must be included"
+
+
+class TestPostProgressUpdate:
+    def test_skips_when_not_configured(self, monkeypatch):
+        """post_progress_update must return immediately when Discord is not configured."""
+        monkeypatch.delenv("DISCORD_BOT_TOKEN", raising=False)
+        monkeypatch.delenv("DISCORD_CHANNEL_ID", raising=False)
+        run(post_progress_update("Still investigating..."))
+
+    def test_posts_plain_text_content(self, monkeypatch):
+        """post_progress_update must post the message as plain 'content' (not an embed)."""
+        monkeypatch.setenv("DISCORD_BOT_TOKEN", "tok")
+        monkeypatch.setenv("DISCORD_CHANNEL_ID", "chan")
+        posted = []
+        post_resp = _make_mock_response(200, json_data={"id": "m5"})
+
+        class MockSession:
+            async def __aenter__(self): return self
+            async def __aexit__(self, *a): pass
+            def post(self, url, **kwargs):
+                posted.append(kwargs.get("json", {}))
+                return post_resp
+
+        with patch("core.discord_approval.aiohttp.ClientSession", return_value=MockSession()):
+            run(post_progress_update("🔍 Investigating OSPF adjacency on C1C"))
+
+        assert len(posted) == 1
+        assert posted[0]["content"] == "🔍 Investigating OSPF adjacency on C1C"
+        assert "embeds" not in posted[0], "progress update must be plain text, not an embed"

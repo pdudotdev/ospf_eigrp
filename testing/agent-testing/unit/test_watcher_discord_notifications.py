@@ -235,13 +235,10 @@ class TestCrashCooldown:
         """Clean up after each test."""
         watcher._last_crash_ts = None
 
-    def test_crash_cooldown_timestamp_not_tested_here(self):
-        """NOTE: _last_crash_ts is set by invoke_claude() (watcher.py:678-680) after a
-        non-zero agent exit — not by _post_discord_session_notification. invoke_claude
-        depends on tmux and subprocess, so it cannot be unit-tested here. The cooldown
-        BEHAVIOR (skip / expire) is exercised by the two tests below via check_crash_cooldown,
-        which is the function main() delegates to."""
-        pass  # No ghost-pass assertion — this is a documented coverage note.
+    # NOTE: _last_crash_ts is set by invoke_claude() (watcher.py) after a non-zero agent
+    # exit — not by _post_discord_session_notification. invoke_claude depends on tmux
+    # and subprocess, so it cannot be unit-tested here. The cooldown BEHAVIOR (skip /
+    # expire) is exercised by the two tests below via check_crash_cooldown().
 
     def test_cooldown_skips_event_within_window(self, monkeypatch, caplog):
         """Event arriving within the cooldown window: check_crash_cooldown returns True."""
@@ -267,7 +264,13 @@ class TestCrashCooldown:
         assert watcher._last_crash_ts is None, "_last_crash_ts should be cleared after expiry"
 
     def test_normal_exit_does_not_set_timestamp(self, tmp_path, monkeypatch):
-        """Normal exit (code 0) must NOT set _last_crash_ts (no cooldown triggered)."""
+        """Normal exit (code 0) must NOT set _last_crash_ts (no cooldown triggered).
+
+        Note: _last_crash_ts is actually set by invoke_claude(), not by
+        _post_discord_session_notification — invoke_claude() requires tmux and cannot be
+        unit-tested here. This test simulates the guard logic inline to document the
+        contract: exit_code 0 must never trigger crash cooldown.
+        """
         monkeypatch.setenv("DISCORD_BOT_TOKEN", "tok")
         monkeypatch.setenv("DISCORD_CHANNEL_ID", "ch")
         session_log = _make_session_log(tmp_path)

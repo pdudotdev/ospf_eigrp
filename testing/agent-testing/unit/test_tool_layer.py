@@ -7,12 +7,17 @@ Validates:
 - get_ospf on asyncssh device passes plain CLI string to execute_command
 - get_ospf on restconf device passes ActionChain to execute_command
 - get_bgp routes through platform_map correctly
+- get_bgp with neighbor IP appends to CLI string (asyncssh) but NOT to ActionChain (restconf)
 - get_routing dispatches correctly (with and without prefix)
+- get_routing prefix on restconf device modifies SSH tier only (RESTCONF tier unchanged)
 - get_interfaces dispatches correctly
 - ping on restconf device uses plain CLI string (not ActionChain)
+- ping with source= appends 'source <ip>' to CLI string on IOS device
 - traceroute on restconf device uses plain CLI string
+- traceroute with source= appends 'source <ip>' to CLI string on IOS device
 - run_show rejects non-show commands at validation
 - run_show accepts show-prefix commands and forwards to execute_command
+- run_show with JSON dict command passes the parsed dict to execute_command
 - get_ospf with vrf parameter flows through to action resolution
 """
 import asyncio
@@ -632,3 +637,130 @@ def test_trim_bgp_table_strips_path_noise_restconf():
                             assert noise_key not in path, f"noise key '{noise_key}' still present"
                         for keep_key in _BGP_PATH_KEEP_KEYS:
                             assert keep_key in path, f"diagnostic key '{keep_key}' was removed"
+
+
+# ── ping / traceroute: source parameter ───────────────────────────────────────
+
+def test_ping_with_source_appends_source_arg():
+    """ping with source= on IOS device must append 'source <ip>' to the CLI string."""
+    params = PingInput(device="A1C", destination="10.0.0.26", source="192.168.1.1")
+    mock_result = {**MOCK_RESULT, "device": "A1C"}
+    with patch("tools.operational.devices", {"A1C": ASYNCSSH_DEV}), \
+         patch("tools.operational.execute_command", new=AsyncMock(return_value=mock_result)) as mock_exec:
+        result = run(ping(params))
+    action_used = mock_exec.call_args[0][1]
+    assert "source 192.168.1.1" in action_used, "source IP must be appended to ping CLI string"
+    assert "error" not in result
+
+
+def test_ping_without_source_no_source_in_cli():
+    """ping without source= must NOT include 'source' in the CLI string."""
+    params = PingInput(device="A1C", destination="10.0.0.26")
+    mock_result = {**MOCK_RESULT, "device": "A1C"}
+    with patch("tools.operational.devices", {"A1C": ASYNCSSH_DEV}), \
+         patch("tools.operational.execute_command", new=AsyncMock(return_value=mock_result)) as mock_exec:
+        result = run(ping(params))
+    action_used = mock_exec.call_args[0][1]
+    assert "source" not in action_used, "source keyword must not appear when source= is not provided"
+    assert "error" not in result
+
+
+def test_traceroute_with_source_appends_source_arg():
+    """traceroute with source= on IOS device must append 'source <ip>' to the CLI string."""
+    params = TracerouteInput(device="E1C", destination="8.8.8.8", source="10.0.0.1")
+    mock_result = {**MOCK_RESULT, "device": "E1C"}
+    with patch("tools.operational.devices", {"E1C": RESTCONF_DEV}), \
+         patch("tools.operational.execute_command", new=AsyncMock(return_value=mock_result)) as mock_exec:
+        result = run(traceroute(params))
+    action_used = mock_exec.call_args[0][1]
+    assert "source 10.0.0.1" in action_used, "source IP must be appended to traceroute CLI string"
+    assert "error" not in result
+
+
+# ── run_show: JSON dict input ─────────────────────────────────────────────────
+
+def test_run_show_json_dict_command_passes_dict():
+    """run_show with a JSON dict command string must pass the parsed dict to execute_command.
+
+    This is the RESTCONF passthrough path — the command is a JSON-encoded URL dict
+    that the transport dispatcher routes directly to the RESTCONF tier.
+    """
+    json_cmd = '{"url": "Cisco-IOS-XE-interfaces-oper:interfaces", "method": "GET"}'
+    params = ShowCommand(device="E1C", command=json_cmd)
+    mock_result = {**MOCK_RESULT, "device": "E1C"}
+    with patch("tools.operational.devices", {"E1C": RESTCONF_DEV}), \
+         patch("tools.operational.execute_command", new=AsyncMock(return_value=mock_result)) as mock_exec:
+        result = run(run_show(params))
+    action_used = mock_exec.call_args[0][1]
+    assert isinstance(action_used, dict), \
+        f"JSON dict command must be passed as dict to execute_command, got {type(action_used)}"
+    assert action_used["url"] == "Cisco-IOS-XE-interfaces-oper:interfaces"
+    assert "error" not in result
+
+
+def test_run_show_plain_cli_passes_string():
+    """run_show with a plain 'show ...' CLI string must pass the string (not a dict)."""
+    params = ShowCommand(device="A1C", command="show ip route")
+    mock_result = {**MOCK_RESULT, "device": "A1C"}
+    with patch("tools.operational.devices", {"A1C": ASYNCSSH_DEV}), \
+         patch("tools.operational.execute_command", new=AsyncMock(return_value=mock_result)) as mock_exec:
+        result = run(run_show(params))
+    action_used = mock_exec.call_args[0][1]
+    assert isinstance(action_used, str), "CLI string command must remain a string"
+    assert "show ip route" in action_used
+    assert "error" not in result
+
+
+# ── get_routing: prefix on ActionChain (restconf) ────────────────────────────
+
+def test_get_routing_prefix_on_restconf_modifies_ssh_tier_only():
+    """get_routing with prefix on restconf device must append prefix to SSH tier only.
+
+    The RESTCONF tier returns the full FIB — no per-prefix URL filter exists.
+    Only the SSH fallback tier CLI string should have the prefix appended.
+    """
+    params = RoutingQuery(device="E1C", prefix="10.0.0.0/24")
+    mock_result = {**MOCK_RESULT, "device": "E1C"}
+    with patch("tools.routing.devices", {"E1C": RESTCONF_DEV}), \
+         patch("tools.routing.execute_command", new=AsyncMock(return_value=mock_result)) as mock_exec:
+        result = run(get_routing(params))
+    action_used = mock_exec.call_args[0][1]
+    assert isinstance(action_used, ActionChain), \
+        "restconf device must use ActionChain even with prefix"
+    # SSH tier must have the prefix appended
+    ssh_tiers = [(tier, act) for tier, act in action_used.actions if tier == "ssh"]
+    assert ssh_tiers, "ActionChain must contain an SSH tier"
+    for _, ssh_cmd in ssh_tiers:
+        assert "10.0.0.0/24" in ssh_cmd, "prefix must be appended to SSH tier CLI string"
+    # RESTCONF tier must NOT have the prefix appended (URL dict unchanged)
+    restconf_tiers = [(tier, act) for tier, act in action_used.actions if tier == "restconf"]
+    for _, rc_action in restconf_tiers:
+        if isinstance(rc_action, dict):
+            assert "10.0.0.0/24" not in str(rc_action.get("url", "")), \
+                "prefix must NOT be appended to RESTCONF URL"
+    assert "error" not in result
+
+
+# ── get_bgp: neighbor on ActionChain (negative case) ─────────────────────────
+
+def test_get_bgp_neighbor_ip_not_appended_to_action_chain():
+    """get_bgp with neighbor IP on a restconf device must NOT append the IP to ActionChain tiers.
+
+    The neighbor filter is only appended to plain CLI strings (asyncssh devices).
+    On restconf devices the action is an ActionChain — no string manipulation is done.
+    The positive case (asyncssh) is already tested in test_get_bgp_neighbor_filter_appended_for_asyncssh.
+    """
+    params = BgpQuery(device="E1C", query="neighbors", neighbor="10.0.0.1")
+    mock_result = {**MOCK_RESULT, "device": "E1C"}
+    with patch("tools.protocol.devices", {"E1C": RESTCONF_DEV}), \
+         patch("tools.protocol.execute_command", new=AsyncMock(return_value=mock_result)) as mock_exec:
+        result = run(get_bgp(params))
+    action_used = mock_exec.call_args[0][1]
+    assert isinstance(action_used, ActionChain), \
+        "restconf device must use ActionChain for BGP neighbors"
+    # Neighbor IP must NOT appear in any string tier of the ActionChain
+    for tier, act in action_used.actions:
+        if isinstance(act, str):
+            assert "10.0.0.1" not in act, \
+                f"neighbor IP must not be appended to ActionChain's {tier} tier string"
+    assert "error" not in result

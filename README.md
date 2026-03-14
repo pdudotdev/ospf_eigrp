@@ -40,7 +40,7 @@
   - [⭐ What's New in v5.5](#-whats-new-in-v55)
   - [⚒️ Current Tech Stack](#️-current-tech-stack)
   - [📋 Supported Vendors](#-supported-vendors)
-  - [🚛 Supported Transports](#️-supported-transports)
+  - [🚛 Supported Transports](#-supported-transports)
   - [🎓 Troubleshooting Scope](#-troubleshooting-scope)
   - [🛠️ Installation & Usage](#️-installation--usage)
   - [🔄 Test Network Topology](#-test-network-topology)

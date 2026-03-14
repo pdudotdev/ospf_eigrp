@@ -78,6 +78,13 @@ case "${MODE}" in
         run_pytest "UT-019 Vault"               "${TEST_PREFIX}/unit/test_vault.py"
         run_pytest "UT-020 NetBox"              "${TEST_PREFIX}/unit/test_netbox.py"
         run_pytest "UT-021 Watcher Discord"     "${TEST_PREFIX}/unit/test_watcher_discord_notifications.py"
+        run_pytest "UT-022 Jira Client"          "${TEST_PREFIX}/unit/test_jira_client.py"
+        run_pytest "UT-023 Watcher Helpers"      "${TEST_PREFIX}/unit/test_watcher_helpers.py"
+        run_pytest "UT-024 Inventory"            "${TEST_PREFIX}/unit/test_inventory.py"
+        run_pytest "UT-025 Logging Config"       "${TEST_PREFIX}/unit/test_logging_config.py"
+        run_pytest "UT-026 WS Bridge"            "${TEST_PREFIX}/unit/test_ws_bridge.py"
+        run_pytest "UT-027 Settings"             "${TEST_PREFIX}/unit/test_settings.py"
+        run_pytest "UT-028 MCP Registration"     "${TEST_PREFIX}/unit/test_mcp_registration.py"
         ;;
 
     integration)
@@ -107,6 +114,13 @@ case "${MODE}" in
         run_pytest "UT-019 Vault"               "${TEST_PREFIX}/unit/test_vault.py"
         run_pytest "UT-020 NetBox"              "${TEST_PREFIX}/unit/test_netbox.py"
         run_pytest "UT-021 Watcher Discord"     "${TEST_PREFIX}/unit/test_watcher_discord_notifications.py"
+        run_pytest "UT-022 Jira Client"          "${TEST_PREFIX}/unit/test_jira_client.py"
+        run_pytest "UT-023 Watcher Helpers"      "${TEST_PREFIX}/unit/test_watcher_helpers.py"
+        run_pytest "UT-024 Inventory"            "${TEST_PREFIX}/unit/test_inventory.py"
+        run_pytest "UT-025 Logging Config"       "${TEST_PREFIX}/unit/test_logging_config.py"
+        run_pytest "UT-026 WS Bridge"            "${TEST_PREFIX}/unit/test_ws_bridge.py"
+        run_pytest "UT-027 Settings"             "${TEST_PREFIX}/unit/test_settings.py"
+        run_pytest "UT-028 MCP Registration"     "${TEST_PREFIX}/unit/test_mcp_registration.py"
         run_pytest "IT-001 MCP Connectivity"    "${TEST_PREFIX}/integration/test_mcp_connectivity.py"
         run_pytest "IT-002 Watcher Events"      "${TEST_PREFIX}/integration/test_watcher_events.py"
         run_pytest "IT-003 MCP Tools"           "${TEST_PREFIX}/integration/test_mcp_tools.py"
