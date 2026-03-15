@@ -28,7 +28,7 @@
     background: var(--bg);
     color: var(--text);
     font-family: 'SF Mono', 'Consolas', 'Monaco', monospace;
-    font-size: 14px;
+    font-size: 15px;
     height: 100vh;
     display: flex;
     flex-direction: column;
@@ -48,7 +48,7 @@
   }
 
   #header .logo {
-    font-size: 16px;
+    font-size: 17px;
     font-weight: 700;
     color: var(--blue);
     letter-spacing: 0.5px;
@@ -59,7 +59,7 @@
     align-items: center;
     gap: 6px;
     color: var(--muted);
-    font-size: 13px;
+    font-size: 14px;
   }
 
   .meta-group .label { color: var(--muted); }
@@ -89,7 +89,7 @@
   }
 
   #ws-status {
-    font-size: 12px;
+    font-size: 13px;
     color: var(--muted);
   }
   #ws-status.error { color: var(--red); }
@@ -100,7 +100,7 @@
     border: 1px solid var(--red);
     color: var(--red);
     font-family: inherit;
-    font-size: 12px;
+    font-size: 13px;
     font-weight: 700;
     letter-spacing: 0.5px;
     padding: 3px 10px;
@@ -132,7 +132,7 @@
     background: var(--surface);
     border-bottom: 1px solid var(--border);
     padding: 7px 14px;
-    font-size: 12px;
+    font-size: 13px;
     font-weight: 700;
     letter-spacing: 1px;
     color: var(--muted);
@@ -146,7 +146,7 @@
     margin-left: auto;
     cursor: pointer;
     color: var(--muted);
-    font-size: 11px;
+    font-size: 12px;
     user-select: none;
     padding: 2px 6px;
     border: 1px solid var(--border);
@@ -181,8 +181,8 @@
     background: var(--green);
     animation: pulse 2.5s infinite;
   }
-  #idle-overlay .idle-text { color: var(--muted); font-size: 16px; }
-  #idle-overlay .idle-sub { color: var(--border); font-size: 12px; margin-top: -8px; }
+  #idle-overlay .idle-text { color: var(--muted); font-size: 17px; }
+  #idle-overlay .idle-sub { color: var(--border); font-size: 13px; margin-top: -8px; }
 
   /* ── Reasoning panel ── */
   #reasoning-body {
@@ -195,7 +195,7 @@
     border: 1px solid var(--border);
     border-radius: 3px;
     padding: 1px 5px;
-    font-size: 13px;
+    font-size: 14px;
     color: var(--purple);
   }
   #reasoning-body pre {
@@ -205,14 +205,14 @@
     padding: 10px 12px;
     overflow-x: auto;
     margin-bottom: 10px;
-    font-size: 13px;
+    font-size: 14px;
   }
   #reasoning-body strong { color: var(--orange); }
   #reasoning-body h1,h2,h3 { color: var(--blue); margin-bottom: 6px; margin-top: 10px; }
   #reasoning-body table {
     border-collapse: collapse;
     margin-bottom: 10px;
-    font-size: 13px;
+    font-size: 14px;
   }
   #reasoning-body th, #reasoning-body td {
     border: 1px solid var(--border);
@@ -250,7 +250,7 @@
   .tool-header:hover { background: #1c2128; }
 
   .tool-icon {
-    font-size: 13px;
+    font-size: 14px;
     width: 16px;
     text-align: center;
     flex-shrink: 0;
@@ -259,18 +259,26 @@
   .tool-name {
     font-weight: 700;
     color: var(--blue);
-    font-size: 13px;
+    font-size: 14px;
+  }
+
+  .tool-name.mcp {
+    background: rgba(63,185,80,0.15);
+    color: var(--green);
+    border: 1px solid rgba(63,185,80,0.4);
+    border-radius: 3px;
+    padding: 1px 6px;
   }
 
   .tool-device {
     color: var(--orange);
-    font-size: 12px;
+    font-size: 13px;
     font-weight: 600;
   }
 
   .tool-args {
     color: var(--muted);
-    font-size: 12px;
+    font-size: 13px;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -279,7 +287,7 @@
 
   .tool-status {
     margin-left: auto;
-    font-size: 11px;
+    font-size: 12px;
     font-weight: 700;
     flex-shrink: 0;
   }
@@ -300,7 +308,7 @@
   .tool-section:last-child { border-bottom: none; }
 
   .tool-section-label {
-    font-size: 11px;
+    font-size: 12px;
     font-weight: 700;
     color: var(--muted);
     letter-spacing: 0.8px;
@@ -312,14 +320,14 @@
     border-radius: 3px;
     padding: 8px 10px;
     overflow-x: auto;
-    font-size: 12px;
+    font-size: 13px;
     line-height: 1.5;
     white-space: pre-wrap;
     word-break: break-all;
   }
 
   .tool-result-text {
-    font-size: 13px;
+    font-size: 14px;
     color: var(--green);
     line-height: 1.5;
     white-space: pre-wrap;
@@ -330,7 +338,7 @@
 
   .tool-result-truncated {
     color: var(--muted);
-    font-size: 12px;
+    font-size: 13px;
     font-style: italic;
     margin-top: 6px;
   }
@@ -338,11 +346,40 @@
   .show-more-btn {
     cursor: pointer;
     color: var(--blue);
-    font-size: 12px;
+    font-size: 13px;
     margin-top: 4px;
     display: inline-block;
   }
   .show-more-btn:hover { text-decoration: underline; }
+
+  .copy-btn {
+    cursor: pointer;
+    color: var(--muted);
+    font-size: 12px;
+    padding: 2px 6px;
+    border: 1px solid var(--border);
+    border-radius: 3px;
+    background: transparent;
+    font-family: inherit;
+    letter-spacing: 0.5px;
+  }
+  .copy-btn:hover { color: var(--text); border-color: var(--muted); }
+
+  #dismiss-btn {
+    margin-left: 0;
+    background: transparent;
+    border: 1px solid var(--muted);
+    color: var(--muted);
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    padding: 3px 10px;
+    border-radius: 3px;
+    cursor: pointer;
+    display: none;
+  }
+  #dismiss-btn:hover { background: rgba(139,148,158,0.15); color: var(--text); }
 
   /* Scrollbar styling */
   ::-webkit-scrollbar { width: 6px; height: 6px; }
@@ -389,6 +426,7 @@
   </div>
 
   <button id="stop-btn" onclick="stopSession()">■ STOP</button>
+  <button id="dismiss-btn" onclick="dismissSession()">✕ DISMISS</button>
   <div id="ws-status">Connecting…</div>
 </div>
 
@@ -404,6 +442,7 @@
   <div class="panel">
     <div class="panel-header">
       AGENT REASONING
+      <button class="copy-btn" onclick="copyPanel('reasoning-body', this)" title="Copy to clipboard">COPY</button>
       <span class="scroll-toggle" id="reasoning-lock-btn" onclick="toggleReasoningLock()">AUTO-SCROLL ON</span>
     </div>
     <div class="panel-body" id="reasoning-body"></div>
@@ -412,6 +451,7 @@
   <div class="panel">
     <div class="panel-header">
       TOOL CALLS
+      <button class="copy-btn" onclick="copyPanel('tools-body', this)" title="Copy to clipboard">COPY</button>
       <span class="scroll-toggle" id="tools-lock-btn" onclick="toggleToolsLock()">AUTO-SCROLL ON</span>
     </div>
     <div class="panel-body" id="tools-body"></div>
@@ -437,6 +477,7 @@ let reasoningLocked = false;
 let toolsLocked = false;
 let reasoningBuffer = "";       // accumulate markdown text before rendering
 let renderPending = false;
+let sessionHeld = false;        // keep content visible after session completes
 
 // Tool call tracking: id → { el, hasResult }
 const toolEntries = {};
@@ -493,7 +534,7 @@ function handleMessage(msg) {
       appendReasoning(msg.text);
       break;
     case "tool_start":
-      addToolEntry(msg.id, msg.tool);
+      addToolEntry(msg.id, msg.tool, msg.is_mcp);
       break;
     case "tool_input_complete":
       updateToolInput(msg.id, msg.tool, msg.input);
@@ -516,6 +557,11 @@ function applyState(state) {
 }
 
 function onSessionStart(msg) {
+  // Auto-dismiss any held completed session when a new one begins
+  sessionHeld = false;
+  document.getElementById("dismiss-btn").style.display = "none";
+  clearPanels();
+
   document.getElementById("idle-overlay").classList.remove("visible");
   const stopBtn = document.getElementById("stop-btn");
   stopBtn.style.display = "block";
@@ -538,6 +584,12 @@ function onSessionStart(msg) {
 }
 
 function onSessionIdle() {
+  if (sessionHeld) {
+    // Keep panels visible — watcher has resumed monitoring, update status to reflect this
+    document.getElementById("hdr-status").textContent = "Completed — Monitoring";
+    document.getElementById("status-dot").className = "active";
+    return;
+  }
   document.getElementById("idle-overlay").classList.add("visible");
   document.getElementById("stop-btn").style.display = "none";
   document.getElementById("status-dot").className = "idle";
@@ -554,8 +606,10 @@ function onSessionIdle() {
 }
 
 function onSessionEnd(msg) {
+  sessionHeld = true;
   document.getElementById("status-dot").className = "idle";
   document.getElementById("stop-btn").style.display = "none";
+  document.getElementById("dismiss-btn").style.display = "block";
   document.getElementById("hdr-status").textContent = "Completed";
   stopElapsedTimer();
 
@@ -609,17 +663,18 @@ function flushReasoning() {
 // ─────────────────────────────────────────────────────────────────────────────
 // Tool calls panel
 // ─────────────────────────────────────────────────────────────────────────────
-function addToolEntry(id, toolName) {
+function addToolEntry(id, toolName, isMcp) {
   if (!id) return;
   const body = document.getElementById("tools-body");
 
+  const nameClass = isMcp ? "tool-name mcp" : "tool-name";
   const entry = document.createElement("div");
   entry.className = "tool-entry";
   entry.id = `tool-${id}`;
   entry.innerHTML = `
     <div class="tool-header" onclick="toggleTool('${id}')">
       <span class="tool-icon">⚙</span>
-      <span class="tool-name">${escHtml(toolName)}</span>
+      <span class="${nameClass}">${escHtml(toolName)}</span>
       <span class="tool-device" id="tool-device-${id}"></span>
       <span class="tool-args" id="tool-args-${id}">…</span>
       <span class="tool-status pending" id="tool-status-${id}">RUNNING</span>
@@ -627,7 +682,7 @@ function addToolEntry(id, toolName) {
     <div class="tool-body" id="tool-body-${id}"></div>
   `;
   body.appendChild(entry);
-  toolEntries[id] = { el: entry, hasResult: false };
+  toolEntries[id] = { el: entry, hasResult: false, isMcp };
 
   if (!toolsLocked) body.scrollTop = body.scrollHeight;
 }
@@ -639,24 +694,26 @@ function updateToolInput(id, toolName, input) {
   const bodyEl = document.getElementById(`tool-body-${id}`);
   if (!bodyEl) return;
 
+  // MCP wraps tool input in {"params": {...}} — unwrap for display
+  const params = (input && input.params) ? input.params : input;
+
   // Extract device for prominent display
-  if (input.device) {
-    if (deviceEl) deviceEl.textContent = `(${input.device})`;
-    // Remove device from args summary
+  if (params && params.device) {
+    if (deviceEl) deviceEl.textContent = `(${params.device})`;
   }
 
-  // Build compact args summary
-  const argParts = Object.entries(input)
+  // Build compact args summary from unwrapped params (exclude device)
+  const argParts = Object.entries(params || {})
     .filter(([k]) => k !== "device")
     .map(([k, v]) => `${k}: ${JSON.stringify(v)}`);
   if (argsEl) argsEl.textContent = argParts.join(" | ") || "";
 
-  // Build input section in body
+  // Build input section in body — show unwrapped params for readability
   const section = document.createElement("div");
   section.className = "tool-section";
   section.innerHTML = `
     <div class="tool-section-label">INPUT</div>
-    <pre>${escHtml(JSON.stringify(input, null, 2))}</pre>
+    <pre>${escHtml(JSON.stringify(params, null, 2))}</pre>
   `;
   bodyEl.appendChild(section);
 }
@@ -667,6 +724,8 @@ function setToolResult(id, output) {
   // Try to find by id — may not exist if tool_start was missed (e.g. late connect)
   const statusEl = document.getElementById(`tool-status-${id}`);
   const bodyEl = document.getElementById(`tool-body-${id}`);
+
+
 
   const lines = String(output).split("\n");
   const truncated = lines.length > MAX_RESULT_LINES;
@@ -767,6 +826,23 @@ function stopSession() {
     btn.style.opacity = "0.5";
     btn.disabled = true;
   }
+}
+
+function dismissSession() {
+  sessionHeld = false;
+  document.getElementById("dismiss-btn").style.display = "none";
+  onSessionIdle();
+}
+
+function copyPanel(panelId, btn) {
+  const el = document.getElementById(panelId);
+  if (!el) return;
+  const text = el.innerText || el.textContent;
+  navigator.clipboard.writeText(text).then(() => {
+    const orig = btn.textContent;
+    btn.textContent = "COPIED";
+    setTimeout(() => { btn.textContent = orig; }, 1500);
+  });
 }
 
 function toggleReasoningLock() {

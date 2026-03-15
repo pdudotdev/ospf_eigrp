@@ -36,29 +36,45 @@ def _reset_tool_inputs():
 
 class TestStripToolPrefix:
     def test_strips_mcp_prefix(self):
-        assert bridge._strip_tool_prefix("mcp__mcp_automation__get_ospf") == "get_ospf"
+        name, is_mcp = bridge._strip_tool_prefix("mcp__mcp_automation__get_ospf")
+        assert name == "get_ospf"
+        assert is_mcp is True
 
     def test_strips_mcp_prefix_traceroute(self):
-        assert bridge._strip_tool_prefix("mcp__mcp_automation__traceroute") == "traceroute"
+        name, is_mcp = bridge._strip_tool_prefix("mcp__mcp_automation__traceroute")
+        assert name == "traceroute"
+        assert is_mcp is True
 
     def test_keeps_builtin_read(self):
-        assert bridge._strip_tool_prefix("Read") == "Read"
+        name, is_mcp = bridge._strip_tool_prefix("Read")
+        assert name == "Read"
+        assert is_mcp is False
 
     def test_keeps_builtin_bash(self):
-        assert bridge._strip_tool_prefix("Bash") == "Bash"
+        name, is_mcp = bridge._strip_tool_prefix("Bash")
+        assert name == "Bash"
+        assert is_mcp is False
 
     def test_keeps_builtin_edit(self):
-        assert bridge._strip_tool_prefix("Edit") == "Edit"
+        name, is_mcp = bridge._strip_tool_prefix("Edit")
+        assert name == "Edit"
+        assert is_mcp is False
 
     def test_empty_string(self):
-        assert bridge._strip_tool_prefix("") == ""
+        name, is_mcp = bridge._strip_tool_prefix("")
+        assert name == ""
+        assert is_mcp is False
 
     def test_partial_prefix_not_stripped(self):
         # Only strips the full known prefix
-        assert bridge._strip_tool_prefix("mcp__mcp_automation__") == ""
+        name, is_mcp = bridge._strip_tool_prefix("mcp__mcp_automation__")
+        assert name == ""
+        assert is_mcp is True
 
     def test_unknown_prefix_kept(self):
-        assert bridge._strip_tool_prefix("custom__tool") == "custom__tool"
+        name, is_mcp = bridge._strip_tool_prefix("custom__tool")
+        assert name == "custom__tool"
+        assert is_mcp is False
 
 
 # ---------------------------------------------------------------------------
@@ -190,6 +206,7 @@ class TestToolUseLifecycle:
         assert events[0]["ui_type"] == "tool_start"
         assert events[0]["tool"] == "get_ospf"
         assert events[0]["id"] == "call_abc"
+        assert events[0]["is_mcp"] is True
 
     def test_builtin_tool_start(self):
         line = _stream_event({
@@ -199,6 +216,7 @@ class TestToolUseLifecycle:
         })
         events = bridge.parse_ndjson_line(line)
         assert events[0]["tool"] == "Read"
+        assert events[0]["is_mcp"] is False
 
     def test_input_json_delta_accumulates_silently(self):
         # First set up the tool
@@ -319,6 +337,7 @@ class TestToolResultBlock:
         events = bridge.parse_ndjson_line(line)
         assert events[0]["ui_type"] == "tool_result"
         assert events[0]["output"] == ""
+
 
 
 # ---------------------------------------------------------------------------

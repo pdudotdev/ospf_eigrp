@@ -70,9 +70,15 @@ _tool_inputs: dict[int, dict] = {}
 # Event parsing — raw stream_event NDJSON → simplified UI events
 # ---------------------------------------------------------------------------
 
-def _strip_tool_prefix(name: str) -> str:
-    """Normalize MCP tool names for display. Keeps built-in names as-is."""
-    return name.removeprefix("mcp__mcp_automation__")
+_MCP_PREFIX = "mcp__mcp_automation__"
+
+
+def _strip_tool_prefix(name: str) -> tuple[str, bool]:
+    """Normalize MCP tool names for display. Returns (display_name, is_mcp)."""
+    if name.startswith(_MCP_PREFIX):
+        return name[len(_MCP_PREFIX):], True
+    return name, False
+
 
 
 def parse_ndjson_line(raw: str) -> list[dict]:
@@ -130,9 +136,9 @@ def parse_ndjson_line(raw: str) -> list[dict]:
         if cb.get("type") == "tool_use":
             idx = ev.get("index", -1)
             tool_id = cb.get("id", "")
-            name = _strip_tool_prefix(cb.get("name", ""))
-            _tool_inputs[idx] = {"json_buf": "", "id": tool_id, "name": name}
-            return [{"ui_type": "tool_start", "tool": name, "id": tool_id}]
+            name, is_mcp = _strip_tool_prefix(cb.get("name", ""))
+            _tool_inputs[idx] = {"json_buf": "", "id": tool_id, "name": name, "is_mcp": is_mcp}
+            return [{"ui_type": "tool_start", "tool": name, "id": tool_id, "is_mcp": is_mcp}]
 
         elif cb.get("type") == "tool_result":
             # Tool result arrives as a content block in the next user message
@@ -160,6 +166,7 @@ def parse_ndjson_line(raw: str) -> list[dict]:
                     "tool": entry.get("name", ""),
                     "id": entry["id"],
                     "input": input_obj,
+                    "is_mcp": entry.get("is_mcp", False),
                 }]
 
     return []

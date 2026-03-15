@@ -207,7 +207,7 @@ The human operator monitors agent operations via the **web dashboard on <IP>:555
 ```bash
 sudo apt install tmux
 sudo cp oncall/oncall-watcher.service /etc/systemd/system/
-sudo cp oncall/oncall-dashboard.service /etc/systemd/system/
+sudo cp dashboard/oncall-dashboard.service /etc/systemd/system/
 sudo systemctl daemon-reload
 sudo systemctl enable --now oncall-watcher.service
 sudo systemctl enable --now oncall-dashboard.service
