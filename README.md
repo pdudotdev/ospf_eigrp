@@ -1,8 +1,8 @@
 # ✨ aiNOC
 
-[![Version](https://img.shields.io/badge/Version-5.5.0-1a1a2e)](https://github.com/pdudotdev/aiNOC/releases/tag/5.5.0)
-![License](https://img.shields.io/badge/License-BSL1.1-1a1a2e)
-[![Last Commit](https://img.shields.io/github/Last-commit/pdudotdev/aiNOC?color=1a1a2e)](https://github.com/pdudotdev/aiNOC/commits/main/)
+[![Version](https://img.shields.io/badge/version-5.5.0-1a1a2e)](https://github.com/pdudotdev/aiNOC/releases/tag/5.5.0)
+![License](https://img.shields.io/badge/license-BSL%201.1-1a1a2e)
+[![Last Commit](https://img.shields.io/github/last-commit/pdudotdev/aiNOC?color=1a1a2e)](https://github.com/pdudotdev/aiNOC/commits/main/)
 
 | | |
 |---|---|
