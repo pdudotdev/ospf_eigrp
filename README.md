@@ -8,7 +8,7 @@
 |---|---|
 | | **Core Version** |
 | **Vendors** | ![Cisco IOS-XE](https://img.shields.io/badge/Cisco_IOS--XE-0d47a1) |
-| **Management** | ![RESTCONF](https://img.shields.io/badge/RESTCONF-primary-1565c0) ![CLI](https://img.shields.io/badge/CLI-fallback-1565c0) |
+| **Management** | ![RESTCONF](https://img.shields.io/badge/RESTCONF-1565c0) ![CLI](https://img.shields.io/badge/CLI-1565c0) |
 | **Integrations** | ![Jira](https://img.shields.io/badge/Jira-1976d2) ![NetBox](https://img.shields.io/badge/NetBox-1976d2) ![Discord](https://img.shields.io/badge/Discord-1976d2) ![HashiCorp Vault](https://img.shields.io/badge/HashiCorp_Vault-1976d2) |
 | | **On-Request** |
 | **Vendors** | ![Arista EOS](https://img.shields.io/badge/Arista_EOS-1e88e5) ![Juniper JunOS](https://img.shields.io/badge/Juniper_JunOS-1e88e5) ![Aruba AOS-CX](https://img.shields.io/badge/Aruba_AOS--CX-1e88e5) ![SONiC FRR](https://img.shields.io/badge/SONiC_FRR-1e88e5) ![MikroTik RouterOS](https://img.shields.io/badge/MikroTik_RouterOS-1e88e5) ![VyOS](https://img.shields.io/badge/VyOS-1e88e5) |
@@ -43,7 +43,7 @@ AI-based **network troubleshooting framework** for multi-vendor, multi-protocol,
 - [x] **Multi-protocol, L2/L3**
 - [x] **Multi-area/multi-AS**
 - [x] **CLI/RESTCONF (Core)**
-- [x] **NETCONF/REST/gNMI/eAPI (extensions)**
+- [x] **NETCONF/REST/gNMI/eAPI**
 - [x] **15 MCP tools, 4 skills**
 - [x] **12 operational guardrails**
 - [x] **HITL for any config changes**
@@ -56,11 +56,11 @@ AI-based **network troubleshooting framework** for multi-vendor, multi-protocol,
 ▫️ **Core vs. On-Request features**:
 - [x] **Core**: 
   - Easy to integrate in Cisco IOS/IOS-XE environments
-  - CLI + RESTCONF transports, OSPF/BGP troubleshooting
-  - Service Mode, Jira integration, Discord integration
+  - CLI, RESTCONF management, OSPF/BGP troubleshooting
+  - Jira, Discord, NetBox, HashiCorp Vault integration
 - [x] **On-Request**: 
   - Custom vendor modules (Arista, Juniper, MikroTik, etc.)
-  - Custom vendor transports (REST, NETCONF, gNMI, eAPI) 
+  - Custom management (REST APIs, NETCONF, gNMI, eAPI) 
   - Built and adapted per client's network environment
 
 ▫️ **aiNOC operating mode in v5.0+**:
@@ -71,9 +71,6 @@ AI-based **network troubleshooting framework** for multi-vendor, multi-protocol,
 
 ▫️ **Agent guardrails list**:
 - [x] See [**guardrails**](metadata/about/guardrails.md)
-
-▫️ **Adding new protocols or vendors**:
-- [x] See [**scalability guide**](metadata/about/scalability.md)
 
 ▫️ **Supported models**:
 - [x] Haiku 4.5
@@ -117,7 +114,6 @@ Create `settings.json` under `.claude/`:
 | NetBox | ✓ |
 | Vector | ✓ |
 | Ubuntu | ✓ |
-| ContainerLab | ✓ |
 
 ## 📋 Supported Vendors
 
@@ -138,7 +134,7 @@ Create `settings.json` under `.claude/`:
 | RESTCONF | Cisco IOS-XE | Primary | Core |
 | CLI | Cisco IOS-XE | Fallback | Core |
 | NETCONF | custom | — | On-Request |
-| REST API | custom | — | On-Request |
+| REST APIs | custom | — | On-Request |
 | gNMI | custom | — | On-Request |
 | eAPI | Arista | — | On-Request |
 
@@ -158,14 +154,13 @@ Create `settings.json` under `.claude/`:
 | **EIGRP** |
 | **HSRP** | 
 | **VRRP** |
-| **STP/MSTP** | 
 | *etc.* |
 
 ## 🛠️ Installation & Usage
 ▫️ **Step 1**:
 ```
 git clone https://github.com/pdudotdev/aiNOC/
-cd aiNOC
+cd aiNOC/
 python3 -m venv mcp
 source mcp/bin/activate
 pip install --upgrade pip
@@ -235,9 +230,8 @@ aiNOC runs as an **on-call watcher** that monitors Vector's `/var/log/network.js
 See [**Installation & Usage**](#️-installation--usage) for instructions.
 
 ## ⬆️ Planned Upgrades
-- [ ] New protocols
-- [ ] Slack support
-- [ ] Performance SLAs
+- [ ] New protocols supported
+- [ ] Performance-based SLAs
 
 ## ♻️ Repository Lifecycle
 **New features** are being added periodically (protocols, integrations, optimizations).
