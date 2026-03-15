@@ -1,6 +1,7 @@
 # ✨ aiNOC
 
 [![Version](https://img.shields.io/badge/version-5.5.0-1a1a2e)](https://github.com/pdudotdev/aiNOC/releases/tag/5.5.0)
+![License](https://img.shields.io/badge/License-BSL1.1-1a1a2e)
 [![Last Commit](https://img.shields.io/github/last-commit/pdudotdev/aiNOC?color=1a1a2e)](https://github.com/pdudotdev/aiNOC/commits/main/)
 
 | | |
@@ -9,7 +10,7 @@
 | **Vendors** | ![Cisco IOS-XE](https://img.shields.io/badge/Cisco_IOS--XE-0d47a1) |
 | **Management** | ![RESTCONF](https://img.shields.io/badge/RESTCONF-primary-1565c0) ![CLI](https://img.shields.io/badge/CLI-fallback-1565c0) |
 | **Integrations** | ![Jira](https://img.shields.io/badge/Jira-1976d2) ![NetBox](https://img.shields.io/badge/NetBox-1976d2) ![Discord](https://img.shields.io/badge/Discord-1976d2) ![HashiCorp Vault](https://img.shields.io/badge/HashiCorp_Vault-1976d2) |
-| | **On-request** |
+| | **On-Request** |
 | **Vendors** | ![Arista EOS](https://img.shields.io/badge/Arista_EOS-1e88e5) ![Juniper JunOS](https://img.shields.io/badge/Juniper_JunOS-1e88e5) ![Aruba AOS-CX](https://img.shields.io/badge/Aruba_AOS--CX-1e88e5) ![SONiC FRR](https://img.shields.io/badge/SONiC_FRR-1e88e5) ![MikroTik RouterOS](https://img.shields.io/badge/MikroTik_RouterOS-1e88e5) ![VyOS](https://img.shields.io/badge/VyOS-1e88e5) |
 | **Management** | ![NETCONF](https://img.shields.io/badge/NETCONF-2196f3) ![REST APIs](https://img.shields.io/badge/REST_APIs-2196f3) ![gNMI](https://img.shields.io/badge/gNMI-2196f3) ![eAPI](https://img.shields.io/badge/eAPI-2196f3) |
 | | **Stats** |
