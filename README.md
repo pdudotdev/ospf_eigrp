@@ -1,12 +1,12 @@
 # ✨ aiNOC
 
-[![Version](https://img.shields.io/badge/version-5.5.0-1a1a2e)](https://github.com/pdudotdev/aiNOC/releases/tag/5.5.0)
+[![Version](https://img.shields.io/badge/Version-5.5.0-1a1a2e)](https://github.com/pdudotdev/aiNOC/releases/tag/5.5.0)
 ![License](https://img.shields.io/badge/License-BSL1.1-1a1a2e)
-[![Last Commit](https://img.shields.io/github/last-commit/pdudotdev/aiNOC?color=1a1a2e)](https://github.com/pdudotdev/aiNOC/commits/main/)
+[![Last Commit](https://img.shields.io/github/Last-commit/pdudotdev/aiNOC?color=1a1a2e)](https://github.com/pdudotdev/aiNOC/commits/main/)
 
 | | |
 |---|---|
-| | **Core** |
+| | **Core Version** |
 | **Vendors** | ![Cisco IOS-XE](https://img.shields.io/badge/Cisco_IOS--XE-0d47a1) |
 | **Management** | ![RESTCONF](https://img.shields.io/badge/RESTCONF-primary-1565c0) ![CLI](https://img.shields.io/badge/CLI-fallback-1565c0) |
 | **Integrations** | ![Jira](https://img.shields.io/badge/Jira-1976d2) ![NetBox](https://img.shields.io/badge/NetBox-1976d2) ![Discord](https://img.shields.io/badge/Discord-1976d2) ![HashiCorp Vault](https://img.shields.io/badge/HashiCorp_Vault-1976d2) |
