@@ -35,6 +35,56 @@ Then these manual scenarios:
 
 ---
 
+## Tool Trace Capture
+
+Every manual test session produces a trace file: a chronological JSON record of the
+agent's MCP tool calls and reasoning text. Use these files to verify methodology
+compliance and pass them to Claude for quality evaluation.
+
+### One-time setup
+
+Add to `.env`:
+```
+DASHBOARD_RETAIN_LOGS=1   # keep session NDJSON logs after each session
+```
+
+Then restart the watcher service:
+```bash
+sudo systemctl restart oncall-watcher
+```
+
+> Remove or set to `0` when done with the testing round.
+
+### After each test session
+
+Once the agent session completes, extract the trace (auto-finds the latest session log):
+```bash
+python3 testing/extract_tool_trace.py --test-id <test-id>
+```
+
+Examples:
+```bash
+python3 testing/extract_tool_trace.py --test-id OC-001-ospf-passive
+python3 testing/extract_tool_trace.py --test-id OC-001-bgp-default-route
+```
+
+Output is written to `testing/manual_results/<test-id>_<timestamp>.json` (gitignored).
+
+To specify a particular session file instead of auto-detecting the latest:
+```bash
+python3 testing/extract_tool_trace.py --test-id OC-001-ospf-passive --file logs/.session-oncall-20260316-140522.tmp
+```
+
+### Evaluation
+
+After completing a set of manual tests, pass the trace files to Claude for evaluation.
+Each trace contains the full narrative (reasoning + MCP tools + tool results in order)
+which allows evaluation of:
+- Methodology compliance (Principles 1–7 from CLAUDE.md)
+- Correct tool sequencing (traceroute before protocol tools, one device at a time)
+- Reasoning quality (correct conclusions drawn from tool results)
+- Unnecessary or missing tool calls
+
 ---
 
 ## On-Call Mode Tests

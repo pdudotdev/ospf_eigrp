@@ -1,7 +1,7 @@
 # ✨ aiNOC
 
 [![Version](https://img.shields.io/badge/version-5.5.0-1a1a2e)](https://github.com/pdudotdev/aiNOC/releases/tag/5.5.0)
-![License](https://img.shields.io/badge/license-BSL%201.1-1a1a2e)
+![License](https://img.shields.io/badge/license-GPLv3-1a1a2e)
 [![Last Commit](https://img.shields.io/github/last-commit/pdudotdev/aiNOC?color=1a1a2e)](https://github.com/pdudotdev/aiNOC/commits/main/)
 
 | | |
@@ -246,8 +246,7 @@ See [**Installation & Usage**](#️-installation--usage) for instructions.
 You are responsible for defining your own troubleshooting methodologies and context files, as well as building your own test environment and meeting the necessary conditions (e.g., RAM/CPU, Claude subscription/API key, etc.).
 
 ## 📜 License
-Licensed under the [**Business Source License 1.1**](https://github.com/pdudotdev/aiNOC/blob/main/LICENSE).
-The source code is available for research, educational, and non-commercial use. Commercial use, SaaS deployment, enterprise automation, or resale of this software is prohibited without explicit written permission from the author.
+Licensed under the [**GNU General Public License v3.0**](LICENSE).
 
 ## 📧 Collaborations
 Interested in collaborating?

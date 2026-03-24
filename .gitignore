@@ -23,6 +23,9 @@ oncall/oncall.lock
 # Per-session agent output logs — runtime-only, never commit
 logs/session-*.md
 
+# Manual test trace results — per-run artifacts, never commit
+testing/manual_results/
+
 # Discord approval runtime state — runtime-only, never commit
 data/
 
